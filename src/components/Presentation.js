@@ -1,0 +1,98 @@
+import React, { useState, useRef, useEffect } from 'react'
+import styled, { keyframes } from 'styled-components'
+import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from "react-redux";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { solid, regular, brands, icon, thin } from '@fortawesome/fontawesome-svg-core/import.macro'
+
+
+const Container = styled.div`
+
+	
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: 2rem;
+	justify-content: space-between;
+  	border-radius: 5px;
+  	box-shadow: 0px 0px 5px rgba(${(props) => props.theme.bodyRgba}, 0.18);
+  	padding: ${(props) => props.theme.fontxl} ${(props) => props.theme.fontxxl};
+
+
+`
+
+const Info = styled.div`
+
+
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+
+	& div {
+		display: flex;
+		gap: .5em;
+		align-items: center;
+
+		&:last-child {
+			& p {
+				&:first-child {
+					transform: rotate(45deg);
+				}
+			}
+		}
+
+		& p {
+			font-weight: 800;
+			&:first-child {
+				color: rgba(${(props) => props.theme.textRgba}, 1);
+				padding: 5px;
+				border-radius: 50%;
+				font-size: ${(props) => props.theme.fontlg};
+				line-height: 0;
+			}
+		}
+	}
+
+
+`
+
+const Description = styled.div`
+
+
+	line-height: 1.5;
+
+
+`
+
+const Presentation = () => {
+	useEffect(() => {
+
+	}, [])
+
+	return(
+		<Container>
+			<h2>Presentation</h2>
+			<iframe height="312" src="https://www.youtube.com/embed/g5VOi9V4Rjo" title="Le mot de l&#39;expert - Izon Immeuble Générale de Gaulle - Bricks.co" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+			<Info>
+				<div>
+					<p><FontAwesomeIcon icon={solid('building')} /></p>
+					<p>16 lots</p>
+				</div>
+				<div>
+					<p><FontAwesomeIcon icon={solid('euro')} /></p>
+					<p>8910 € / loyer mensuel</p>
+				</div>
+				<div>
+					<p><FontAwesomeIcon icon={solid('arrows-left-right')} /></p>
+					<p>562 m²</p>
+				</div>
+			</Info>
+			<Description>
+				Cette ancienne maison bourgeoise de 565 m² située sur l’artère principale de la ville d’Izon (Nouvelle Aquitaine) est composée d’un bâtiment principal et d’une dépendance au cœur d’un écrin de verdure de 2287 m². Elle a été entièrement rénovée par des professionnels de la restauration de vieilles bâtisses pour en faire un espace de coliving avec des caractéristiques qui favorisent la mise en location de ce type d’actif. 
+			</Description>
+		</Container>	
+	)
+}
+
+export default Presentation;
+
