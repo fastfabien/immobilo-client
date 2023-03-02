@@ -17,7 +17,7 @@ import img from "../../../assets/house2.jpg";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { solid, regular, brands, icon, thin } from '@fortawesome/fontawesome-svg-core/import.macro'
 
-const API_URL = "http://localhost:8080/api/properties/";
+const API_URL = "/api/properties/";
 
 const Container = styled.div`
 

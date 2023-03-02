@@ -8,7 +8,7 @@ import axios from "axios";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { solid, regular, brands, icon, thin } from '@fortawesome/fontawesome-svg-core/import.macro'
 
-const API_URL = "http://localhost:8080/api/user/";
+const API_URL = "/api/user/";
 
 
 const Container = styled.div`
@@ -196,7 +196,7 @@ const NewAdmin = () =>  {
 
 	const handleSubmit = async (e) => {
     e.preventDefault();
-    return await axios.post("http://localhost:8080/api/auth/createUser", data).then(() => {
+    return await axios.post("/api/auth/createUser", data).then(() => {
     		navigate("/admin");
     	}).catch((err) => {
     		setError(err.message)

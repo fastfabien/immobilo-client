@@ -369,7 +369,7 @@ const UserInformation = () => {
       setError(message)
     })*/
 
-    await axios.post('http://localhost:8080/api/user/document', formData, {
+    await axios.post('/api/user/document', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'x-access-token': `${token}` 
