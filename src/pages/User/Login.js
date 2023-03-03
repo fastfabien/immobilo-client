@@ -230,9 +230,6 @@ const Login = () => {
     dispatch(googleLogin(accessToken,navigate)).then(() => {
       setError(message)
       window.location.reload();
-    }).catch(() => {
-      alert(message)
-      setError(message)
     })
   }
 
