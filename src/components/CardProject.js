@@ -22,6 +22,7 @@ const Container = styled.div`
   padding-bottom: 1rem;
   cursor: pointer;
   width: 30%;
+  position: relative;
 
   &:hover {
     box-shadow: 1px 20px 20px rgba(${(props) => props.theme.bodyRgba}, 0.1);

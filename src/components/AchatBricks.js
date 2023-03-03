@@ -5,6 +5,7 @@ import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { solid, regular, brands, icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 import CustomButton from './CustomButton';
+import Loader from './Loader';
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { buyBricks } from '../actions/auth';
 import { Buffer } from "buffer"
@@ -243,6 +244,7 @@ const AchatBricks = ({ nom, image, pourcentageInvestissement, brickRestant, setS
     const [message, setMessage] = useState()
     const [error, setError] = useState()
     const dispatch = useDispatch()
+    const [loading, setLoading] = useState(false)
 
     const [data, setData] = useState({
         nombreBricks: 0,
@@ -255,25 +257,26 @@ const AchatBricks = ({ nom, image, pourcentageInvestissement, brickRestant, setS
 
     const handleAddBrick = (e) => {
         e.preventDefault()
-        console.log(brickRestant)
         setData({ ...data, nombreBricks: e.target.value, prixTotalBricks: (e.target.value * 10), properties_id: id })
       }
 
     const handleBuyBricks = async (e) => {
       e.preventDefault()
 
-      console.log(data)
+      setLoading(true)
 
       await dispatch(buyBricks(data)).then(() => {
+        setLoading(false)
         window.location.reload()
       }).catch(() => {
-        setError("Errora")
+        setLoading(false)
       })
 
     }
 
     return (
       <>
+        { loading && <Loader />}
         <AcheterBricksContainer>
           <AcheterBricksContent>
             <div className="header">
