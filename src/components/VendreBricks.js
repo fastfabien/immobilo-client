@@ -6,6 +6,7 @@ import axios from "axios";
 import { Buffer } from "buffer"
 import CardProject from "./CardProject";
 import ProprieteNavibar from "./ProprieteNavibar";
+import Loader from "./Loader";
 import img from "./../assets/house2.jpg";
 import authHeader from "./../services/auth-header";
 
@@ -270,6 +271,7 @@ const SellBricks = ({ id, image, nom, zip, prix_total, nombre_bricks, rentabilit
 	const [show, setShow] = useState(false)
 	const [success, setSuccess] = useState('')
 	const [error, setError] = useState('')
+	const [loading, setLoading] = useState(false)
 	const [data, setData] = useState({
 		new_price: 0
 	})
@@ -278,12 +280,15 @@ const SellBricks = ({ id, image, nom, zip, prix_total, nombre_bricks, rentabilit
 	const handleSellBricks = async (e) => {
 		e.preventDefault()
 
+		setLoading(true)
+
 		setData({ ...data, bricks_id: id })
 
 		await axios.post('/api/market', data,{ headers: authHeader() }).then((data) => {
+			setLoading(false)
 			window.location.reload()
 		}).catch((err) => {
-			setError(err.message)
+			setLoading(false)
 		})	
 
 	}
@@ -298,6 +303,9 @@ const SellBricks = ({ id, image, nom, zip, prix_total, nombre_bricks, rentabilit
 
 	return(
 		<>
+		{
+			loading && <Loader />
+		}
 		<Content key={id}>
 			<div>
 				<img src={image} alt={nom} />
