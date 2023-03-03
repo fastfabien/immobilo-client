@@ -5,6 +5,7 @@ import axios from 'axios'
 import { Link, useNavigate, Navigate } from 'react-router-dom'
 import { useGoogleLogin } from '@react-oauth/google';
 import { register, googleRegister } from "../../actions/auth"
+import Loader from "../../components/Loader";
 import message from '../../reducers/message';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { solid, regular, brands, icon } from '@fortawesome/fontawesome-svg-core/import.macro'
@@ -18,6 +19,7 @@ const Container = styled.div`
     justify-content: center;
     align-items: center;
     padding-top: 5rem;
+    position: relative;
 
 `
 
@@ -192,6 +194,7 @@ const Signup = () => {
 
   const [error, setError] = useState()
   const [welcome, setWelcome] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const navigate = useNavigate()
   const { message } = useSelector((state) => state.message)
@@ -199,17 +202,24 @@ const Signup = () => {
 
 
   const handleSubmit = (e) => {
+    setLoading(true)
     e.preventDefault();
     dispatch(register(data.username, data.email, data.password))
       .then(() => {
         setWelcome(true)
+        setLoading(false)
+      }).catch(() => {
+        setLoading(false)
       })
   }
 
   function handleGoogleLoginSuccess(tokenResponse) {
+    setLoading(true)
     const accessToken = tokenResponse.access_token;
     dispatch(googleRegister(accessToken, navigate)).then(() => {
       window.location.reload()
+    }).catch(() => {
+      setLoading(false)
     })
   }
 
@@ -238,6 +248,7 @@ const Signup = () => {
           </ActionContainer>
         </SignupContainer>
       }
+      { loading && <Loader />}
     </Container>
   )
 }

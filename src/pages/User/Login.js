@@ -7,6 +7,7 @@ import {useGoogleLogin} from '@react-oauth/google';
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input"
 import CheckButton from "react-validation/build/button";
+import Loader from "../../components/Loader";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { solid, regular, brands, icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 
@@ -25,6 +26,7 @@ const Container = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
 
 
 `
@@ -215,6 +217,7 @@ const Login = () => {
 
     await dispatch(login(data.username, data.password))
       .then(() => {
+        setLoading(false)
         navigate("/dashboard");
         window.location.reload();
       })
@@ -226,10 +229,12 @@ const Login = () => {
 
   function handleGoogleLoginSuccess(tokenResponse) {
     const accessToken = tokenResponse.access_token;
-    console.log(accessToken)
+    setLoading(true)
     dispatch(googleLogin(accessToken,navigate)).then(() => {
-      setError(message)
+      setLoading(false)
       window.location.reload();
+    }).catch(() => {
+      setLoading(false)
     })
   }
 
@@ -258,6 +263,7 @@ const Login = () => {
           </button>
         </ActionContainer>
       </SignupContainer>
+      { loading && <Loader />}
     </Container>
   )
 }
