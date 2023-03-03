@@ -30,7 +30,7 @@ export default function (state = initialState, action) {
         case REGISTER_SUCCESS:
             return {
                 ...state,
-                isLoggedIn: false,
+                isLoggedIn: false
             }
         case GOOGLE_REGISTER_SUCCESS:
             return {

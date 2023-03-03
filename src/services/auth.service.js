@@ -18,7 +18,7 @@ const googleRegister = (accessToken) => {
         credential: accessToken
     }).then((response) => {
         console.log(response)
-        if(response) {
+        if (response) {
             localStorage.setItem("user", JSON.stringify(response.data.user));
             localStorage.setItem("token", JSON.stringify(response.data.token));
         }
@@ -32,7 +32,7 @@ const googleLogin = (accessToken) => {
         credential: accessToken
     }).then((response) => {
         console.log(response)
-        if(response) {
+        if (response) {
             localStorage.setItem("user", JSON.stringify(response.data.user));
             localStorage.setItem("token", JSON.stringify(response.data.token));
         }
@@ -46,8 +46,8 @@ const uploadUserDocument = (formData, accessToken) => {
         formData
     }, {
         headers: {
-        'Content-Type': 'multipart/form-data',
-        'x-access-token': `${accessToken}`
+            'Content-Type': 'multipart/form-data',
+            'x-access-token': `${accessToken}`
         }
     })
 }
@@ -69,12 +69,12 @@ const confirmUserInformation = (data, accessToken) => {
 
 const buyBricks = (data) => {
     return axios.post(BRICK_API_URL, data, { headers: authHeader() })
-    .then((response) => {
-        if(response.data.user) {
-            localStorage.setItem("user", JSON.stringify(response.data.user));
-        }
-        return response.data;
-    });
+        .then((response) => {
+            if (response.data.user) {
+                localStorage.setItem("user", JSON.stringify(response.data.user));
+            }
+            return response.data;
+        });
 }
 
 const login = (username, password) => {

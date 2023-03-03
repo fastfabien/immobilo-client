@@ -91,7 +91,7 @@ export const googleRegister = (accessToken, navigate) => (dispatch) => {
         return Promise.resolve();
     },
         (error) => {
-            
+
             const message = (error.response && error.response.data && error.response.data.message) || error.response.data.message || error.toString();
             dispatch({
                 type: LOGIN_FAIL,
@@ -132,7 +132,7 @@ export const confirmUserInformation = (data, accessToken) => (dispatch) => {
 
             return Promise.reject();
         }
-        )
+    )
 }
 
 export const buyBricks = (data) => (dispatch) => {
@@ -156,7 +156,7 @@ export const buyBricks = (data) => (dispatch) => {
                 payload: message
             });
 
-            return Promise.reject();   
+            return Promise.reject();
         }
     )
 }
@@ -169,8 +169,8 @@ export const uploadUserDocument = (typeDocument, accessToken) => (dispatch) => {
         });
         return Promise.resolve();
     },
-    (error) => {
-        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+        (error) => {
+            const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
 
             dispatch({
                 type: UPLOAD_DOCUMENT_FAIL
@@ -182,7 +182,7 @@ export const uploadUserDocument = (typeDocument, accessToken) => (dispatch) => {
             });
 
             return Promise.reject();
-    }
+        }
     )
 }
 

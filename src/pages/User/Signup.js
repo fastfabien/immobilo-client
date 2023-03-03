@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import styled, { keyframes } from 'styled-components'
 import axios from 'axios'
 import { Link, useNavigate, Navigate } from 'react-router-dom'
-import {useGoogleLogin} from '@react-oauth/google';
+import { useGoogleLogin } from '@react-oauth/google';
 import { register, googleRegister } from "../../actions/auth"
 import message from '../../reducers/message';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -190,59 +190,54 @@ const Signup = () => {
     password: ""
   })
 
-  const [error, setError] = useState("")
-  const [welcome, setWelcome] = useState('')
+  const [error, setError] = useState()
+  const [welcome, setWelcome] = useState(false)
 
   const navigate = useNavigate()
   const { message } = useSelector((state) => state.message)
   const dispatch = useDispatch()
 
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(register(data.username, data.email, data.password))
       .then(() => {
         setWelcome(true)
       })
-      .catch(() => {
-        setError(message)
-      })
   }
 
   function handleGoogleLoginSuccess(tokenResponse) {
     const accessToken = tokenResponse.access_token;
-    dispatch(googleRegister(accessToken,navigate)).then(() => {
+    dispatch(googleRegister(accessToken, navigate)).then(() => {
       window.location.reload()
-    }).catch(() => {
-      setError(message)
     })
   }
-  
-  const login = useGoogleLogin({onSuccess: handleGoogleLoginSuccess});
+
+  const login = useGoogleLogin({ onSuccess: handleGoogleLoginSuccess });
 
   return (
     <Container>
-    {
-      welcome ? <div>Votre compte a été crée avec succes, verifier votre email pour confirmer.</div> : <SignupContainer>
-        <Title>
-          Crée <span>un Compte</span>
-        </Title>
-        <InputContainer onSubmit={handleSubmit}>
-          <Input type="text" name={data.username} required placeholder="Entrez votre nom d'utilisateur" onChange={(e) => setData({ ...data, username: e.target.value })} />
-          <Input type="email" name={data.email} required placeholder='Entrez votre email' onChange={(e) => setData({ ...data, email: e.target.value })} />
-          <Input type="password" name={data.password} required placeholder='Entrez votre mot de passe' onChange={(e) => setData({ ...data, password: e.target.value })} />
-          {error && <Error>{error}</Error>}
-          <Input type="submit" placeholder='Entrez votre mot de passe' value="S'inscrire" />
-        </InputContainer>
-        <ActionContainer>
-          <div>Vous avez déjà un compte? <Link to='/login'>Se connecter</Link></div>
-          <button onClick={() => login()}>
-            <p><FontAwesomeIcon icon={brands('google-plus-g')} /></p>
-            <span>Continuer avec google</span>
-          </button>
-        </ActionContainer>
-      </SignupContainer>
-    }
+      {
+        welcome ? <div>Votre compte a été crée avec succes, verifier votre email pour confirmer.</div> : <SignupContainer>
+          <Title>
+            Crée <span>un Compte</span>
+          </Title>
+          <InputContainer onSubmit={handleSubmit}>
+            <Input type="text" name={data.username} required placeholder="Entrez votre nom d'utilisateur" onChange={(e) => setData({ ...data, username: e.target.value })} />
+            <Input type="email" name={data.email} required placeholder='Entrez votre email' onChange={(e) => setData({ ...data, email: e.target.value })} />
+            <Input type="password" name={data.password} required placeholder='Entrez votre mot de passe' onChange={(e) => setData({ ...data, password: e.target.value })} />
+            {message && <Error>{message}</Error>}
+            <Input type="submit" placeholder='Entrez votre mot de passe' value="S'inscrire" />
+          </InputContainer>
+          <ActionContainer>
+            <div>Vous avez déjà un compte? <Link to='/login'>Se connecter</Link></div>
+            <button onClick={() => login()}>
+              <p><FontAwesomeIcon icon={brands('google-plus-g')} /></p>
+              <span>Continuer avec google</span>
+            </button>
+          </ActionContainer>
+        </SignupContainer>
+      }
     </Container>
   )
 }

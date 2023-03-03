@@ -219,7 +219,6 @@ const Login = () => {
         window.location.reload();
       })
       .catch(() => {
-        setError(message)
         setLoading(false)
       });
 
@@ -251,7 +250,7 @@ const Login = () => {
         <InputContainer onSubmit={handleLogin}>
           <Inputs type="text" validations={[required]} name={data.username} required placeholder='Entrez votre nom' onChange={(e) => setData({ ...data, username: e.target.value })} />
           <Inputs type="password" validations={[required]} name={data.password} required placeholder='Entrez votre mot de passe' onChange={(e) => setData({ ...data, password: e.target.value })} />
-          {error && <Error>{error}</Error>}
+          {message && <Error>{message}</Error>}
           <Inputs type="submit" placeholder='Entrez votre mot de passe' value="Se connecter" />
         </InputContainer>
         <ActionContainer>
