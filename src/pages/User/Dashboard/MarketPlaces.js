@@ -3,7 +3,6 @@ import styled, { keyframes } from 'styled-components'
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { Buffer } from "buffer"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { solid, regular, brands, icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 import Button from '../../../components/Button';
@@ -210,21 +209,22 @@ const MarketPlaces = () => {
 	const { isLoggedIn, user, token } = useSelector(state => state.auth);
 	const [loading, setLoading] = useState(false)
 
-	const getAllSales =  async () => {
-		setLoading(true)
-		return await axios.get('/api/markets', { headers: authHeader() }).then((data) => {
-			setDatas(data.data.markets)
-			setLoading(false)
-		}).catch((err) => {
-			setLoading(false)
-			console.log(err) 
-		})	
-	}
+	const getAllSales = useCallback(async () => {
+	  setLoading(true)
+	  try {
+	    const response = await axios.get('/api/markets', { headers: authHeader() })
+	    setDatas(response.data.markets)
+	  } catch (error) {
+	    console.log(error)
+	  } finally {
+	    setLoading(false)
+	  }
+	}, [])
+
 
 	useEffect(() => {
 		getAllSales()
-		console.log(datas)
-	}, [])
+	}, [getAllSales])
 
 
 	return(
@@ -254,12 +254,11 @@ const MarketPlaces = () => {
 				<ProprieteContainer>
 							{
 								datas && datas.map((data) => (
-									<>
+									<React.Fragment key={data._id}>
 										{
-											user._id !== data.user &&
 												<AchatMarket 
 													id={data._id} 
-													image={`data:image/jpg;base64,${Buffer.from(data.bricks.propertie_id.images[0].data).toString('base64')}`} 
+													image={`data:image/jpg;base64,${data.bricks.propertie_id.image_couverture}`} 
 													nom={ data.bricks.propertie_id.nom }
 													zip={ data.bricks.propertie_id.zip }
 													prix_total={ data.prix }
@@ -268,9 +267,10 @@ const MarketPlaces = () => {
 													reverser={ data.bricks.propertie_id.reverser.toFixed(2) }
 													region={ data.bricks.propertie_id.region }
 													status={ data.status }
+													setDatas={setDatas}
 												 />
 										}
-									 </>
+									 </React.Fragment>
 									))
 							}
 						</ProprieteContainer>}

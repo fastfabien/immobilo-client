@@ -6,7 +6,6 @@ import AchatBricks from './AchatBricks';
 import { useDispatch, useSelector } from 'react-redux'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { solid, regular, brands, icon } from '@fortawesome/fontawesome-svg-core/import.macro'
-import { Buffer } from "buffer"
 
 const Container = styled.div`
   display: flex;
@@ -173,7 +172,7 @@ const CardProject = ({
   return (
     <>
     <Container>
-      <Header src={`data:image/jpg;base64,${Buffer.from(image.data).toString('base64')}`} onClick={handleGoToLink} alt="Photo de couverture" />
+      <Header src={`data:image/jpg;base64,${image}`} onClick={handleGoToLink} alt="Photo de couverture" />
       <Body >
         <div>
           <p>{nom}</p>

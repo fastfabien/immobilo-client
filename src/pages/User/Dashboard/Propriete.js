@@ -83,7 +83,7 @@ const Proprietes = () => {
 						<CardProject
 						  key={data._id}
 						  id={data._id}
-			              image={data.images[0]}
+			              image={data.image_couverture}
 			              nom={data.nom}
 			              adresse={`${data.zip} ${data.rue}`}
 			              prix={`${data.valorisation}€`}

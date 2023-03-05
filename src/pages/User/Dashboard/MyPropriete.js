@@ -3,7 +3,6 @@ import styled, { keyframes } from 'styled-components'
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import { Buffer } from "buffer"
 import Button from '../../../components/Button';
 import CardProject from "../../../components/CardProject";
 import ProprieteNavibar from "../../../components/ProprieteNavibar";
@@ -80,7 +79,7 @@ const MyPropriete = () => {
 			
 									<SellBricks 
 										id={data._id} 
-										image={`data:image/jpg;base64,${Buffer.from(data.propertie_id.images[0].data).toString('base64')}`} 
+										image={`data:image/jpg;base64,${data.propertie_id.image_couverture}`} 
 										nom={ data.propertie_id.nom }
 										zip={ data.propertie_id.zip }
 										prix_total={ data.prix_total }

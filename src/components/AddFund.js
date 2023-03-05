@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from "react-redux";
+import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { solid, regular, brands, icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 import CustomButton from './CustomButton';
 import Loader from './Loader';
 import { Link, Navigate, useNavigate } from "react-router-dom";
-import { buyBricks } from '../actions/auth';
+import { buyBricks } from '../actions/auth'
+import { Buffer } from "buffer"
+import authHeader from "./../services/auth-header";;
 
 
 
@@ -63,7 +66,7 @@ const AcheterBricksContent = styled.div`
 
 
   width: 50%;
-  height: 80vh;
+  height: auto;
   background-color: ${props => props.theme.white};
 
   & .header {
@@ -176,6 +179,7 @@ const InputContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   gap: .5rem;
+  margin-bottom: 2rem;
 
 `
 
@@ -235,7 +239,7 @@ const PourcentageInvestissement = styled.div`
 
 
 
-const AchatBricks = ({ nom, image, pourcentageInvestissement, brickRestant, setShowAction, id }) => {
+const AddFund = ({ setShowAddFund }) => {
 
 
     const { isLoggedIn, user, token } = useSelector(state => state.auth);
@@ -244,34 +248,12 @@ const AchatBricks = ({ nom, image, pourcentageInvestissement, brickRestant, setS
     const [error, setError] = useState()
     const dispatch = useDispatch()
     const [loading, setLoading] = useState(false)
-
-    const [data, setData] = useState({
-        nombreBricks: 0,
-        prixTotalBricks: 0
-    })
+    const [price, setPrice] = useState()
 
     useEffect(() => {
+
       
     }, [])
-
-    const handleAddBrick = (e) => {
-        e.preventDefault()
-        setData({ ...data, nombreBricks: e.target.value, prixTotalBricks: (e.target.value * 10), properties_id: id })
-      }
-
-    const handleBuyBricks = async (e) => {
-      e.preventDefault()
-
-      setLoading(true)
-
-      await dispatch(buyBricks(data)).then(() => {
-        setLoading(false)
-        window.location.reload()
-      }).catch(() => {
-        setLoading(false)
-      })
-
-    }
 
     return (
       <>
@@ -279,48 +261,45 @@ const AchatBricks = ({ nom, image, pourcentageInvestissement, brickRestant, setS
         <AcheterBricksContainer>
           <AcheterBricksContent>
             <div className="header">
-              Acheter des bricks
-              <Button onClick={() => setShowAction(false)}><span></span></Button>
+              Ajouter des fonds
+              <Button onClick={() => setShowAddFund(false)}><span></span></Button>
             </div>
             <div className="body">
               <div className="info">
-                <img src={`data:image/jpg;base64,${image}`} alt={nom} />
-                <p>{nom}</p>
+                <p>{user.lastName}</p>
                 <span>Argent sur votre portefeuille: {user.wallet}€</span>
               </div>
               <div className="briks">
-                <form onSubmit={handleBuyBricks}>
+                <form>
                   <InputContainer>
                     <div>
-                      <label>Nombre de bricks</label>
-                      <Input type="number" value={data.nombreBricks} min="0" onChange={handleAddBrick} />
-                    </div>
-                    <div>
-                      <label>Prix par bricks</label>
-                      <Input type="number" placeholder="10€" readOnly />
-                    </div>
-                    <div>
-                      <label>Prix total</label>
-                      <Input type="number" placeholder={`${data.prixTotalBricks}€`} readOnly />
+                      <label>Combient de fond voulez vous ajouter ?</label>
+                      <Input type="number" min="0" onChange={(e) => setPrice(e.target.value)} />
                     </div>
                   </InputContainer>
-                  <input type="submit" disabled={ (data.nombreBricks === 0 || data.nombreBricks === "0" || user.wallet < data.prixTotalBricks) ? true : false } value={`Acheter ${data.nombreBricks} bricks`} />
+                  <PayPalButtons 
+                        style={{ layout: "vertical" }}
+                        forceReRender={[price]}
+                        createOrder={(data, actions) => {
+                          return actions.order.create({
+                          purchase_units: [
+                              {
+                                  amount: {
+                                      value: price,
+                                  },
+                              },
+                          ],
+                      });
+                        }}
+                        onApprove={(data, actions) => {
+                          return actions.order.capture().then((details) => {
+                          const name = details.payer.name.given_name;
+                          return axios.get('/api/user/paypal/', details, { headers: authHeader() })
+                      });
+                        }}
+                    />
                 </form>
               </div>
-              <div className="footer">
-                <PourcentageInvestissementContainer>
-                  {pourcentageInvestissement} financé - {brickRestant} de bricks restant
-                  <PourcentageInvestissement pourcentage={pourcentageInvestissement} />
-                </PourcentageInvestissementContainer>
-              </div>
-              {
-                user.wallet < data.prixTotalBricks && (
-                  <FondError>
-                    <FontAwesomeIcon icon={solid('circle-exclamation')} />
-                    <p>Mince, vous n’avez pas assez d’argent dans votre portefeuille.</p>
-                  </FondError>
-                  )
-              }
             </div>
           </AcheterBricksContent>
         </AcheterBricksContainer>
@@ -329,4 +308,4 @@ const AchatBricks = ({ nom, image, pourcentageInvestissement, brickRestant, setS
     )
 }
 
-export default AchatBricks
+export default AddFund

@@ -3,7 +3,6 @@ import styled, { keyframes } from 'styled-components'
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { Buffer } from "buffer"
 import Button from '../../../components/Button';
 import CardProject from "../../../components/CardProject";
 import ProprieteNavibar from "../../../components/ProprieteNavibar";
@@ -148,16 +147,16 @@ const MySales = () => {
 	const [datas, setDatas] = useState()
 	const [loading, setLoading] = useState(false)
 
-	const getMySales =  async () => {
+	const getMySales =  useCallback(() => {
 		setLoading(true)
-		return await axios.get('/api/market', { headers: authHeader() }).then((data) => {
+		return axios.get('/api/market', { headers: authHeader() }).then((data) => {
 			setDatas(data.data.markets)
 			setLoading(false)
 		}).catch((err) => {
 			setLoading(false)
 			console.log(err) 
 		})	
-	}
+	}, [])
 
 	useEffect(() => {
 		getMySales()
@@ -180,7 +179,7 @@ const MySales = () => {
 			
 									<SellBricks 
 										id={data._id} 
-										image={`data:image/jpg;base64,${Buffer.from(data.bricks.propertie_id.images[0].data).toString('base64')}`} 
+										image={`data:image/jpg;base64,${data.bricks.propertie_id.image_couverture}`} 
 										nom={ data.bricks.propertie_id.nom }
 										zip={ data.bricks.propertie_id.zip }
 										prix_total={ data.prix }

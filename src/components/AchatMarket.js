@@ -134,9 +134,9 @@ const Container = styled.div`
 
 	width: 60%;
 	background-color: ${props => props.theme.white};
-	height: 80%;
+	height: auto;
 	box-shadow: 0px 0px 5px rgba(${(props) => props.theme.bodyRgba}, 0.18);
-
+	padding-bottom: 2rem;
 `
 
 const Header = styled.div`
@@ -203,6 +203,7 @@ const Information = styled.div`
 	justify-content: space-between;
 	gap: 2rem;
 	margin-top: 2rem;
+	margin-bottom: 2rem;
 
 	& div {
 		& span {
@@ -256,17 +257,14 @@ const Error = styled.div`
 
 	
 	padding: 1rem;
-	background-color: red;
-	color: ${props => props.theme.white};
-	position: fixed;
-	top: 0;
-	right: 0;
+	color: red;
 
 
 `
 
-const AchatMarket = ({ id, image, nom, zip, prix_total, nombre_bricks, rentabiliter, reverser, region, status  }) => {
+const AchatMarket = ({ id, image, nom, zip, prix_total, nombre_bricks, rentabiliter, reverser, region, status, setDatas  }) => {
 
+	const { isLoggedIn, user, token } = useSelector(state => state.auth);
 	const [show, setShow] = useState(false)
 	const [success, setSuccess] = useState('')
 	const [error, setError] = useState('')
@@ -278,12 +276,15 @@ const AchatMarket = ({ id, image, nom, zip, prix_total, nombre_bricks, rentabili
 	const handleSellBricks = async (e) => {
 		e.preventDefault()
 
-		setData({ ...data, bricks_id: id })
+		const value = {
+			market_id: id,
+			prix_total: prix_total
+		}
 
-		await axios.post('/api/market', data,{ headers: authHeader() }).then((data) => {
+		await axios.post('/api/markets/sell', value,{ headers: authHeader() }).then((data) => {
 			window.location.reload()
 		}).catch((err) => {
-			setError(err.message)
+			console.log(err)
 		})	
 
 	}
@@ -333,7 +334,7 @@ const AchatMarket = ({ id, image, nom, zip, prix_total, nombre_bricks, rentabili
 				<Container>
 					<Header>
 						<Button onClick={() => setShow(!show)}><span></span></Button>
-						Vendre des bricks
+						Acheter des bricks
 					</Header>
 					<Body>
 						<img src={img} alt={nom} />
@@ -342,29 +343,32 @@ const AchatMarket = ({ id, image, nom, zip, prix_total, nombre_bricks, rentabili
 
 						<Information>
 							<div>
-								Argent investi: <span>{ prix_total } €</span>
+								Nombre: <span> { nombre_bricks } </span>
 							</div>
 							<div>
-								Nombre de bricks: <span> { nombre_bricks } </span>
+								Prix vente/d'origine: <span> { (prix_total/nombre_bricks).toFixed(2) } € / 10 € </span>
 							</div>
 							<div>
-								Prix unitaire de bricks: <span> 10 € </span>
+								Rentabilité: <span> { rentabiliter } € </span>
+							</div>
+							<div>
+								Reversé: <span> { reverser } € </span>
 							</div>
 						</Information>
 						<Vente onSubmit={handleSellBricks}>
-							<div>
-								<p>Prix des bricks: </p>
-								<input type="number" value={data.new_price} min="0" onChange={(e) => setData({...data, new_price: e.target.value})} />
-							</div>
-							<Btn disabled={ data.new_price === "0" || data.new_price === "" || data.new_price === 0 ? true : false} type="submit" color="#fff" background="rgba(231,62,17, 1)">Vendre les { nombre_bricks } bricks à { data.new_price } € dont {data.new_price / nombre_bricks} € par bricks</Btn>
+							<input type="hidden" value={ prix_total } />
+							{
+								error !== '' && <Error>{error}</Error>
+							}
+							{
+								user.wallet < prix_total && <Error>Vous n'avez pas assez d’argent dans votre portefeuille, s'il vous plait fait un depot!</Error>
+							}
+							<Btn disabled={user.wallet < prix_total ? true : false} type="submit" color="#fff" background="rgba(231,62,17, 1)">Acheter les bricks pour { prix_total } €</Btn>
 						</Vente>
 					</Body>
 				</Container>
 				{
 					success !== '' && <Success>{success}</Success>
-				}
-				{
-					error !== '' && <Error>{error}</Error>
 				}
 			</BuyContainer>
 		}

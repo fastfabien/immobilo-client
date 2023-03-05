@@ -21,6 +21,14 @@ import UserDashboard from "./pages/Admin/User.admin";
 import GlobalStyle from "./styles/GlobalStyle";
 import { light } from "./styles/Themes";
 import { GoogleOAuthProvider} from '@react-oauth/google';
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+
+
+const initialOptions = {
+  "client-id": process.env.REACT_APP_PAYPAL_CLIENT_ID,
+  currency: "EUR",
+  intent: "capture",
+};
 
 
 function App() {
@@ -30,6 +38,7 @@ function App() {
       <GlobalStyle />
       <ThemeProvider theme={light}>
         <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+        <PayPalScriptProvider options={initialOptions}>
         <Header />
         <Routes>
           {/* USER ROUTES */}
@@ -53,6 +62,7 @@ function App() {
           <Route path="/admin/proprietes/new" element={<NewProprieteAdmin />} />
         </Routes>
         {/* <Footer /> */}
+        </PayPalScriptProvider>
         </GoogleOAuthProvider>
       </ThemeProvider>
     </>

@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState, useRef } from 'react'
 import { Link, useLocation, NavLink } from 'react-router-dom'
 import styled from 'styled-components'
 import Button from './Button'
+import AddFund from './AddFund'
 import MyLogo from "../assets/logo.jpg"
 import { useDispatch, useSelector } from 'react-redux'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -252,12 +253,31 @@ const UserInfo = styled.div`
 
 `
 
+const Wallet = styled.div`
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    line-height: 0;
+    gap: .5rem;
+    font-weight: 800;
+    color:rgba(${(props) => props.theme.textRgba}, 1);
+    cursor: pointer;
+    & .svg-inline--fa {
+        height: 1.8em;
+    }
+
+
+
+`
+
 
 
 function Header() {
     const { user: currentUser } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
     const [isShow, setIsShow] = useState(false)
+    const [showAddFund, setShowAddFund] = useState(false)
 
     let location = useLocation();
     const navRef = useRef()
@@ -288,6 +308,9 @@ function Header() {
                 <img src={MyLogo} alt="logo" />
             </Logo>
             {
+                showAddFund && <AddFund setShowAddFund={setShowAddFund} />
+            }
+            {
                 currentUser && (<>
 
                     <UserNavigation ref={navRef}>
@@ -304,7 +327,7 @@ function Header() {
                     currentUser
                         ?   (<>
                                 <UserInfo>
-                                    <Link className="link" to="/"><span>{currentUser.wallet}€</span><FontAwesomeIcon icon={solid('wallet')} /></Link>
+                                    <Wallet onClick={() => setShowAddFund(true)} ><span>{currentUser.wallet}€</span><FontAwesomeIcon icon={solid('wallet')} /></Wallet>
                                     <div><Link className="link" to="/"><FontAwesomeIcon icon={solid('circle-info')} /></Link></div>
                                     <div><Link className="link" onClick={logOut} to="/"><FontAwesomeIcon icon={solid('right-from-bracket')} /></Link></div>
                                 </UserInfo>
