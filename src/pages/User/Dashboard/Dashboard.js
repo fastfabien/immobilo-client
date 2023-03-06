@@ -1,8 +1,11 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useCallback } from 'react'
 import styled, { keyframes } from 'styled-components'
+import axios from "axios";
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import Button from '../../../components/Button';
+import authHeader from "../../../services/auth-header";
+import Loader from '../../../components/Loader';
 
 
 
@@ -175,6 +178,20 @@ const Right = styled.div`
 const Dashboard = () => {
   const [ message, setMessage ] = useState({})
   const { isLoggedIn, user, token } = useSelector(state => state.auth);
+  const [datas, setDatas] = useState()
+  const [bricksValue, setBrickValue] = useState()
+
+  const refreshUserInfo =  useCallback(() => {
+    return axios.get('/api/user/dashboard', { headers: authHeader() }).then( async (data) => {
+      console.log(data.data.user)
+      setDatas(data.data.user)
+      setBrickValue(data.data.user.bricks)
+    }).catch((err) => {
+      console.log(err)
+    })
+  }, [])
+
+
   useEffect(() => {
     if (user.verification === "Non verifier") {
       setMessage({
@@ -192,13 +209,16 @@ const Dashboard = () => {
         titre: "Votre document a été refusé par le prestataire de paiement"
       })
     }
-  }, [])
+    refreshUserInfo()
+  }, [refreshUserInfo])
 
   if (user?.roles[0].name === "admin") {
     return <Navigate to="/admin" />
   } else if (!isLoggedIn) {
     return <Navigate to="/login" />
   }
+
+  console.log(bricksValue)
 
   return (
     <Container>
@@ -219,15 +239,15 @@ const Dashboard = () => {
         <Recap>
           <RecapContent>
             <h2>valeur de mes bricks</h2>
-            <div>10 €</div>
+            <div>{datas?.bricks.reduce((acc, curr) => acc + parseFloat(curr.prix_total), 0)} €</div>
           </RecapContent>
           <RecapContent>
             <h2>proprieté en portefeuille</h2>
-            <div>1</div>
+            <div>{datas?.bricks.length}</div>
           </RecapContent>
           <RecapContent>
             <h2>révenus réçu</h2>
-            <div>{user?.user_benefits.toFixed(2)} €</div>
+            <div>{datas?.user_benefits.toFixed(2)} €</div>
           </RecapContent>
           <RecapContent>
             <h2>montant total investi</h2>
@@ -245,16 +265,22 @@ const Dashboard = () => {
                 <th>Répartition</th>
                 <th>Valoriation</th>
               </tr>
-              <tr>
-                <td>Immeuble Barban</td>
-                <td>100%</td>
-                <td>10 €</td>
-              </tr>
+              {
+                bricksValue?.map((brick) => (
+
+                  <tr>
+                    <td>{ brick.propertie_id.nom }</td>
+                    <td>100%</td>
+                    <td>{ brick.prix_total } €</td>
+                  </tr>
+
+                ))
+              }
               <tfoot>
               <tr>
                 <td>Total</td>
                 <td>100%</td>
-                <td>10 €</td>
+                <td>{datas?.bricks.reduce((acc, curr) => acc + parseFloat(curr.prix_total), 0)} €</td>
               </tr>
             </tfoot>
             </table>

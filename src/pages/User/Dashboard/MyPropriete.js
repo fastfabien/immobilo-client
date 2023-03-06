@@ -62,8 +62,6 @@ const MyPropriete = () => {
     getAllPropriete();
   }, [getAllPropriete]);
 
-  console.log(datas);
-
   return (
     <Container>
       <ProprieteNavibar

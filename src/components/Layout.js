@@ -274,7 +274,7 @@ const Wallet = styled.div`
 
 
 function Header() {
-    const { user: currentUser, isLoggedIn } = useSelector((state) => state.auth);
+    const { user: currentUser, isLoggedIn, wallet } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
     const [isShow, setIsShow] = useState(false)
     const [showAddFund, setShowAddFund] = useState(false)
@@ -296,6 +296,7 @@ function Header() {
                 }
             }
         }
+        dispatch(refreshUserInformation())
 
     }, [dispatch, location])
 
@@ -328,7 +329,7 @@ function Header() {
                     currentUser
                         ?   (<>
                                 <UserInfo>
-                                    <Wallet onClick={() => setShowAddFund(true)} ><span>{currentUser.wallet}€</span><FontAwesomeIcon icon={solid('wallet')} /></Wallet>
+                                    <Wallet onClick={() => setShowAddFund(true)} ><span>{wallet}€</span><FontAwesomeIcon icon={solid('wallet')} /></Wallet>
                                     <div><Link className="link" to="/"><FontAwesomeIcon icon={solid('circle-info')} /></Link></div>
                                     <div><Link className="link" onClick={logOut} to="/"><FontAwesomeIcon icon={solid('right-from-bracket')} /></Link></div>
                                 </UserInfo>

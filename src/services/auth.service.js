@@ -94,8 +94,8 @@ const login = (username, password) => {
 const refreshUserInformation = () => {
     return axios.get('/api/user/refresh', { headers: authHeader() })
     .then((response) => {
-        console.log(response.data.user)
-        localStorage.setItem("user", JSON.stringify(response.data.user));
+        console.log(response.data.user.wallet)
+        return response.data;
     })
 }
 

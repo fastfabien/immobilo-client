@@ -21,13 +21,12 @@ const user = JSON.parse(localStorage.getItem("user"));
 const token = JSON.parse(localStorage.getItem("token"));
 
 const initialState = user
-    ? { isLoggedIn: true, user, token }
-    : { isLoggedIn: false, user: null, token: null };
+    ? { isLoggedIn: true, user, token, wallet: user.wallet }
+    : { isLoggedIn: false, user: null, token: null, wallet: 0.0 };
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default function (state = initialState, action) {
     const { type, payload } = action;
-
     switch (type) {
         case REGISTER_SUCCESS:
             return {
@@ -38,8 +37,8 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 isLoggedIn: true,
-                user: payload.user
-                }
+                wallet: payload.user.user.wallet
+            }
         case GOOGLE_REGISTER_SUCCESS:
             return {
                 ...state,
