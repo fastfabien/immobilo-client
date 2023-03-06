@@ -296,7 +296,9 @@ function Header() {
                 }
             }
         }
-        dispatch(refreshUserInformation())
+        if (isLoggedIn) {
+            dispatch(refreshUserInformation())
+        }
 
     }, [dispatch, location])
 
