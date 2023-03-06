@@ -271,10 +271,13 @@ const AchatMarket = ({ id, image, nom, zip, prix_total, nombre_bricks, rentabili
 	const [data, setData] = useState({
 		new_price: 0
 	})
+	const [isClicked, setIsClicked] = useState(false)
 
 
 	const handleSellBricks = async (e) => {
 		e.preventDefault()
+
+		setIsClicked(true);
 
 		const value = {
 			market_id: id,
@@ -363,7 +366,7 @@ const AchatMarket = ({ id, image, nom, zip, prix_total, nombre_bricks, rentabili
 							{
 								user.wallet < prix_total && <Error>Vous n'avez pas assez d’argent dans votre portefeuille, s'il vous plait fait un depot!</Error>
 							}
-							<Btn disabled={user.wallet < prix_total ? true : false} type="submit" color="#fff" background="rgba(231,62,17, 1)">Acheter les bricks pour { prix_total } €</Btn>
+							<Btn disabled={user.wallet < prix_total || isClicked ? true : false} type="submit" color="#fff" background="rgba(231,62,17, 1)">Acheter les bricks pour { prix_total } €</Btn>
 						</Vente>
 					</Body>
 				</Container>
