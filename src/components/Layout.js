@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { solid, regular, brands, icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 
-import { logout } from "../actions/auth";
+import { logout, refreshUserInformation } from "../actions/auth";
 import { clearMessage } from "../actions/message";
 
 const NavBar = styled.nav`
@@ -274,7 +274,7 @@ const Wallet = styled.div`
 
 
 function Header() {
-    const { user: currentUser } = useSelector((state) => state.auth);
+    const { user: currentUser, isLoggedIn } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
     const [isShow, setIsShow] = useState(false)
     const [showAddFund, setShowAddFund] = useState(false)
@@ -296,6 +296,7 @@ function Header() {
                 }
             }
         }
+
     }, [dispatch, location])
 
     const logOut = useCallback(() => {

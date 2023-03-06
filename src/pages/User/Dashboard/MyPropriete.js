@@ -42,59 +42,61 @@ const ProprieteContainer = styled.div`
 
 
 const MyPropriete = () => {
+  const [datas, setDatas] = useState(null);
+  const [loading, setLoading] = useState(false);
 
+  const getAllPropriete = useCallback(async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get("/api/bricks", { headers: authHeader() });
+      setDatas(response?.data?.bricks || []);
+    } catch (error) {
+      console.log(error);
+      setDatas([]);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
-	const [datas, setDatas] = useState()
-	const [loading, setLoading] = useState(false)
+  useEffect(() => {
+    getAllPropriete();
+  }, [getAllPropriete]);
 
-	const getAllPropriete =  async () => {
-		setLoading(true)
-		return await axios.get('/api/bricks', { headers: authHeader() }).then((data) => {
-			setDatas(data.data.bricks)
-			setLoading(false)
-		}).catch((err) => {
-			setLoading(false)
-			console.log(err)
-		})	
-	}
+  console.log(datas);
 
-	useEffect(() => {
-		getAllPropriete()
-		console.log(datas)
-	}, [])
-
-
-	return(
-		<Container>
-			<ProprieteNavibar alignment="center" content={
-				[{ lien: "/proprietes", text: "Tous les biens" },
-				{ lien: "/mes-proprietes", text: "Mes biens" },
-				{ lien: "/mes-ventes", text: "Mes ventes en cours" }]
-			} /> 
-			{
-				loading ? <Loader /> :
-				<ProprieteContainer>
-							{
-								datas && datas.map((data) => (
-			
-									<SellBricks 
-										id={data._id} 
-										image={`data:image/jpg;base64,${data.propertie_id.image_couverture}`} 
-										nom={ data.propertie_id.nom }
-										zip={ data.propertie_id.zip }
-										prix_total={ data.prix_total }
-										nombre_bricks={ data.nombre_bricks }
-										rentabiliter={ data.propertie_id.rentabiliter } 
-										reverser={ data.propertie_id.reverser.toFixed(2) }
-										region={ data.propertie_id.region }
-										status={ data.status === "Sell" && data.status }
-									 />
-									))
-							}
-						</ProprieteContainer>}
-		</Container>	
-	)
-}
+  return (
+    <Container>
+      <ProprieteNavibar
+        alignment="center"
+        content={[
+          { lien: "/proprietes", text: "Tous les biens" },
+          { lien: "/mes-proprietes", text: "Mes biens" },
+          { lien: "/mes-ventes", text: "Mes ventes en cours" },
+        ]}
+      />
+      {loading ? (
+        <Loader />
+      ) : (
+        <ProprieteContainer>
+          {datas?.map((data) => (
+            <SellBricks
+              key={data._id}
+              id={data._id}
+              image={`data:image/jpg;base64,${data.propertie_id.image_couverture}`}
+              nom={data.propertie_id.nom}
+              zip={data.propertie_id.zip}
+              prix_total={data.prix_total}
+              nombre_bricks={data.nombre_bricks}
+              rentabiliter={data.propertie_id.rentabiliter}
+              reverser={data.propertie_id.reverser.toFixed(2)}
+              region={data.propertie_id.region}
+              status={data.status === "Sell" && data.status}
+            />
+          ))}
+        </ProprieteContainer>
+      )}
+    </Container>
+  );
+};
 
 export default MyPropriete;
-

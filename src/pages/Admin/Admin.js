@@ -1,4 +1,4 @@
-import react from 'react'
+import react, { useEffect } from 'react'
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import styled from 'styled-components'
@@ -33,9 +33,15 @@ const Admin = () => {
 
 	const { isLoggedIn, user, token } = useSelector(state => state.auth);
 
-	if (!isLoggedIn && user.roles[0]['name'] !== 'admin') {
+
+	useEffect(() => {
+
+	}, [])
+
+	if (!isLoggedIn || user?.roles[0]['name'] !== 'admin') {
 	    return <Navigate to="/dashboard" />
 	 }
+
 
 	return(
 		<Container>

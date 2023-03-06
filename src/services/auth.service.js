@@ -91,6 +91,14 @@ const login = (username, password) => {
     });
 };
 
+const refreshUserInformation = () => {
+    return axios.get('/api/user/refresh', { headers: authHeader() })
+    .then((response) => {
+        console.log(response.data.user)
+        localStorage.setItem("user", JSON.stringify(response.data.user));
+    })
+}
+
 const logout = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
@@ -111,6 +119,7 @@ export default {
     googleLogin,
     confirmUserInformation,
     uploadUserDocument,
-    buyBricks
+    buyBricks,
+    refreshUserInformation
 };
 

@@ -12,7 +12,9 @@ import {
     LOGIN_FAIL,
     LOGOUT,
     BRICKS_SELLED_SUCCESS,
-    BRICKS_SELLED_FAIL
+    BRICKS_SELLED_FAIL,
+    INFORMATION_UPDATED,
+    INFORMATION_UPDATE_FAILED
 } from "../actions/types";
 
 const user = JSON.parse(localStorage.getItem("user"));
@@ -32,6 +34,12 @@ export default function (state = initialState, action) {
                 ...state,
                 isLoggedIn: false
             }
+        case INFORMATION_UPDATED:
+            return {
+                ...state,
+                isLoggedIn: true,
+                user: payload.user
+                }
         case GOOGLE_REGISTER_SUCCESS:
             return {
                 ...state,

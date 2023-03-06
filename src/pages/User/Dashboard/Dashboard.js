@@ -194,21 +194,23 @@ const Dashboard = () => {
     }
   }, [])
 
-  if (user.roles === "admin") {
+  if (user?.roles[0].name === "admin") {
     return <Navigate to="/admin" />
+  } else if (!isLoggedIn) {
+    return <Navigate to="/login" />
   }
 
   return (
     <Container>
       {
-        user.verification !=="Verifier" && 
+        user?.verification !=="Verifier" && 
         <Message>
           <MessageContainer>
             <h1>{message.titre}</h1>
             <p>{message.description}</p>
           </MessageContainer>
           {
-            user.verification !== "En attente" && <Button userAction="user__action" href="/information" color="#fff" background="rgba(53,52,52,1)">Verifier mes information</Button>
+            user?.verification !== "En attente" && <Button userAction="user__action" href="/information" color="#fff" background="rgba(53,52,52,1)">Verifier mes information</Button>
           }
         </Message>
       }
@@ -225,7 +227,7 @@ const Dashboard = () => {
           </RecapContent>
           <RecapContent>
             <h2>révenus réçu</h2>
-            <div>0.03 €</div>
+            <div>{user?.user_benefits.toFixed(2)} €</div>
           </RecapContent>
           <RecapContent>
             <h2>montant total investi</h2>

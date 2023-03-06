@@ -14,7 +14,9 @@ import {
     LOGOUT,
     SET_MESSAGE,
     BRICKS_SELLED_SUCCESS,
-    BRICKS_SELLED_FAIL
+    BRICKS_SELLED_FAIL,
+    INFORMATION_UPDATED,
+    INFORMATION_UPDATE_FAILED
 } from "./types";
 
 import AuthService from "../services/auth.service";
@@ -212,6 +214,34 @@ export const googleLogin = (accessToken, navigate) => (dispatch) => {
         }
     );
 };
+
+
+export const refreshUserInformation = () => (dispatch) => {
+    return AuthService.refreshUserInformation().then(
+        (data) => {
+            dispatch({
+                type: INFORMATION_UPDATED,
+                payload: { user: data }
+            })
+
+            return Promise.resolve()
+        },
+        (error) => {
+            const message = (error.response && error.response.data && error.response.data.message) || error.response.data.message || error.toString();
+
+            dispatch({
+                type: INFORMATION_UPDATE_FAILED,
+            });
+
+            dispatch({
+                type: SET_MESSAGE,
+                payload: message
+            });
+
+            return Promise.reject();
+        }
+    )
+}
 
 export const logout = () => (dispatch) => {
     AuthService.logout();

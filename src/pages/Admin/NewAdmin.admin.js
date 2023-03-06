@@ -187,12 +187,19 @@ const NewAdmin = () =>  {
 	    email: "",
 	    password: ""
 	})
+  const { isLoggedIn, user, token } = useSelector(state => state.auth);
 	const [error, setError] = useState(false)
 	const navigate = useNavigate()
 
 	useEffect(() => {
 		
 	}, [])
+
+
+  if (!isLoggedIn || user.roles[0]['name'] !== 'admin') {
+    return <Navigate to="/dashboard" />
+  }
+
 
 	const handleSubmit = async (e) => {
     e.preventDefault();

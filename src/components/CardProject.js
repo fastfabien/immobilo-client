@@ -166,7 +166,7 @@ const CardProject = ({
   }
 
   useEffect(() => {
-    console.log(image)
+    
   }, [])
 
   return (

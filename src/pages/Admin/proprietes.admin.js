@@ -88,9 +88,9 @@ const ProprieteAdmin = () => {
 		getAllPropriete()
 	}, [])
 
-	if (!isLoggedIn && user.roles[0]['name'] !== 'user') {
-	    return <Navigate to="/login" />
-	 }
+	if (!isLoggedIn || user.roles[0]['name'] !== 'admin') {
+      return <Navigate to="/dashboard" />
+    }
 
 	return(
 		<Container>

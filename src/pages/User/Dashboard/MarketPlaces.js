@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback} from 'react'
+import React, { useState, useRef, useEffect, useCallback, useMemo} from 'react'
 import styled, { keyframes } from 'styled-components'
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import axios from "axios";
@@ -159,15 +159,7 @@ const Filter = styled.div`
 			justify-content: space-between;
 			align-items: center;	
 			position: relative;
-			&:last-child::after {
-				content: "";
-				width: 0.8em;
-				height: 0.5em;
-				background-color: rgba(${props => props.theme.textRgba}, 1);
-				clip-path: polygon(100% 0%, 0 0%, 50% 100%);
-				position: absolute;
-				right: 0;
-			}
+			
 
 			& select {
 				appearance: none;
@@ -201,30 +193,65 @@ const Input = styled.input`
 
 `
 
+const filterProprietes = (datas, villeFilter, priceFilter, rentabiliteFilter) => {
+  return datas?.filter(
+    (data) =>
+      (data.bricks.propertie_id.rue.includes(villeFilter) || 
+      data.bricks.propertie_id.region.includes(villeFilter) || 
+      data.bricks.propertie_id.nom.includes(villeFilter) ) &&
+      data.prix >= priceFilter &&
+      data.bricks.propertie_id.rentabiliter >= rentabiliteFilter
+  );
+};
+
+const fetchData = async (setLoading, setDatas) => {
+	  setLoading(true);
+	  try {
+	    const response = await axios.get('/api/markets', { headers: authHeader() });
+	    setDatas(response.data.markets);
+	    setLoading(false);
+	  } catch (error) {
+	    setLoading(false);
+	  }
+	};
 
 const MarketPlaces = () => {
 
 
 	const [datas, setDatas] = useState()
+	const [villeFilter, setVilleFilter] = useState("")
+	const [priceFilter, setPriceFilter] = useState("")
+	const [typeFilter, setTypeFilter] = useState("")
+	const [rentabiliteFilter, setRentabiliteFilter] = useState("")
 	const { isLoggedIn, user, token } = useSelector(state => state.auth);
 	const [loading, setLoading] = useState(false)
 
-	const getAllSales = useCallback(async () => {
-	  setLoading(true)
-	  try {
-	    const response = await axios.get('/api/markets', { headers: authHeader() })
-	    setDatas(response.data.markets)
-	  } catch (error) {
-	    console.log(error)
-	  } finally {
-	    setLoading(false)
-	  }
-	}, [])
 
 
 	useEffect(() => {
-		getAllSales()
-	}, [getAllSales])
+		fetchData(setLoading, setDatas)
+	}, [setDatas])
+
+	const handleVilleChange = (e) => {
+    	setVilleFilter(e.target.value);
+	};
+
+	const handlePriceChange = (e) => {
+		setPriceFilter(e.target.value)
+	}
+
+	const handleRentabiliteFilter = (e) => {
+		setRentabiliteFilter(e.target.value)
+	}
+
+	const handleTypeChange = (e) => {
+	    setTypeFilter(e.target.value);
+	};
+
+	const filteredProprietes = useMemo(
+	    () => filterProprietes(datas, villeFilter, priceFilter, rentabiliteFilter),
+	    [datas, villeFilter, priceFilter, rentabiliteFilter]
+	  );
 
 
 	return(
@@ -232,20 +259,14 @@ const MarketPlaces = () => {
 			<Filter>
 				<form>
 					<div>
-						<FontAwesomeIcon icon={solid('search')} /><Input type="text" placeholder="Ville, Immeuble,..." />
+						<FontAwesomeIcon icon={solid('search')} /><Input type="text" value={villeFilter} placeholder="Ville, Immeuble,..." onChange={handleVilleChange} />
 					</div>
 					<div>
-						<FontAwesomeIcon icon={solid('euro-sign')} /><Input type="number" placeholder="Prix" />
+						<FontAwesomeIcon icon={solid('euro-sign')} /><Input type="number" placeholder="Prix" value={priceFilter} onChange={handlePriceChange} />
 					</div>
 					<div>
 						<FontAwesomeIcon icon={solid('percent')} />
-						<Input type="number" placeholder="Rentabilité" />
-						<select>
-							<option>Mandona</option>
-							<option>Mandona</option>
-							<option>Mandona</option>
-							<option>Mandona</option>
-						</select>
+						<Input type="number" placeholder="Rentabilité" value={rentabiliteFilter} onChange={handleRentabiliteFilter} />
 					</div>
 				</form>
 			</Filter>
@@ -253,7 +274,7 @@ const MarketPlaces = () => {
 				loading ? <Loader /> :
 				<ProprieteContainer>
 							{
-								datas && datas.map((data) => (
+								filteredProprietes && filteredProprietes.map((data) => (
 									<React.Fragment key={data._id}>
 										{
 												<AchatMarket 

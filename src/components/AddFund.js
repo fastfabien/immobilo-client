@@ -10,7 +10,7 @@ import Loader from './Loader';
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { buyBricks } from '../actions/auth'
 import { Buffer } from "buffer"
-import authHeader from "./../services/auth-header";;
+import authHeader from "./../services/auth-header";
 
 
 
@@ -249,6 +249,39 @@ const AddFund = ({ setShowAddFund }) => {
     const dispatch = useDispatch()
     const [loading, setLoading] = useState(false)
     const [price, setPrice] = useState()
+    const [orderId, setOrderId] = useState("");
+
+    const createOrder = (data, actions) => {
+      return axios.post("/api/paypal/order", {
+        amount: price,
+        currency: "EUR",
+      })
+        .then((res) => {
+          setOrderId(res.data.orderId);
+          console.log(res.data.orderId)
+          return res.data.orderId;
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    };
+
+    const onApprove = (data, actions) => {
+      return axios.post("/api/paypal/capture", {
+        orderId,
+        amount: price,
+        currency: "EUR",
+        authorization: data.orderID,
+      })
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    };
+
+
 
     useEffect(() => {
 
@@ -280,23 +313,8 @@ const AddFund = ({ setShowAddFund }) => {
                   <PayPalButtons 
                         style={{ layout: "vertical" }}
                         forceReRender={[price]}
-                        createOrder={(data, actions) => {
-                          return actions.order.create({
-                          purchase_units: [
-                              {
-                                  amount: {
-                                      value: price,
-                                  },
-                              },
-                          ],
-                      });
-                        }}
-                        onApprove={(data, actions) => {
-                          return actions.order.capture().then((details) => {
-                          const name = details.payer.name.given_name;
-                          return axios.get('/api/user/paypal/', details, { headers: authHeader() })
-                      });
-                        }}
+                        createOrder={createOrder}
+                        onApprove={onApprove}
                     />
                 </form>
               </div>

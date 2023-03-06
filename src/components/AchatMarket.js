@@ -349,10 +349,10 @@ const AchatMarket = ({ id, image, nom, zip, prix_total, nombre_bricks, rentabili
 								Prix vente/d'origine: <span> { (prix_total/nombre_bricks).toFixed(2) } € / 10 € </span>
 							</div>
 							<div>
-								Rentabilité: <span> { rentabiliter } € </span>
+								Rentabilité: <span> { rentabiliter } % </span>
 							</div>
 							<div>
-								Reversé: <span> { reverser } € </span>
+								Reversé: <span> { reverser } % </span>
 							</div>
 						</Information>
 						<Vente onSubmit={handleSellBricks}>
