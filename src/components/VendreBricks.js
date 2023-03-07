@@ -272,20 +272,23 @@ const SellBricks = ({ id, image, nom, zip, prix_total, nombre_bricks, rentabilit
 	const [success, setSuccess] = useState('')
 	const [error, setError] = useState('')
 	const [loading, setLoading] = useState(false)
+	const [isClicked, setIsClicked] = useState(false)
 	const [data, setData] = useState({
-		new_price: 0
+		new_price: 0,
+		bricks_id: id
 	})
 
 
 	const handleSellBricks = async (e) => {
 		e.preventDefault()
 
-		setLoading(true)
+		setIsClicked(true)
 
-		setData({ ...data, bricks_id: id })
+		setLoading(true)
 
 		await axios.post('/api/market', data,{ headers: authHeader() }).then((data) => {
 			setLoading(false)
+			setShow(!show)
 			window.location.reload()
 		}).catch((err) => {
 			setLoading(false)
@@ -364,7 +367,7 @@ const SellBricks = ({ id, image, nom, zip, prix_total, nombre_bricks, rentabilit
 								<p>Prix des bricks: </p>
 								<input type="number" value={data.new_price} min="0" onChange={(e) => setData({...data, new_price: e.target.value})} />
 							</div>
-							<Btn disabled={ data.new_price === "0" || data.new_price === "" || data.new_price === 0 ? true : false} type="submit" color="#fff" background="rgba(231,62,17, 1)">Vendre les { nombre_bricks } bricks à { data.new_price } € dont {(data.new_price / nombre_bricks).toFixed(2)} € par bricks</Btn>
+							<Btn disabled={ data.new_price === "0" || data.new_price === "" || data.new_price === 0 ? true : false || isClicked } type="submit" color="#fff" background="rgba(231,62,17, 1)">Vendre les { nombre_bricks } bricks à { data.new_price } € dont {(data.new_price / nombre_bricks).toFixed(2)} € par bricks</Btn>
 						</Vente>
 					</Body>
 				</Container>

@@ -266,7 +266,7 @@ const AchatBricks = ({ nom, image, pourcentageInvestissement, brickRestant, setS
 
       await dispatch(buyBricks(data)).then(() => {
         setLoading(false)
-        window.location.reload()
+        setShowAction(false)
       }).catch(() => {
         setLoading(false)
       })
