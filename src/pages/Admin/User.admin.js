@@ -3,7 +3,6 @@ import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import styled from 'styled-components'
 import authHeader from "../../services/auth-header";
-import { Buffer } from "buffer"
 import axios from "axios";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { solid, regular, brands, icon, thin } from '@fortawesome/fontawesome-svg-core/import.macro'
@@ -280,7 +279,7 @@ const UserDashboard = () =>  {
 						<Profil>
 							{
 								user.document && 
-							   <img src={`data:image/jpg;base64,${Buffer.from(user.document.data).toString('base64')}`} height="50" width="60" alt="Red dot" />
+							   <img src={`data:image/jpg;base64,${user.document}`} height="50" width="60" alt="Red dot" />
 							}
 						</Profil>
 					</Left>
@@ -301,7 +300,7 @@ const UserDashboard = () =>  {
 						{
 							user.document && (
 								<p>
-									<a href={`data:${user.documentMimetype};base64,${Buffer.from(user.document.data).toString('base64')}`} download={`document.${user.documentMimetype.split("/")[1]}`}>Voir le document</a>
+									<a href={`data:${user.documentMimetype};base64,${user.document}`} download={`document.${user.documentMimetype.split("/")[1]}`}>Voir le document</a>
 								</p>
 							)
 						}
