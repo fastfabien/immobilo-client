@@ -136,7 +136,7 @@ const Opportinuté = () => {
                           rentabilité={`${data.rentabiliter}%`}
                           reversé={`${data.reverser.toFixed(2)}%`}
                           pourcentageInvestissement="57.32%"
-                          acheter={true}
+                          acheter={false}
                           brickRestant={data.nb_brique_restant}
                          />
                   </SwiperSlide>
