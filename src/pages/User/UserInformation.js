@@ -4,6 +4,7 @@ import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import axios from 'axios';
 import { confirmUserInformation, uploadUserDocument } from '../../actions/auth';
+import Loader from "../../components/Loader";
 
 
 const Container = styled.div`
@@ -342,6 +343,7 @@ const UserInformation = () => {
     await dispatch(confirmUserInformation(data, token))
       .then(() => {
         setShowDoc(true)
+        setLoading(false);
       })
       .catch(() => {
         setLoading(false)
@@ -353,6 +355,8 @@ const UserInformation = () => {
   const uploadDocument = async (e) => {
     e.preventDefault();
     console.log(e.target[1].files[0])
+
+    setLoading(true);
 
     /*console.log(files)*/
     var formData = new FormData()
@@ -470,6 +474,9 @@ const UserInformation = () => {
         </FormContainer>
         }
       </SignupContainer>
+      {
+        loading && <Loader />
+      }
     </Container>
   )
 }
