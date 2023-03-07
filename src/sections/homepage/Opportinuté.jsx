@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios"
 import styled from "styled-components";
 import { Swiper, SwiperSlide } from "swiper/react";
 import img from "../../assets/house2.jpg";
@@ -21,6 +22,18 @@ const Container = styled.div`
   @media screen and (max-width: 70em) {
     padding: ${(props) => props.theme.fontsm} ${(props) => props.theme.fontlg};
   }
+
+  .swiper-slide {
+    & > div {
+      width: 100%;
+    & img {
+      height: 100%;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+  }
+  }
+
 `;
 
 const Title = styled.h2`
@@ -60,6 +73,26 @@ const CardContainer = styled.div`
 `;
 
 const Opportinuté = () => {
+
+
+  const [datas, setDatas] = useState()
+  const [loading, setLoading] = useState(false)
+
+  const getAllPropriete = () => {
+    setLoading(true)
+    return axios.get('/api/properties').then( async (data) => {
+      await setDatas(data.data)
+      setLoading(false)
+    }).catch((err) => {
+      setLoading(false)
+    })
+  }
+
+  useEffect(() => {
+    getAllPropriete()
+  }, [])
+
+
   return (
     <Container>
       <Title>
@@ -90,84 +123,26 @@ const Opportinuté = () => {
             },
           }}
         >
-          <SwiperSlide>
-            <CardProject
-              image={img}
-              nom="Immeuble Général de Gaule"
-              adresse="33450 Izon"
-              prix="152300"
-              rentabilité="8.53%"
-              reversé="5.53%"
-              pourcentageInvestissement="57.32%"
-            >
-              mandona
-            </CardProject>
-          </SwiperSlide>
-          <SwiperSlide>
-            <CardProject
-              image={img}
-              nom="Immeuble Général de Gaule"
-              adresse="33450 Izon"
-              prix="152300"
-              rentabilité="8.53%"
-              reversé="5.53%"
-              pourcentageInvestissement="57.32%"
-            >
-              mandona
-            </CardProject>
-          </SwiperSlide>
-          <SwiperSlide>
-            <CardProject
-              image={img}
-              nom="Immeuble Général de Gaule"
-              adresse="33450 Izon"
-              prix="152300"
-              rentabilité="8.53%"
-              reversé="5.53%"
-              pourcentageInvestissement="57.32%"
-            >
-              mandona
-            </CardProject>
-          </SwiperSlide>
-          <SwiperSlide>
-            <CardProject
-              image={img}
-              nom="Immeuble Général de Gaule"
-              adresse="33450 Izon"
-              prix="152300"
-              rentabilité="8.53%"
-              reversé="5.53%"
-              pourcentageInvestissement="57.32%"
-            >
-              mandona
-            </CardProject>
-          </SwiperSlide>
-          <SwiperSlide>
-            <CardProject
-              image={img}
-              nom="Immeuble Général de Gaule"
-              adresse="33450 Izon"
-              prix="152300"
-              rentabilité="8.53%"
-              reversé="5.53%"
-              pourcentageInvestissement="57.32%"
-            >
-              mandona
-            </CardProject>
-          </SwiperSlide>
-          <SwiperSlide>
-            <CardProject
-              image={img}
-              nom="Immeuble Général de Gaule"
-              adresse="33450 Izon"
-              prix="152300"
-              rentabilité="8.53%"
-              reversé="5.53%"
-              pourcentageInvestissement="57.32%"
-            >
-              mandona
-            </CardProject>
-          </SwiperSlide>
+      {
+              datas && datas?.map((data) => (
+                <SwiperSlide>
+                  <CardProject
+                    key={data._id}
+                    id={data._id}
+                          image={data.image_couverture}
+                          nom={data.nom}
+                          adresse={`${data.zip} ${data.rue}`}
+                          prix={`${data.valorisation}€`}
+                          rentabilité={`${data.rentabiliter}%`}
+                          reversé={`${data.reverser.toFixed(2)}%`}
+                          pourcentageInvestissement="57.32%"
+                          acheter={true}
+                          brickRestant={data.nb_brique_restant}
+                         />
+                  </SwiperSlide>
+
+              ))
+            }
         </Swiper>
       </CardContainer>
       <Button href="/" color="#fff" background="rgba(231,62,17, 1)">
