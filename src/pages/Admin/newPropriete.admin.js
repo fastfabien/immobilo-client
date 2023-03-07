@@ -413,7 +413,9 @@ const NewProprieteAdmin = () => {
 	})
 	const [message, setMessage] = useState()
 	const [error, setError] = useState()
+	const [isClicked, setIsClicked] = useState(false)
 	const [isVerified, setIsVerified] = useState(false)
+	const [toVerify, setToVerify] = useState(false)
 	const [showFileName, setShowFileName] = useState("");
 	const navigate = useNavigate()
 
@@ -434,11 +436,19 @@ const NewProprieteAdmin = () => {
     return <Navigate to="/dashboard" />
   }
 
+  const handleVerified = (e) => {
+    	e.preventDefault()
+
+    	setIsVerified(true)
+    	setToVerify(false)
+    }
+
 	const handleCreateProperty = async (e) => {
 		e.preventDefault()
 
 		const val = e.target[23].files;
 		console.table(val)
+		setIsClicked(true)
 
 		var formData = new FormData()
 		for(var i = 0; i < e.target.length - 1; i++) {
@@ -447,7 +457,6 @@ const NewProprieteAdmin = () => {
     for(var i = 0; i < val.length; i++) {
 			formData.append('file', e.target[23].files[i])    
     }
-
 
     await axios.post('/api/properties', formData, {
         headers: {
@@ -477,7 +486,7 @@ const NewProprieteAdmin = () => {
 					{ lien: "/admin/proprietes", text: "Tous les biens" }]
 				} />
 			</NavBarContainer>
-			{!isVerified && <FormContainer onSubmit={handleCreateProperty}>
+			{!toVerify && <FormContainer onSubmit={handleCreateProperty}>
 			          <InputContainer>
 			            <Content>
 			              <Label>Information generale</Label>
@@ -523,29 +532,29 @@ const NewProprieteAdmin = () => {
 			                    showFileName == "" ? "Choisissez un fichier" : showFileName
 			                  }
 			              </UploadContainer>
-			              <input type="file" name="file" id="uploadDoc" multiple accept="image/png,image/jpeg" />
+			              <input type="file" name="file" id="uploadDoc" multiple accept="image/png,image/jpeg" required />
 			            </Content>
 			            <SubmitContainer>
-			            	<Btn onClick={() => setIsVerified(!isVerified)} >Verifier</Btn>
-			            	<Inputs type="submit" value="Valider" />
+			            	<Btn onClick={() => setToVerify(true)} >Verifier</Btn>
+			            	<Inputs type="submit" disabled={!isVerified || isClicked} value="Valider" />
 			            </SubmitContainer>
 			        </FormContainer>}
-	        { isVerified && <Verification>
+	        { toVerify && <Verification>
 	        						<InputContainer>
 	        	        	<Content>
 	        	              <Label>Information generale</Label>
-	        	              <Inputs type="text" required value={data.nom} name="nom" placeholder='Nom' onChange={(e) => setData({ ...data, nom: e.target.value })} readOnly />
-	        	              <Inputs type="text" required value={data.rue} name="rue" placeholder='Rue' onChange={(e) => setData({ ...data, rue: e.target.value })} readOnly />
-	        	              <Inputs type="text" required value={data.region} name="region" placeholder='Region' onChange={(e) => setData({ ...data, region: e.target.value })} readOnly />
-	        	              <Inputs type="number" min="0" required value={data.zip} name="zip" placeholder='Zip' onChange={(e) => setData({ ...data, zip: e.target.value })} readOnly />
+	        	              <Inputs type="text" required value={data.nom} name="nom" placeholder='Nom' onChange={(e) => setData({ ...data, nom: e.target.value })} />
+	        	              <Inputs type="text" required value={data.rue} name="rue" placeholder='Rue' onChange={(e) => setData({ ...data, rue: e.target.value })} />
+	        	              <Inputs type="text" required value={data.region} name="region" placeholder='Region' onChange={(e) => setData({ ...data, region: e.target.value })} />
+	        	              <Inputs type="number" min="0" required value={data.zip} name="zip" placeholder='Zip' onChange={(e) => setData({ ...data, zip: e.target.value })} />
 	        	              <Label>Information Secondaire</Label>
-	        	              <Textarea type="text" required value={data.localisation} name="localisation" placeholder='Localisation' onChange={(e) => setData({ ...data, localisation: e.target.value })} readOnly />
-	        	              <Textarea type="text" required value={data.etat_immeuble} name="etat_immeuble" placeholder="Etat de l'immeuble" onChange={(e) => setData({ ...data, etat_immeuble: e.target.value })} readOnly />
-	        	              <Textarea type="text" required value={data.nature_lots} name="nature_lots" placeholder='Nature du lots' onChange={(e) => setData({ ...data, nature_lots: e.target.value })} readOnly />
-	        	              <Textarea type="text" required value={data.totalite_lots} name="totalite_lots" placeholder='Totalite du lots' onChange={(e) => setData({ ...data, totalite_lots: e.target.value })} readOnly />
-	        	              <Inputs type="number" min="0" required value={data.nombre_lots} name="nombre_lots" placeholder='Nombre de lots' onChange={(e) => setData({ ...data, nombre_lots: e.target.value })} readOnly />
-	        	              <Inputs type="number" min="0" required value={data.aire} name="aire" placeholder='Aire' onChange={(e) => setData({ ...data, aire: e.target.value })} readOnly />
-	        	              <Textarea required value={data.description} name="description" placeholder='Description' onChange={(e) => setData({ ...data, description: e.target.value })} readOnly />
+	        	              <Textarea type="text" required value={data.localisation} name="localisation" placeholder='Localisation' onChange={(e) => setData({ ...data, localisation: e.target.value })} />
+	        	              <Textarea type="text" required value={data.etat_immeuble} name="etat_immeuble" placeholder="Etat de l'immeuble" onChange={(e) => setData({ ...data, etat_immeuble: e.target.value })} />
+	        	              <Textarea type="text" required value={data.nature_lots} name="nature_lots" placeholder='Nature du lots' onChange={(e) => setData({ ...data, nature_lots: e.target.value })} />
+	        	              <Textarea type="text" required value={data.totalite_lots} name="totalite_lots" placeholder='Totalite du lots' onChange={(e) => setData({ ...data, totalite_lots: e.target.value })} />
+	        	              <Inputs type="number" min="0" required value={data.nombre_lots} name="nombre_lots" placeholder='Nombre de lots' onChange={(e) => setData({ ...data, nombre_lots: e.target.value })} />
+	        	              <Inputs type="number" min="0" required value={data.aire} name="aire" placeholder='Aire' onChange={(e) => setData({ ...data, aire: e.target.value })} />
+	        	              <Textarea required value={data.description} name="description" placeholder='Description' onChange={(e) => setData({ ...data, description: e.target.value })} />
 	        
 	        	            </Content>
 	        	            <Content>
@@ -558,17 +567,20 @@ const NewProprieteAdmin = () => {
 	        	              <Inputs type="number" min="0" required value={data.renovation} name="renovation" placeholder="Renovation" onChange={(e) => setData({ ...data, renovation: e.target.value })} readOnly />
 	        
 	        	              <Label>Loyer Mensuel/Annuel</Label>
-	        	              <Inputs type="number" min="0" required value={data.loyer_mensuel} name="loyer_mensuel" placeholder='Loyer Mensuel' onChange={(e) => setData({...data,loyer_mensuel: e.target.value })} readOnly />
+	        	              <Inputs type="number" min="0" required value={data.loyer_mensuel} name="loyer_mensuel" placeholder='Loyer Mensuel' onChange={(e) => setData({...data,loyer_mensuel: e.target.value })} />
 	        	              <Inputs type="number" min="0" required value={data.loyer_collecter_annuel} name="loyer_collecter_annuel" placeholder='Loyer Collecter Annuel' readOnly />
 	        	              <Label>Rendement locatif cible</Label>
-	        	              <Inputs type="number" min="0" required value={data.frais_agence} name="frais_agence" placeholder="Frais agence immobilier" onChange={(e) => setData({ ...data, frais_agence: e.target.value })} readOnly />
-	        	              <Inputs type="number" min="0" required value={data.remboursement_emprunt} name="remboursement_emprunt" placeholder="Remboursement emprunt" onChange={(e) => setData({ ...data, remboursement_emprunt: e.target.value })} readOnly />
-	        	              <Inputs type="number" min="0" step="0.01" required value={data.taxes} name="taxes" placeholder="Taxes" onChange={(e) => setData({ ...data, taxes: e.target.value })} readOnly />
+	        	              <Inputs type="number" min="0" required value={data.frais_agence} name="frais_agence" placeholder="Frais agence immobilier" onChange={(e) => setData({ ...data, frais_agence: e.target.value })}  />
+	        	              <Inputs type="number" min="0" required value={data.remboursement_emprunt} name="remboursement_emprunt" placeholder="Remboursement emprunt" onChange={(e) => setData({ ...data, remboursement_emprunt: e.target.value })}  />
+	        	              <Inputs type="number" min="0" step="0.01" required value={data.taxes} name="taxes" placeholder="Taxes" onChange={(e) => setData({ ...data, taxes: e.target.value })}  />
 	        	              <Label>Finance</Label>
-	        	              <Inputs type="number" min="0" step="0.01" required value={data.revente} name="revente" placeholder="Potentiel de revente" onChange={(e) => setData({ ...data, revente: e.target.value })} readOnly />
-	        	              <Inputs type="number" min="0" step="0.01" required value={data.hausse} name="hause" placeholder="Potentiel de hausse" onChange={(e) => setData({ ...data, hausse: e.target.value })} readOnly />
+	        	              <Inputs type="number" min="0" step="0.01" required value={data.revente} name="revente" placeholder="Potentiel de revente" onChange={(e) => setData({ ...data, revente: e.target.value })}  />
+	        	              <Inputs type="number" min="0" step="0.01" required value={data.hausse} name="hause" placeholder="Potentiel de hausse" onChange={(e) => setData({ ...data, hausse: e.target.value })}  />
 	        	            </Content>
 	        	            </InputContainer>
+	        	            <SubmitContainer>
+		        	            <Btn onClick={handleVerified} >Confirmer</Btn>
+	        	            </SubmitContainer>
 	        	        </Verification>}
         {
          	message && <Message>{message}<span onClick={() => setMessage(!message)}><FontAwesomeIcon icon={solid('xmark')} /></span></Message>
