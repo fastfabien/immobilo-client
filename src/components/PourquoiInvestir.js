@@ -87,7 +87,7 @@ const Avis = styled.div`
 `
 
 
-const PourquoiInvestir = () => {
+const PourquoiInvestir = ({ localisation, etat_immeuble, nature_lots, totalite_lots }) => {
 	useEffect(() => {
 
 	}, [])
@@ -105,25 +105,25 @@ const PourquoiInvestir = () => {
 				<Avis>
 					<p><FontAwesomeIcon icon={solid('check')} /></p>
 					<p>
-						<span>Localisation</span> - L’actif est situé sur l’axe principal de la ville d’Izon à 35 kilomètres du centre ville de Bordeaux et à 14 kilomètres du centre ville de Libourne.
+						<span>Localisation</span> - {localisation}.
 					</p>
 				</Avis>
 				<Avis>
 					<p><FontAwesomeIcon icon={solid('check')} /></p>
 					<p>
-						<span>Immeuble en bon état</span> - L’immeuble, son grand jardin ainsi que sa piscine sont en parfait état en raison d’une rénovation complète intervenue récemment.
+						<span>Immeuble en bon état</span> - {etat_immeuble}.
 					</p>
 				</Avis>
 				<Avis>
 					<p><FontAwesomeIcon icon={solid('check')} /></p>
 					<p>
-						<span>Nature des lots</span> - L’espace de coliving très bien conçu et astucieusement aménagé pour exploiter au mieux l’espace et proposer une cadre de vie idéal aux locataires.
+						<span>Nature des lots</span> - {nature_lots}.
 					</p>
 				</Avis>
 				<Avis>
 					<p><FontAwesomeIcon icon={solid('check')} /></p>
 					<p>
-						<span>Totalité des lots loués</span> - L’ensemble des chambres sont louées ce qui témoigne de l’attractivité de la zone auprès des étudiants et des jeunes actifs qui peuvent accéder facilement à Bordeaux et Libourne depuis Izon.
+						<span>Totalité des lots loués</span> - {totalite_lots}.
 					</p>
 				</Avis>
 			</Body>

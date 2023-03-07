@@ -76,9 +76,10 @@ const Btn = styled.button`
 
 `
 
-const Brickeurs = () => {
+const Brickeurs = ({nom, image, pourcentageInvestissement, brickRestant, id}) => {
 
 	const [showAction, setShowAction] = useState(false);
+	const formatedbrickRestant = brickRestant?.toLocaleString(undefined, {useGrouping: true, groupingSeparator: " "});
 
 	const handleShowAction = (e) => {
 	    e.stopPropagation()
@@ -93,8 +94,8 @@ const Brickeurs = () => {
 		<>
 			<Container>
 				<PourcentageInvestissementContainer>
-	              71.2% financé  de bricks restant
-	              <PourcentageInvestissement pourcentage={"71.2%"} />
+	               {formatedbrickRestant} de bricks restant
+	              <PourcentageInvestissement pourcentage={pourcentageInvestissement} />
 	            </PourcentageInvestissementContainer>
 	            <Btn onClick={handleShowAction} color="#fff" background="rgba(231,62,17, 1)">
 	              Acheter
@@ -102,7 +103,7 @@ const Brickeurs = () => {
 			</Container>	
 			{
 		        showAction && 
-		        <AchatBricks onclick={handleShowAction} nom="Immeuble Général de Gaulle" image={img} pourcentageInvestissement="71.2%" brickRestant="45000" />
+		        <AchatBricks setShowAction={setShowAction} nom={nom} image={image} pourcentageInvestissement={pourcentageInvestissement} brickRestant={formatedbrickRestant} id={id} />
 		    }
 		</>
 	)

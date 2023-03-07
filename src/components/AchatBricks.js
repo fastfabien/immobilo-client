@@ -267,6 +267,7 @@ const AchatBricks = ({ nom, image, pourcentageInvestissement, brickRestant, setS
       await dispatch(buyBricks(data)).then(() => {
         setLoading(false)
         setShowAction(false)
+        window.location.reload()
       }).catch(() => {
         setLoading(false)
       })
@@ -309,7 +310,7 @@ const AchatBricks = ({ nom, image, pourcentageInvestissement, brickRestant, setS
               </div>
               <div className="footer">
                 <PourcentageInvestissementContainer>
-                  {pourcentageInvestissement} financé - {brickRestant} de bricks restant
+                  {pourcentageInvestissement}% financé - {brickRestant} de bricks restant
                   <PourcentageInvestissement pourcentage={pourcentageInvestissement} />
                 </PourcentageInvestissementContainer>
               </div>

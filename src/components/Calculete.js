@@ -117,7 +117,7 @@ const Investissement = styled.div`
 `
 
 
-const Brickeurs = () => {
+const Brickeurs = ({ reverser }) => {
 
 	const [showAction, setShowAction] = useState(false);
 	const [montantInvesti, setMontantInvesti] = useState(0)
@@ -127,7 +127,7 @@ const Brickeurs = () => {
 
 	const handleChangeMontantInvesti = (e) => {
 		setMontantInvesti(e.target.value)
-		setRevenuMensuel(e.target.value * 0.2 / 100)
+		setRevenuMensuel(e.target.value * parseFloat(reverser) / 100)
 		setPlusValue(e.target.value * 0.5 / 100)
 		setValoriation(e.target.value * 0.2 / 100)
 	}

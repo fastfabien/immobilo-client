@@ -74,6 +74,7 @@ const GalleryContainer = styled.div`
 	padding: ${(props) => props.theme.fontlg} ${(props) => props.theme.fontxxl};
 	position: absolute;
 	top: 0;
+	bottom: 0;
 	left: 0;
 	z-index: 6;
 
@@ -120,7 +121,7 @@ const GoBack = styled.div`
 `
 
 
-const ProprieteInfoImage = ({ all_images }) => {
+const ProprieteInfoImage = ({ all_images, nom, rue, region, zip }) => {
 
 	const images = [house, house, house, house, house, house ,house, house, house, house]
 
@@ -135,16 +136,16 @@ const ProprieteInfoImage = ({ all_images }) => {
 	return(
 		<Container>
 			<Header>
-				<h1>Immeuble Général de Gaulle</h1>
-				<p>136 Avenue du Général de Gaulle, 33450 Izon</p>
+				<h1>{nom}</h1>
+				<p>{rue}, {zip} {region}</p>
 			</Header>
 			<Body onClick={() => setShowGallery(!showGallery)}>
 			{
-				images && images.slice(0, 2).map((image) => (
-					<img src={image} />
+				all_images && all_images?.slice(0, 2).map((image, i) => (
+					<img key={i} src={`data:image/jpg;base64,${image}`} />
 				))
 			}
-			<p><FontAwesomeIcon icon={solid('image')} />Voir les {images.length} photos</p>
+			<p><FontAwesomeIcon icon={solid('image')} />Voir les {all_images?.length} photos</p>
 			</Body>
 			{
 				showGallery && 
@@ -154,8 +155,8 @@ const ProprieteInfoImage = ({ all_images }) => {
 					</GoBack>
 					<Gallery>
 						{
-							images && images.map((image) => (
-								<img src={image} />
+							all_images && all_images?.map((image, i) => (
+								<img key={i} src={`data:image/jpg;base64,${image}`} />
 							))
 						}
 					</Gallery>

@@ -13,6 +13,7 @@ import PourquoiInvestir from "../../../components/PourquoiInvestir";
 import Presentation from "../../../components/Presentation";
 import Brickeurs from "../../../components/Brickeurs";
 import Calculete from "../../../components/Calculete";
+import FinanceInformation from "../../../components/FinanceInformation";
 import img from "../../../assets/house2.jpg";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { solid, regular, brands, icon, thin } from '@fortawesome/fontawesome-svg-core/import.macro'
@@ -90,13 +91,15 @@ const Right = styled.div`
 `
 
 
-const Propriete = () => {
+const Finance = () => {
 
 	const navigate = useNavigate();
 	const [datas, setDatas] = useState()
 	const { id } = useParams()
 
 	const pourcentage_investisement= ((parseFloat(datas?.nb_brique_restant) * 100) / parseFloat(datas?.nb_brique)).toFixed(2)
+	const formatedRevenuReverserValue = parseFloat(datas?.loyer_collecter_annuel) - parseFloat(datas?.frais_agence) - parseFloat(datas?.remboursement_emprunt) - parseFloat(datas?.renovation)
+	const formatedValorisation = datas?.valorisation.toLocaleString(undefined, {useGrouping: true, groupingSeparator: " "});
 
 	const getInformation = async () => {
 		return await axios.get(API_URL + `${id}`, { headers: authHeader() }).then( async (data) => {
@@ -110,7 +113,7 @@ const Propriete = () => {
 		getInformation()
 	}, [])
 
-	
+	console.log(datas)
 
 	return(
 		<Container>
@@ -133,22 +136,33 @@ const Propriete = () => {
 			</NavBarContainer>
 			<InformationContainer>
 				<Left>
-					<Actualite />
-					<Rentabilite 
-						rentabiliter={datas?.rentabiliter.toFixed(2)} 
-						reverser={datas?.reverser.toFixed(2)} 
-						valorisation={datas?.valorisation} />
-					<PourquoiInvestir
-						localisation={datas?.localisation}
-						etat_immeuble={datas?.etat_immeuble}
-						nature_lots={datas?.nature_lots}
-						totalite_lots={datas?.totalite_lots}
+					<FinanceInformation 
+
+						information={[	{header: [<FontAwesomeIcon icon={solid('home')} />, "Acquisition"]},
+							["Prix d'acquisition", datas?.prix_acquisition],
+							["Rémunération", datas?.renumeration_service],
+							["Frais de notaire", datas?.frais_notaire],
+							["Réserve d’argent (notamment pour travaux)", datas?.reserve_argent],
+							["Coût d'acquisition total", formatedValorisation]
+						]}
 					 />
-					<Presentation
-						nombre_lots={datas?.nombre_lots}
-						loyer_mensuel={datas?.loyer_mensuel}
-						aire={datas?.aire}
-						description={datas?.description}
+					 <FinanceInformation 
+						information={[	{header: [<FontAwesomeIcon icon={solid('home')} />, "Rendement Locatif Cible"]},
+							["Loyers collectés", datas?.loyer_collecter_annuel],
+							["Frais d’agence immobilière", datas?.frais_agence],
+							["Remboursement de l'emprunt", datas?.remboursement_emprunt],
+							["Renovation", datas?.renovation],
+							["Revenu Reverser", `${formatedRevenuReverserValue} € (soit ${datas?.reverser.toFixed(2)})`]
+						]}
+					 />
+					 <FinanceInformation 
+						information={[	{header: [<FontAwesomeIcon icon={solid('home')} />, "valorisation"]},
+							["Nombre de bricks", datas?.nb_brique],
+							["Valorisation du bien", formatedValorisation],
+							["Réserve d'argent actuelle", datas?.reserve_argent],
+							["Prêt à rembourser", datas?.remboursement_emprunt],
+							["Valeur Totale", formatedValorisation]
+						]}
 					 />
 				</Left>
 				<Right>
@@ -159,7 +173,6 @@ const Propriete = () => {
 						brickRestant={datas?.nb_brique_restant}
 						id={datas?._id}
 					 />
-					}
 					<Calculete reverser={datas?.reverser.toFixed(2)} />
 				</Right>
 			</InformationContainer>
@@ -167,5 +180,5 @@ const Propriete = () => {
 	)
 }
 
-export default Propriete;
+export default Finance;
 

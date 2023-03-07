@@ -156,6 +156,7 @@ const CardProject = ({
   const { user: currentUser } = useSelector((state) => state.auth);
 
   const handleGoToLink = (e) => {
+    e.preventDefault()
     e.stopPropagation()
     navigate(`/proprietes/${id}`)
   }
@@ -171,8 +172,9 @@ const CardProject = ({
 
   return (
     <>
-    <Container>
-      <Header src={`data:image/jpg;base64,${image}`} onClick={handleGoToLink} alt="Photo de couverture" />
+    <Container onClick={handleGoToLink}
+  >
+      <Header src={`data:image/jpg;base64,${image}`} alt="Photo de couverture" />
       <Body >
         <div>
           <p>{nom}</p>
@@ -197,7 +199,13 @@ const CardProject = ({
           </PourcentageInvestissementContainer>
           {
             acheter && 
-            <Btn onClick={() => setShowAction(true)} color="#fff" background="rgba(231,62,17, 1)">
+            <Btn onClick={(e) => {
+              e.stopPropagation();
+              setShowAction(true);
+            }
+
+
+          } color="#fff" background="rgba(231,62,17, 1)">
               Acheter
             </Btn>
           }

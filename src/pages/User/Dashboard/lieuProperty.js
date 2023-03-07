@@ -68,6 +68,7 @@ const InformationContainer = styled.div`
 	display: flex;
 	justify-content: space-between;
 	gap: 2rem;
+	margin-top: 2rem;
 
 `
 
@@ -90,7 +91,20 @@ const Right = styled.div`
 `
 
 
-const Propriete = () => {
+const Content = styled.div`
+
+	line-height: 1.5;
+	background-color: ${props => props.theme.white};
+	box-shadow: 0px 0px 5px rgba(${(props) => props.theme.bodyRgba}, 0.18);
+	padding: 2rem;
+	& div {
+		margin-top: 2rem;
+	}	
+
+`
+
+
+const Lieu = () => {
 
 	const navigate = useNavigate();
 	const [datas, setDatas] = useState()
@@ -133,23 +147,12 @@ const Propriete = () => {
 			</NavBarContainer>
 			<InformationContainer>
 				<Left>
-					<Actualite />
-					<Rentabilite 
-						rentabiliter={datas?.rentabiliter.toFixed(2)} 
-						reverser={datas?.reverser.toFixed(2)} 
-						valorisation={datas?.valorisation} />
-					<PourquoiInvestir
-						localisation={datas?.localisation}
-						etat_immeuble={datas?.etat_immeuble}
-						nature_lots={datas?.nature_lots}
-						totalite_lots={datas?.totalite_lots}
-					 />
-					<Presentation
-						nombre_lots={datas?.nombre_lots}
-						loyer_mensuel={datas?.loyer_mensuel}
-						aire={datas?.aire}
-						description={datas?.description}
-					 />
+					<Content>
+						<h2>À propos</h2>
+						<div>
+							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eu consectetur tortor, pellentesque vehicula sapien. Praesent tristique, justo in vulputate finibus, turpis ex tempor mauris, ut rhoncus justo dui at lectus. Etiam cursus, odio sit amet volutpat mollis, lacus nulla sodales leo, blandit tempus elit lectus vel risus. Nunc nec egestas dui. Nulla eget sagittis mi, ac rutrum diam. Curabitur eget mauris a justo convallis mattis rhoncus non nisl. Sed at pulvinar ante. Nam dignissim laoreet mi, a molestie ante sodales nec. Integer ultrices dictum dolor sollicitudin sagittis. In vel nunc et nisl aliquet placerat aliquam at dolor. Duis semper, libero nec varius tempor, erat ante suscipit nisi, vitae tempor tellus dolor vitae ipsum.
+						</div>
+					</Content>
 				</Left>
 				<Right>
 					<Brickeurs 
@@ -159,7 +162,6 @@ const Propriete = () => {
 						brickRestant={datas?.nb_brique_restant}
 						id={datas?._id}
 					 />
-					}
 					<Calculete reverser={datas?.reverser.toFixed(2)} />
 				</Right>
 			</InformationContainer>
@@ -167,5 +169,5 @@ const Propriete = () => {
 	)
 }
 
-export default Propriete;
+export default Lieu;
 

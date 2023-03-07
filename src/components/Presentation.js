@@ -64,7 +64,10 @@ const Description = styled.div`
 
 `
 
-const Presentation = () => {
+const Presentation = ({ nombre_lots, loyer_mensuel, aire, description }) => {
+
+	const formatedLoyerMensuel = loyer_mensuel?.toLocaleString(undefined, {useGrouping: true, groupingSeparator: " "});
+
 	useEffect(() => {
 
 	}, [])
@@ -76,11 +79,11 @@ const Presentation = () => {
 			<Info>
 				<div>
 					<p><FontAwesomeIcon icon={solid('building')} /></p>
-					<p>16 lots</p>
+					<p>{nombre_lots} lots</p>
 				</div>
 				<div>
 					<p><FontAwesomeIcon icon={solid('euro')} /></p>
-					<p>8910 € / loyer mensuel</p>
+					<p>{formatedLoyerMensuel} € / loyer mensuel</p>
 				</div>
 				<div>
 					<p><FontAwesomeIcon icon={solid('arrows-left-right')} /></p>
@@ -88,7 +91,7 @@ const Presentation = () => {
 				</div>
 			</Info>
 			<Description>
-				Cette ancienne maison bourgeoise de 565 m² située sur l’artère principale de la ville d’Izon (Nouvelle Aquitaine) est composée d’un bâtiment principal et d’une dépendance au cœur d’un écrin de verdure de 2287 m². Elle a été entièrement rénovée par des professionnels de la restauration de vieilles bâtisses pour en faire un espace de coliving avec des caractéristiques qui favorisent la mise en location de ce type d’actif. 
+				{description}
 			</Description>
 		</Container>	
 	)

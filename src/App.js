@@ -9,6 +9,8 @@ import Welcome from "./pages/User/Welcome";
 import Dashboard from "./pages/User/Dashboard/Dashboard";
 import Proprietes from "./pages/User/Dashboard/Propriete";
 import Propriete from "./pages/User/Dashboard/proprieteView";
+import Finance from "./pages/User/Dashboard/proprieteViewFinance";
+import Lieu from "./pages/User/Dashboard/lieuProperty";
 import MyPropriete from "./pages/User/Dashboard/MyPropriete"
 import MarketPlaces from "./pages/User/Dashboard/MarketPlaces"
 import MySales from "./pages/User/Dashboard/MySales"
@@ -54,6 +56,8 @@ function App() {
           <Route path="/market" element={<MarketPlaces />} />
           <Route path="/information" element={<UserInformation />} />
           <Route path="/proprietes/:id" element={<Propriete />} />
+          <Route path="/proprietes/:id/finance" element={<Finance />} />
+          <Route path="/proprietes/:id/location" element={<Lieu />} />
           {/* ADMIN ROUTES */}
           <Route path="/admin" element={<Admin />} />
           <Route path="/admin/new" element={<NewAdmin />} />

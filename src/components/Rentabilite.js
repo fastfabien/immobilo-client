@@ -50,7 +50,10 @@ const Content = styled.div`
 `
 
 
-const Rentabilite = () => {
+const Rentabilite = ({ rentabiliter, reverser, valorisation }) => {
+
+	const formatedValorisation = valorisation?.toLocaleString(undefined, {useGrouping: true, groupingSeparator: " "});
+
 	useEffect(() => {
 
 	}, [])
@@ -62,7 +65,7 @@ const Rentabilite = () => {
 					Rentabilité cible
 				</div>
 				<div>
-					<p>8.53%</p>
+					<p>{rentabiliter}%</p>
 				</div>
 			</Content>
 			<Content>
@@ -70,7 +73,7 @@ const Rentabilite = () => {
 					Revenus reversés
 				</div>
 				<div>
-					<p>5.53%</p>
+					<p>{reverser}%</p>
 				</div>
 			</Content>
 			<Content>
@@ -78,7 +81,7 @@ const Rentabilite = () => {
 					Valorisation bien
 				</div>
 				<div>
-					<p>1 523 000€</p>
+					<p>{formatedValorisation} €</p>
 				</div>
 			</Content>
 		</Container>	
