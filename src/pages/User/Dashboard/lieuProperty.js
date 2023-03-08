@@ -99,6 +99,9 @@ const Content = styled.div`
 	padding: 2rem;
 	& div {
 		margin-top: 2rem;
+		& p {
+			margin-top: 2rem;
+		}
 	}	
 
 `
@@ -150,7 +153,13 @@ const Lieu = () => {
 					<Content>
 						<h2>À propos</h2>
 						<div>
-							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eu consectetur tortor, pellentesque vehicula sapien. Praesent tristique, justo in vulputate finibus, turpis ex tempor mauris, ut rhoncus justo dui at lectus. Etiam cursus, odio sit amet volutpat mollis, lacus nulla sodales leo, blandit tempus elit lectus vel risus. Nunc nec egestas dui. Nulla eget sagittis mi, ac rutrum diam. Curabitur eget mauris a justo convallis mattis rhoncus non nisl. Sed at pulvinar ante. Nam dignissim laoreet mi, a molestie ante sodales nec. Integer ultrices dictum dolor sollicitudin sagittis. In vel nunc et nisl aliquet placerat aliquam at dolor. Duis semper, libero nec varius tempor, erat ante suscipit nisi, vitae tempor tellus dolor vitae ipsum.
+							{
+								datas && datas?.about.map((detail, i) => (
+
+									<p key={i}>{detail}</p>
+
+								))
+							}
 						</div>
 					</Content>
 				</Left>

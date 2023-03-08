@@ -61,16 +61,24 @@ const Description = styled.div`
 
 	line-height: 1.5;
 
+	& p {
+		margin-top: 1rem;
+	}
+
 
 `
 
 const Presentation = ({ nombre_lots, loyer_mensuel, aire, description }) => {
 
 	const formatedLoyerMensuel = loyer_mensuel?.toLocaleString(undefined, {useGrouping: true, groupingSeparator: " "});
+	const descritionRef = useRef()
+
 
 	useEffect(() => {
 
 	}, [])
+
+	console.dir(descritionRef?.current)
 
 	return(
 		<Container>
@@ -87,11 +95,16 @@ const Presentation = ({ nombre_lots, loyer_mensuel, aire, description }) => {
 				</div>
 				<div>
 					<p><FontAwesomeIcon icon={solid('arrows-left-right')} /></p>
-					<p>562 m²</p>
+					<p>{aire} m²</p>
 				</div>
 			</Info>
-			<Description>
-				{description}
+			<Description ref={descritionRef}>
+
+				{description && description.map((detail, i) => (
+
+					<p key={i}>{detail}</p>
+
+				))}
 			</Description>
 		</Container>	
 	)

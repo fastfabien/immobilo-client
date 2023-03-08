@@ -1,4 +1,4 @@
-import react, {useState, useEffect} from 'react'
+import react, {useState, useEffect, useRef} from 'react'
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import axios from 'axios';
@@ -404,6 +404,50 @@ const Btn = styled.button`
 
 `
 
+const TextareaContainer = styled.div`
+
+
+	width: 80%;
+	display: flex;
+	flex-direction: column;
+
+	& textarea {
+		width: 100%!important;
+		padding: ${props => props.theme.fontlg} ${props => props.theme.fontlg};
+		outline: none;
+		border: 1px solid rgba(${(props) => props.theme.textRgba}, 1); 
+		border-radius: 5px;
+		margin-top: 1rem;
+	}
+
+	& + button {
+		color: ${props => props.theme.white};
+    background-color: rgba(${props => props.theme.textRgba}, 1);
+    outline: none;
+    border: none;
+    padding: ${props => props.theme.fontsm} ${props => props.theme.fontmd};
+    font-size: ${props => props.theme.fontmd};
+    font-weight: 800;
+    cursor: pointer;
+    border-radius: 5px;
+    text-align: center;
+    opacity: .9;
+    width: 10%;
+    &:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+      &:hover {
+      	opacity: .5;
+      }
+    }
+    &:hover {
+        opacity: .8;
+    }
+	}
+
+
+`
+
 const NewProprieteAdmin = () => {
 
 	const { isLoggedIn, user, token } = useSelector(state => state.auth);
@@ -411,6 +455,8 @@ const NewProprieteAdmin = () => {
 		loyer_mensuel: 0,
 		loyer_collecter_annuel: 0
 	})
+	const textareaConteinerRef = useRef()
+	const aproposRef = useRef()
 	const [message, setMessage] = useState()
 	const [error, setError] = useState()
 	const [isClicked, setIsClicked] = useState(false)
@@ -418,6 +464,7 @@ const NewProprieteAdmin = () => {
 	const [toVerify, setToVerify] = useState(false)
 	const [showFileName, setShowFileName] = useState("");
 	const navigate = useNavigate()
+	const [inputNumber, setInputNumber] = useState(0)
 
 	const handleChangeLoyerMensuel = (e) => {
 		e.preventDefault()
@@ -443,11 +490,34 @@ const NewProprieteAdmin = () => {
     	setToVerify(false)
     }
 
+  const createDescription = (e) => {
+  	e.preventDefault()
+  	setInputNumber(inputNumber + 1)
+  	const name = `description${inputNumber}`
+  	const form = textareaConteinerRef.current
+  	const textarea = document.createElement('textarea')
+  	textarea.name = name
+  	textarea.placeholder = "Description"
+  	textarea.onChange = () => setData({ ...data, name: e.target.value })
+  	form.appendChild(textarea)
+  }
+
+  const createAbout = (e) => {
+  	e.preventDefault()
+  	setInputNumber(inputNumber + 1)
+  	const name = `about${inputNumber}`
+  	const form = aproposRef.current
+  	const textarea = document.createElement('textarea')
+  	textarea.name = name
+  	textarea.placeholder = "À propos"
+  	textarea.onChange = () => setData({ ...data, name: e.target.value })
+  	form.appendChild(textarea)
+  }
+
 	const handleCreateProperty = async (e) => {
 		e.preventDefault()
 
-		const val = e.target[23].files;
-		console.table(val)
+		const val = e.target[e.target.length - 2].files;
 		setIsClicked(true)
 
 		var formData = new FormData()
@@ -455,7 +525,7 @@ const NewProprieteAdmin = () => {
 			formData.append(`${e.target[i].name}`, e.target[i].value)    
     }
     for(var i = 0; i < val.length; i++) {
-			formData.append('file', e.target[23].files[i])    
+			formData.append('file', e.target[e.target.length - 2].files[i])    
     }
 
     await axios.post('/api/properties', formData, {
@@ -469,7 +539,6 @@ const NewProprieteAdmin = () => {
 	    }).catch((error) => {
 	        setError(error.message)
 	    })
-
 
 
 	}
@@ -500,9 +569,15 @@ const NewProprieteAdmin = () => {
 			              <Textarea type="text" required value={data.nature_lots} name="nature_lots" placeholder='Nature du lots' onChange={(e) => setData({ ...data, nature_lots: e.target.value })} />
 			              <Textarea type="text" required value={data.totalite_lots} name="totalite_lots" placeholder='Totalite du lots' onChange={(e) => setData({ ...data, totalite_lots: e.target.value })} />
 			              <Inputs type="number" min="0" required value={data.nombre_lots} name="nombre_lots" placeholder='Nombre de lots' onChange={(e) => setData({ ...data, nombre_lots: e.target.value })} />
-			              <Inputs type="number" min="0" required value={data.aire} name="aire" placeholder='Aire' onChange={(e) => setData({ ...data, aire: e.target.value })} />
-			              <Textarea required value={data.description} name="description" placeholder='Description' onChange={(e) => setData({ ...data, description: e.target.value })} />
-			
+			              <Inputs type="number" min="0" required value={data.aire} name="aire" placeholder='Surface' onChange={(e) => setData({ ...data, aire: e.target.value })} />
+			              <TextareaContainer ref={textareaConteinerRef}>
+			              	<Textarea required value={data.description} name="description" placeholder='Description' onChange={(e) => setData({ ...data, description: e.target.value })} />
+			              </TextareaContainer>
+			              <Btn onClick={createDescription}>+</Btn>
+			              <TextareaContainer ref={aproposRef}>
+			              	<Textarea required value={data.about} name="about" placeholder='À propos' onChange={(e) => setData({ ...data, about: e.target.value })} />
+			              </TextareaContainer>
+			              <Btn onClick={createAbout}>+</Btn>
 			            </Content>
 			            <Content>
 			              
@@ -535,8 +610,7 @@ const NewProprieteAdmin = () => {
 			              <input type="file" name="file" id="uploadDoc" multiple accept="image/png,image/jpeg" required />
 			            </Content>
 			            <SubmitContainer>
-			            	<Btn onClick={() => setToVerify(true)} >Verifier</Btn>
-			            	<Inputs type="submit" disabled={!isVerified || isClicked} value="Valider" />
+			            	<Inputs type="submit" value="Valider" />
 			            </SubmitContainer>
 			        </FormContainer>}
 	        { toVerify && <Verification>
@@ -553,7 +627,7 @@ const NewProprieteAdmin = () => {
 	        	              <Textarea type="text" required value={data.nature_lots} name="nature_lots" placeholder='Nature du lots' onChange={(e) => setData({ ...data, nature_lots: e.target.value })} />
 	        	              <Textarea type="text" required value={data.totalite_lots} name="totalite_lots" placeholder='Totalite du lots' onChange={(e) => setData({ ...data, totalite_lots: e.target.value })} />
 	        	              <Inputs type="number" min="0" required value={data.nombre_lots} name="nombre_lots" placeholder='Nombre de lots' onChange={(e) => setData({ ...data, nombre_lots: e.target.value })} />
-	        	              <Inputs type="number" min="0" required value={data.aire} name="aire" placeholder='Aire' onChange={(e) => setData({ ...data, aire: e.target.value })} />
+	        	              <Inputs type="number" min="0" required value={data.aire} name="aire" placeholder='Surface' onChange={(e) => setData({ ...data, aire: e.target.value })} />
 	        	              <Textarea required value={data.description} name="description" placeholder='Description' onChange={(e) => setData({ ...data, description: e.target.value })} />
 	        
 	        	            </Content>
