@@ -180,6 +180,7 @@ const Dashboard = () => {
   const { isLoggedIn, user, token } = useSelector(state => state.auth);
   const [datas, setDatas] = useState()
   const [bricksValue, setBrickValue] = useState()
+  const formatedBrickPriceTotal = datas?.bricks.reduce((acc, curr) => acc + parseFloat(curr.prix_total), 0)  
 
   const refreshUserInfo =  useCallback(() => {
     return axios.get('/api/user/dashboard', { headers: authHeader() }).then( async (data) => {
@@ -251,7 +252,7 @@ const Dashboard = () => {
           </RecapContent>
           <RecapContent>
             <h2>montant total investi</h2>
-            <div>10 €</div>
+            <div>{datas?.invested_money} €</div>
           </RecapContent>
         </Recap>
         <Propriete>
@@ -270,7 +271,7 @@ const Dashboard = () => {
 
                   <tr>
                     <td>{ brick.propertie_id.nom }</td>
-                    <td>100%</td>
+                    <td>{ ((parseFloat(brick.prix_total) * 100) / formatedBrickPriceTotal).toFixed(2) }%</td>
                     <td>{ brick.prix_total } €</td>
                   </tr>
 
@@ -280,7 +281,7 @@ const Dashboard = () => {
               <tr>
                 <td>Total</td>
                 <td>100%</td>
-                <td>{datas?.bricks.reduce((acc, curr) => acc + parseFloat(curr.prix_total), 0)} €</td>
+                <td>{formatedBrickPriceTotal} €</td>
               </tr>
             </tfoot>
             </table>

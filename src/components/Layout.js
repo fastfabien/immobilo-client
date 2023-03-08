@@ -331,7 +331,7 @@ function Header() {
                     currentUser
                         ?   (<>
                                 <UserInfo>
-                                    <Wallet onClick={() => setShowAddFund(true)} ><span>{wallet}€</span><FontAwesomeIcon icon={solid('wallet')} /></Wallet>
+                                    <Wallet onClick={() => setShowAddFund(true)} ><span>{wallet?.toFixed(2)}€</span><FontAwesomeIcon icon={solid('wallet')} /></Wallet>
                                     <div><Link className="link" to="/"><FontAwesomeIcon icon={solid('circle-info')} /></Link></div>
                                     <div><Link className="link" onClick={logOut} to="/"><FontAwesomeIcon icon={solid('right-from-bracket')} /></Link></div>
                                 </UserInfo>
