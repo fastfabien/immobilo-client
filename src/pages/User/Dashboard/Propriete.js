@@ -89,7 +89,7 @@ const Proprietes = () => {
 			              prix={`${data.valorisation}€`}
 			              rentabilité={`${data.rentabiliter}%`}
 			              reversé={`${data.reverser.toFixed(2)}%`}
-			              pourcentageInvestissement="57.32%"
+			              pourcentageInvestissement={((parseFloat(datas?.nb_brique_restant) * 100) / parseFloat(datas?.nb_brique)).toFixed(2)}
 			              acheter={true}
 			              brickRestant={data.nb_brique_restant}
 			             />
