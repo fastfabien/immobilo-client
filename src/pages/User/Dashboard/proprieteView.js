@@ -97,7 +97,7 @@ const Propriete = () => {
 	const [datas, setDatas] = useState()
 	const { id } = useParams()
 
-	const pourcentage_investisement = ((parseFloat(datas?.nb_brique_restant) * 100) / parseFloat(datas?.nb_brique)).toFixed(2)
+	const pourcentage_investisement = (((parseFloat(datas?.nb_brique) - parseFloat(datas?.nb_brique_restant)) * 100) / parseFloat(datas?.nb_brique)).toFixed(2)
 
 	const getInformation = async () => {
 		return await axios.get(API_URL + `${id}`, { headers: authHeader() }).then(async (data) => {

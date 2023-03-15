@@ -287,7 +287,7 @@ const AchatBricks = ({ nom, image, pourcentageInvestissement, brickRestant, setS
             <div className="info">
               <img src={`data:image/jpg;base64,${image}`} alt={nom} />
               <p>{nom}</p>
-              <span>Argent sur votre portefeuille: {wallet}€</span>
+              <span>Argent sur votre portefeuille: {wallet.toFixed(2)}€</span>
             </div>
             <div className="briks">
               <form onSubmit={handleBuyBricks}>

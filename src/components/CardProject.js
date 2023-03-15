@@ -167,56 +167,56 @@ const CardProject = ({
   }
 
   useEffect(() => {
-    
+
   }, [])
 
   return (
     <>
-    <Container onClick={handleGoToLink}
-  >
-      <Header src={`data:image/jpg;base64,${image}`} alt="Photo de couverture" />
-      <Body >
-        <div>
-          <p>{nom}</p>
-          <p>
-            {adresse} - {prix}
-          </p>
-        </div>
-        <Investissement>
+      <Container onClick={handleGoToLink}
+      >
+        <Header src={`data:image/jpg;base64,${image}`} alt="Photo de couverture" />
+        <Body >
           <div>
-            <p>Rentabilité</p>
-            <p>{rentabilité}</p>
+            <p>{nom}</p>
+            <p>
+              {adresse} - {prix}
+            </p>
           </div>
-          <div>
-            <p>Reversé</p>
-            <p>{reversé}</p>
-          </div>
-        </Investissement>
-        <Action>
-          <PourcentageInvestissementContainer>
-            {pourcentageInvestissement} financé
-            <PourcentageInvestissement pourcentage={pourcentageInvestissement} />
-          </PourcentageInvestissementContainer>
-          {
-            acheter && 
-            <Btn onClick={(e) => {
-              e.stopPropagation();
-              setShowAction(true);
+          <Investissement>
+            <div>
+              <p>Rentabilité</p>
+              <p>{rentabilité}</p>
+            </div>
+            <div>
+              <p>Reversé</p>
+              <p>{reversé}</p>
+            </div>
+          </Investissement>
+          <Action>
+            <PourcentageInvestissementContainer>
+              {pourcentageInvestissement}% financé
+              <PourcentageInvestissement pourcentage={pourcentageInvestissement} />
+            </PourcentageInvestissementContainer>
+            {
+              acheter &&
+              <Btn onClick={(e) => {
+                e.stopPropagation();
+                setShowAction(true);
+              }
+
+
+              } color="#fff" background="rgba(231,62,17, 1)">
+                Acheter
+              </Btn>
             }
-
-
-          } color="#fff" background="rgba(231,62,17, 1)">
-              Acheter
-            </Btn>
-          }
-        </Action>
-      </Body>
-    </Container>
-    {
-        showAction && 
+          </Action>
+        </Body>
+      </Container>
+      {
+        showAction &&
         <AchatBricks setShowAction={setShowAction} nom={nom} image={image} pourcentageInvestissement={pourcentageInvestissement} brickRestant={brickRestant} id={id} />
       }
-      </>
+    </>
   );
 };
 

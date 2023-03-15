@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback} from 'react'
+import React, { useState, useRef, useEffect, useCallback } from 'react'
 import styled, { keyframes } from 'styled-components'
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import axios from "axios";
@@ -53,7 +53,7 @@ const Proprietes = () => {
 
 	const getAllPropriete = () => {
 		setLoading(true)
-		return axios.get('/api/properties').then( async (data) => {
+		return axios.get('/api/properties').then(async (data) => {
 			await setDatas(data.data)
 			setLoading(false)
 		}).catch((err) => {
@@ -66,7 +66,8 @@ const Proprietes = () => {
 	}, [])
 
 
-	return(
+
+	return (
 		<Container>
 			<ProprieteNavibar alignment="center" content={
 				[{ lien: "/proprietes", text: "Tous les biens" },
@@ -74,32 +75,32 @@ const Proprietes = () => {
 				{ lien: "/mes-ventes", text: "Mes ventes en cours" }]
 			} />
 			{
-				loading ? 
-				<Loader /> :
-				<ProprieteContainer>
-				{
-					datas && datas?.map((data) => (
+				loading ?
+					<Loader /> :
+					<ProprieteContainer>
+						{
+							datas && datas?.map((data) => (
 
-						<CardProject
-						  key={data._id}
-						  id={data._id}
-			              image={data.image_couverture}
-			              nom={data.nom}
-			              adresse={`${data.zip} ${data.rue}`}
-			              prix={`${data.valorisation}€`}
-			              rentabilité={`${data.rentabiliter}%`}
-			              reversé={`${data.reverser.toFixed(2)}%`}
-			              pourcentageInvestissement={((parseFloat(datas?.nb_brique_restant) * 100) / parseFloat(datas?.nb_brique)).toFixed(2)}
-			              acheter={true}
-			              brickRestant={data.nb_brique_restant}
-			             />
+								<CardProject
+									key={data._id}
+									id={data._id}
+									image={data.image_couverture}
+									nom={data.nom}
+									adresse={`${data.zip} ${data.rue}`}
+									prix={`${data.valorisation}€`}
+									rentabilité={`${data.rentabiliter}%`}
+									reversé={`${data.reverser.toFixed(2)}%`}
+									pourcentageInvestissement={(((parseFloat(data?.nb_brique) - parseFloat(data?.nb_brique_restant)) * 100) / parseFloat(data?.nb_brique)).toFixed(2)} //((parseFloat(data?.nb_brique_restant) * 100) / parseFloat(data?.nb_brique))
+									acheter={true}
+									brickRestant={data.nb_brique_restant}
+								/>
 
-					))
-				}
-				</ProprieteContainer> 
+							))
+						}
+					</ProprieteContainer>
 			}
-			
-		</Container>	
+
+		</Container>
 	)
 }
 
