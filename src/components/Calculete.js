@@ -152,16 +152,16 @@ const Brickeurs = ({ reverser }) => {
 						<div>
 							<div>
 								Revenu/mois
-								<p><span>{revenuMensuel.toFixed(2)}</span>€</p>
+								<p><span>+{revenuMensuel.toFixed(2)}</span>€</p>
 							</div>
 							<div>
 								Plus value/an
-								<p><span>{plusValue.toFixed(2)}</span>€</p>
+								<p><span>+{plusValue.toFixed(2)}</span>€</p>
 							</div>
 						</div>
 						<div>
 							Valorisation/an
-							<p><span>{valoriation.toFixed(2)}</span>€</p>
+							<p><span>+{valoriation.toFixed(2)}</span>€</p>
 						</div>
 					</Investissement>
 				</Body>

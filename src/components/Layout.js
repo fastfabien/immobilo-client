@@ -288,7 +288,7 @@ function Header() {
         }
         if (navRef.current) {
             const nav = navRef.current.children;
-            for(let i = 0; i < nav.length; i++) {
+            for (let i = 0; i < nav.length; i++) {
                 if (nav[i].pathname === location.pathname) {
                     nav[i].classList.add('link-active')
                 } else {
@@ -329,13 +329,13 @@ function Header() {
             <Right>
                 {
                     currentUser
-                        ?   (<>
-                                <UserInfo>
-                                    <Wallet onClick={() => setShowAddFund(true)} ><span>{wallet?.toFixed(2)}€</span><FontAwesomeIcon icon={solid('wallet')} /></Wallet>
-                                    <div><Link className="link" to="/"><FontAwesomeIcon icon={solid('circle-info')} /></Link></div>
-                                    <div><Link className="link" onClick={logOut} to="/"><FontAwesomeIcon icon={solid('right-from-bracket')} /></Link></div>
-                                </UserInfo>
-                            </>)
+                        ? (<>
+                            <UserInfo>
+                                <Wallet onClick={() => setShowAddFund(true)} ><span>{wallet?.toFixed(2)}€</span><FontAwesomeIcon icon={solid('wallet')} /></Wallet>
+                                <div><Link className="link" to="/"><FontAwesomeIcon icon={solid('circle-info')} /></Link></div>
+                                <div><Link className="link" onClick={logOut} to="/"><FontAwesomeIcon icon={solid('right-from-bracket')} /></Link></div>
+                            </UserInfo>
+                        </>)
                         : (<>
                             <Link className='user__action' to="signup">Créer compte</Link><Button userAction="user__action" href="login" color="#fff" background="rgba(53,52,52,1)">Se connecter</Button>
                             <input type="checkbox" id="show" name='show' className='showNav' />

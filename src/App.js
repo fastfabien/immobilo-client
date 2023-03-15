@@ -22,8 +22,12 @@ import NewProprieteAdmin from "./pages/Admin/newPropriete.admin";
 import UserDashboard from "./pages/Admin/User.admin";
 import GlobalStyle from "./styles/GlobalStyle";
 import { light } from "./styles/Themes";
-import { GoogleOAuthProvider} from '@react-oauth/google';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import StripePayment from "./components/StripePayment";
+import Success from "./pages/User/Success";
+import Cancel from "./pages/User/Cancel";
+import PaypalPayment from "./components/PaypalPayment";
 
 
 const initialOptions = {
@@ -40,33 +44,37 @@ function App() {
       <GlobalStyle />
       <ThemeProvider theme={light}>
         <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-        <PayPalScriptProvider options={initialOptions}>
-        <Header />
-        <Routes>
-          {/* USER ROUTES */}
-          <Route path="/" element={<Home />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/confirm/:confirmationCode" element={<Welcome />} />
-          {/* DASHBOARD ROUTES */}
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/proprietes" element={<Proprietes />} />
-          <Route path="/mes-proprietes" element={<MyPropriete />} />
-          <Route path="/mes-ventes" element={<MySales />} />
-          <Route path="/market" element={<MarketPlaces />} />
-          <Route path="/information" element={<UserInformation />} />
-          <Route path="/proprietes/:id" element={<Propriete />} />
-          <Route path="/proprietes/:id/finance" element={<Finance />} />
-          <Route path="/proprietes/:id/location" element={<Lieu />} />
-          {/* ADMIN ROUTES */}
-          <Route path="/admin" element={<Admin />} />
-          <Route path="/admin/new" element={<NewAdmin />} />
-          <Route path="/admin/user/:id" element={<UserDashboard />} />
-          <Route path="/admin/proprietes" element={<ProprieteAdmin />} />
-          <Route path="/admin/proprietes/new" element={<NewProprieteAdmin />} />
-        </Routes>
-        {/* <Footer /> */}
-        </PayPalScriptProvider>
+          <PayPalScriptProvider options={initialOptions}>
+            <Header />
+            <Routes>
+              {/* USER ROUTES */}
+              <Route path="/" element={<Home />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/confirm/:confirmationCode" element={<Welcome />} />
+              {/* DASHBOARD ROUTES */}
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/proprietes" element={<Proprietes />} />
+              <Route path="/mes-proprietes" element={<MyPropriete />} />
+              <Route path="/mes-ventes" element={<MySales />} />
+              <Route path="/market" element={<MarketPlaces />} />
+              <Route path="/information" element={<UserInformation />} />
+              <Route path="/proprietes/:id" element={<Propriete />} />
+              <Route path="/proprietes/:id/finance" element={<Finance />} />
+              <Route path="/proprietes/:id/location" element={<Lieu />} />
+              <Route path="/stripe/pay" element={<StripePayment />} />
+              <Route path="/paypal/pay" element={<PaypalPayment />} />
+              <Route path="/success" element={<Success />} />
+              <Route path="/cancel" element={<Cancel />} />
+              {/* ADMIN ROUTES */}
+              <Route path="/admin" element={<Admin />} />
+              <Route path="/admin/new" element={<NewAdmin />} />
+              <Route path="/admin/user/:id" element={<UserDashboard />} />
+              <Route path="/admin/proprietes" element={<ProprieteAdmin />} />
+              <Route path="/admin/proprietes/new" element={<NewProprieteAdmin />} />
+            </Routes>
+            {/* <Footer /> */}
+          </PayPalScriptProvider>
         </GoogleOAuthProvider>
       </ThemeProvider>
     </>

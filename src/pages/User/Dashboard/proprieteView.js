@@ -68,6 +68,7 @@ const InformationContainer = styled.div`
 	display: flex;
 	justify-content: space-between;
 	gap: 2rem;
+	position: relative;
 
 `
 
@@ -159,7 +160,6 @@ const Propriete = () => {
 						brickRestant={datas?.nb_brique_restant}
 						id={datas?._id}
 					 />
-					}
 					<Calculete reverser={datas?.reverser.toFixed(2)} />
 				</Right>
 			</InformationContainer>

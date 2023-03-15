@@ -6,8 +6,8 @@ import { BrowserRouter } from 'react-router-dom';
 import store from './store';
 import axios from 'axios';
 
-axios.defaults.baseURL = "https://immobilo-api.onrender.com"
-/*axios.defaults.baseURL = "http://localhost:8080"*/
+/*axios.defaults.baseURL = "https://immobilo-api.onrender.com"*/
+axios.defaults.baseURL = "http://localhost:8080"
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

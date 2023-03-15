@@ -93,10 +93,10 @@ const login = (username, password) => {
 
 const refreshUserInformation = () => {
     return axios.get('/api/user/refresh', { headers: authHeader() })
-    .then((response) => {
-        console.log(response.data.user.wallet)
-        return response.data;
-    })
+        .then((response) => {
+            console.log(response.data.user.wallet)
+            return response.data;
+        })
 }
 
 const logout = () => {
@@ -109,6 +109,10 @@ const verifyUser = (code) => {
         return response.data;
     });
 };
+
+const createPaypalOrder = (amount) => {
+    return axios.get('/api/paypal/order', { amount: amount, currency: 'EUR' })
+}
 
 export default {
     register,

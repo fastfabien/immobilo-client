@@ -152,7 +152,7 @@ const Finance = () => {
 							["Frais d’agence immobilière", datas?.frais_agence],
 							["Remboursement de l'emprunt", datas?.remboursement_emprunt],
 							["Renovation", datas?.renovation],
-							["Revenu Reverser", `${formatedRevenuReverserValue} € (soit ${datas?.reverser.toFixed(2)})`]
+							["Revenu Reverser", `${formatedRevenuReverserValue} € (soit ${datas?.reverser.toFixed(2)}%)`]
 						]}
 					 />
 					 <FinanceInformation 

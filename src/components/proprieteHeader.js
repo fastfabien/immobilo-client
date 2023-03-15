@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import ProprieteNavibar from "./ProprieteNavibar";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { solid, regular, brands, icon, thin } from '@fortawesome/fontawesome-svg-core/import.macro'
-import house from "./../assets/house2.jpg";
 
 
 const Container = styled.div`
@@ -115,6 +114,7 @@ const GoBack = styled.div`
 	text-align: center;
 	border-radius: 5px;
 
+	position: fixed;
 
 
 
@@ -122,8 +122,6 @@ const GoBack = styled.div`
 
 
 const ProprieteInfoImage = ({ all_images, nom, rue, region, zip }) => {
-
-	const images = [house, house, house, house, house, house ,house, house, house, house]
 
 	const [showGallery, setShowGallery] = useState(false)
 	

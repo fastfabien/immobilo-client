@@ -11,6 +11,7 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import { buyBricks } from '../actions/auth'
 import { Buffer } from "buffer"
 import authHeader from "./../services/auth-header";
+import PayPalBtn from './PayPalBtn';
 
 
 
@@ -26,7 +27,7 @@ const AcheterBricksContainer = styled.div`
   top: 0;
   left: 0;
   background-color: rgba(0,0,0, .2);
-  z-index: 99;
+  z-index: 999;
 
 
 `
@@ -74,6 +75,16 @@ const AcheterBricksContent = styled.div`
     text-align: center;
     padding: 1rem;
     box-shadow: 1px 2px 2px rgba(${(props) => props.theme.bodyRgba}, 0.1);
+  }
+
+
+  & a {
+    text-decoration: underline;
+    font-weight: 800;
+    display: block;
+    &:first-child {
+      margin-bottom: 1rem;
+    }
   }
 
   & .body {
@@ -242,88 +253,39 @@ const PourcentageInvestissement = styled.div`
 const AddFund = ({ setShowAddFund }) => {
 
 
-    const { isLoggedIn, user, token } = useSelector(state => state.auth);
-    const navigate = useNavigate()
-    const [message, setMessage] = useState()
-    const [error, setError] = useState()
-    const dispatch = useDispatch()
-    const [loading, setLoading] = useState(false)
-    const [price, setPrice] = useState()
-    const [orderId, setOrderId] = useState("");
-
-    const createOrder = (data, actions) => {
-      return axios.post("/api/paypal/order", {
-        amount: price,
-        currency: "EUR",
-      })
-        .then((res) => {
-          setOrderId(res.data.orderId);
-          console.log(res.data.orderId)
-          return res.data.orderId;
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    };
-
-    const onApprove = (data, actions) => {
-      return axios.post("/api/paypal/capture", {
-        orderId,
-        amount: price,
-        currency: "EUR",
-        authorization: data.orderID,
-      })
-        .then((res) => {
-          console.log(res.data);
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    };
+  const { isLoggedIn, user, token, wallet } = useSelector(state => state.auth);
+  const navigate = useNavigate()
+  const [message, setMessage] = useState()
+  const [error, setError] = useState()
+  const dispatch = useDispatch()
+  const [loading, setLoading] = useState(false)
+  const [price, setPrice] = useState()
 
 
-
-    useEffect(() => {
-
-      
-    }, [])
-
-    return (
-      <>
-        { loading && <Loader />}
-        <AcheterBricksContainer>
-          <AcheterBricksContent>
-            <div className="header">
-              Ajouter des fonds
-              <Button onClick={() => setShowAddFund(false)}><span></span></Button>
+  return (
+    <>
+      {loading && <Loader />}
+      <AcheterBricksContainer>
+        <AcheterBricksContent>
+          <div className="header">
+            Ajouter des fonds
+            <Button onClick={() => setShowAddFund(false)}><span></span></Button>
+          </div>
+          <div className="body">
+            <div className="info">
+              <p>{user.lastName}</p>
+              <span>Argent sur votre portefeuille: {wallet}€</span>
             </div>
-            <div className="body">
-              <div className="info">
-                <p>{user.lastName}</p>
-                <span>Argent sur votre portefeuille: {user.wallet}€</span>
-              </div>
-              <div className="briks">
-                <form>
-                  <InputContainer>
-                    <div>
-                      <label>Combient de fond voulez vous ajouter ?</label>
-                      <Input type="number" min="0" onChange={(e) => setPrice(e.target.value)} />
-                    </div>
-                  </InputContainer>
-                  <PayPalButtons 
-                        style={{ layout: "vertical" }}
-                        forceReRender={[price]}
-                        createOrder={createOrder}
-                        onApprove={onApprove}
-                    />
-                </form>
-              </div>
+            <div className="briks">
+              <Link to="/stripe/pay" onClick={() => setShowAddFund(false)}>Operation avec Stripe</Link>
+              <Link to="/paypal/pay" onClick={() => setShowAddFund(false)}>Operation avec Paypal</Link>
             </div>
-          </AcheterBricksContent>
-        </AcheterBricksContainer>
+          </div>
+        </AcheterBricksContent>
+      </AcheterBricksContainer>
 
-        </>
-    )
+    </>
+  )
 }
 
 export default AddFund
