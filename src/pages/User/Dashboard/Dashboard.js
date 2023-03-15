@@ -152,7 +152,7 @@ const Left = styled.div`
 const Right = styled.div`
 
 
-  width: 70%;
+  width: 100%;
 
   table {
     font-family: arial, sans-serif;
@@ -256,9 +256,6 @@ const Dashboard = () => {
           </RecapContent>
         </Recap>
         <Propriete>
-          <Left>
-
-          </Left>
           <Right>
             <table>
               <tr>

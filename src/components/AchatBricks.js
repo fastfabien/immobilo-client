@@ -7,7 +7,7 @@ import { solid, regular, brands, icon } from '@fortawesome/fontawesome-svg-core/
 import CustomButton from './CustomButton';
 import Loader from './Loader';
 import { Link, Navigate, useNavigate } from "react-router-dom";
-import { buyBricks } from '../actions/auth';
+import { buyBricks, refreshUserInformation } from '../actions/auth';
 
 
 
@@ -238,96 +238,96 @@ const PourcentageInvestissement = styled.div`
 const AchatBricks = ({ nom, image, pourcentageInvestissement, brickRestant, setShowAction, id }) => {
 
 
-    const { isLoggedIn, user, token } = useSelector(state => state.auth);
-    const navigate = useNavigate()
-    const [message, setMessage] = useState()
-    const [error, setError] = useState()
-    const dispatch = useDispatch()
-    const [loading, setLoading] = useState(false)
+  const { isLoggedIn, user, token, wallet } = useSelector(state => state.auth);
+  const navigate = useNavigate()
+  const [message, setMessage] = useState()
+  const [error, setError] = useState()
+  const dispatch = useDispatch()
+  const [loading, setLoading] = useState(false)
 
-    const [data, setData] = useState({
-        nombreBricks: 0,
-        prixTotalBricks: 0
+  const [data, setData] = useState({
+    nombreBricks: 0,
+    prixTotalBricks: 0
+  })
+
+  useEffect(() => {
+
+  }, [])
+
+  const handleAddBrick = (e) => {
+    e.preventDefault()
+    setData({ ...data, nombreBricks: e.target.value, prixTotalBricks: (e.target.value * 10), properties_id: id })
+  }
+
+  const handleBuyBricks = async (e) => {
+    e.preventDefault()
+
+    setLoading(true)
+
+    await dispatch(buyBricks(data)).then(() => {
+      setLoading(false)
+      setShowAction(false)
+      dispatch(refreshUserInformation())
+    }).catch(() => {
+      setLoading(false)
     })
 
-    useEffect(() => {
-      
-    }, [])
+  }
 
-    const handleAddBrick = (e) => {
-        e.preventDefault()
-        setData({ ...data, nombreBricks: e.target.value, prixTotalBricks: (e.target.value * 10), properties_id: id })
-      }
-
-    const handleBuyBricks = async (e) => {
-      e.preventDefault()
-
-      setLoading(true)
-
-      await dispatch(buyBricks(data)).then(() => {
-        setLoading(false)
-        setShowAction(false)
-        window.location.reload()
-      }).catch(() => {
-        setLoading(false)
-      })
-
-    }
-
-    return (
-      <>
-        { loading && <Loader />}
-        <AcheterBricksContainer>
-          <AcheterBricksContent>
-            <div className="header">
-              Acheter des bricks
-              <Button onClick={() => setShowAction(false)}><span></span></Button>
+  return (
+    <>
+      {loading && <Loader />}
+      <AcheterBricksContainer>
+        <AcheterBricksContent>
+          <div className="header">
+            Acheter des bricks
+            <Button onClick={() => setShowAction(false)}><span></span></Button>
+          </div>
+          <div className="body">
+            <div className="info">
+              <img src={`data:image/jpg;base64,${image}`} alt={nom} />
+              <p>{nom}</p>
+              <span>Argent sur votre portefeuille: {wallet}€</span>
             </div>
-            <div className="body">
-              <div className="info">
-                <img src={`data:image/jpg;base64,${image}`} alt={nom} />
-                <p>{nom}</p>
-                <span>Argent sur votre portefeuille: {user.wallet}€</span>
-              </div>
-              <div className="briks">
-                <form onSubmit={handleBuyBricks}>
-                  <InputContainer>
-                    <div>
-                      <label>Nombre de bricks</label>
-                      <Input type="number" value={data.nombreBricks} min="0" onChange={handleAddBrick} />
-                    </div>
-                    <div>
-                      <label>Prix par bricks</label>
-                      <Input type="number" placeholder="10€" readOnly />
-                    </div>
-                    <div>
-                      <label>Prix total</label>
-                      <Input type="number" placeholder={`${data.prixTotalBricks}€`} readOnly />
-                    </div>
-                  </InputContainer>
-                  <input type="submit" disabled={ (data.nombreBricks === 0 || data.nombreBricks === "0" || user.wallet < data.prixTotalBricks) ? true : false } value={`Acheter ${data.nombreBricks} bricks`} />
-                </form>
-              </div>
-              <div className="footer">
-                <PourcentageInvestissementContainer>
-                  {pourcentageInvestissement}% financé - {brickRestant} de bricks restant
-                  <PourcentageInvestissement pourcentage={pourcentageInvestissement} />
-                </PourcentageInvestissementContainer>
-              </div>
-              {
-                user.wallet < data.prixTotalBricks && (
-                  <FondError>
-                    <FontAwesomeIcon icon={solid('circle-exclamation')} />
-                    <p>Mince, vous n’avez pas assez d’argent dans votre portefeuille.</p>
-                  </FondError>
-                  )
-              }
+            <div className="briks">
+              <form onSubmit={handleBuyBricks}>
+                <InputContainer>
+                  <div>
+                    <label>Nombre de bricks</label>
+                    <Input type="number" value={data.nombreBricks} min="0" onChange={handleAddBrick} />
+                  </div>
+                  <div>
+                    <label>Prix par bricks</label>
+                    <Input type="number" placeholder="10€" readOnly />
+                  </div>
+                  <div>
+                    <label>Prix total</label>
+                    <Input type="number" placeholder={`${data.prixTotalBricks}€`} readOnly />
+                  </div>
+                </InputContainer>
+                <input type="submit" disabled={(data.nombreBricks === 0 || data.nombreBricks === "0" || wallet < data.prixTotalBricks) ? true : false} value={`Acheter ${data.nombreBricks} bricks`} />
+              </form>
             </div>
-          </AcheterBricksContent>
-        </AcheterBricksContainer>
+            <div className="footer">
+              <PourcentageInvestissementContainer>
+                {pourcentageInvestissement}% financé - {brickRestant} de bricks restant
+                <PourcentageInvestissement pourcentage={pourcentageInvestissement} />
+              </PourcentageInvestissementContainer>
+            </div>
+            {
+              wallet < data.prixTotalBricks && (
+                <FondError>
+                  <FontAwesomeIcon icon={solid('circle-exclamation')} />
+                  <p>Mince, vous n’avez pas assez d’argent dans votre portefeuille.</p>
+                </FondError>
+              )
+            }
+          </div>
+        </AcheterBricksContent>
+      </AcheterBricksContainer>
 
-        </>
-    )
+    </>
+  )
 }
 
 export default AchatBricks

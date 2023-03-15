@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback} from 'react'
+import React, { useState, useRef, useEffect, useCallback } from 'react'
 import styled, { keyframes } from 'styled-components'
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
@@ -262,9 +262,9 @@ const Error = styled.div`
 
 `
 
-const AchatMarket = ({ id, image, nom, zip, prix_total, nombre_bricks, rentabiliter, reverser, region, status, setDatas  }) => {
+const AchatMarket = ({ id, image, nom, zip, prix_total, nombre_bricks, rentabiliter, reverser, region, status, setDatas }) => {
 
-	const { isLoggedIn, user, token } = useSelector(state => state.auth);
+	const { isLoggedIn, user, token, wallet } = useSelector(state => state.auth);
 	const [show, setShow] = useState(false)
 	const [success, setSuccess] = useState('')
 	const [error, setError] = useState('')
@@ -284,97 +284,97 @@ const AchatMarket = ({ id, image, nom, zip, prix_total, nombre_bricks, rentabili
 			prix_total: prix_total
 		}
 
-		await axios.post('/api/markets/sell', value,{ headers: authHeader() }).then((data) => {
+		await axios.post('/api/markets/sell', value, { headers: authHeader() }).then((data) => {
 			window.location.reload()
 		}).catch((err) => {
 			console.log(err)
-		})	
+		})
 
 	}
 
 
 	useEffect(() => {
-		
+
 	}, [])
 
 
 
 
-	return(
+	return (
 		<>
-		<Content key={id}>
-			<div>
-				<img src={image} alt={nom} />
-				<p>
-					<h2>{ nom }</h2>
-					<span>{ zip } - { region }</span>
-				</p>
-			</div>
-			<div>
-				<p> Prix du lot </p>
-				<span>{ prix_total } €</span>
-				<span> ~{ (prix_total/nombre_bricks).toFixed(2) } € / brick</span>
-			</div>
-			<div>
+			<Content key={id}>
 				<div>
-					<p> Benefices </p>
-					<p>{ rentabiliter }% rentabilité</p>
-					<p>{ reverser }% reversé</p>
+					<img src={image} alt={nom} />
+					<p>
+						<h2>{nom}</h2>
+						<span>{zip} - {region}</span>
+					</p>
 				</div>
 				<div>
-					{
-					status === "Sell" &&
-					<Btn onClick={() => setShow(!show)} color="#fff" background="rgba(231,62,17, 1)">
-		              Acheter
-		            </Btn>
-					}
+					<p> Prix du lot </p>
+					<span>{prix_total} €</span>
+					<span> ~{(prix_total / nombre_bricks).toFixed(2)} € / brick</span>
 				</div>
-			</div>
-		</Content>
-		{
-			show && 
-			<BuyContainer>
-				<Container>
-					<Header>
-						<Button onClick={() => setShow(!show)}><span></span></Button>
-						Acheter des bricks
-					</Header>
-					<Body>
-						<img src={img} alt={nom} />
-						<h2>{ nom }</h2>
-						<span>{ zip } - { region }</span>
+				<div>
+					<div>
+						<p> Benefices </p>
+						<p>{rentabiliter}% rentabilité</p>
+						<p>{reverser}% reversé</p>
+					</div>
+					<div>
+						{
+							status === "Sell" &&
+							<Btn onClick={() => setShow(!show)} color="#fff" background="rgba(231,62,17, 1)">
+								Acheter
+							</Btn>
+						}
+					</div>
+				</div>
+			</Content>
+			{
+				show &&
+				<BuyContainer>
+					<Container>
+						<Header>
+							<Button onClick={() => setShow(!show)}><span></span></Button>
+							Acheter des bricks
+						</Header>
+						<Body>
+							<img src={img} alt={nom} />
+							<h2>{nom}</h2>
+							<span>{zip} - {region}</span>
 
-						<Information>
-							<div>
-								Nombre: <span> { nombre_bricks } </span>
-							</div>
-							<div>
-								Prix vente/d'origine: <span> { (prix_total/nombre_bricks).toFixed(2) } € / 10 € </span>
-							</div>
-							<div>
-								Rentabilité: <span> { rentabiliter } % </span>
-							</div>
-							<div>
-								Reversé: <span> { reverser } % </span>
-							</div>
-						</Information>
-						<Vente onSubmit={handleSellBricks}>
-							<input type="hidden" value={ prix_total } />
-							{
-								error !== '' && <Error>{error}</Error>
-							}
-							{
-								user.wallet < prix_total && <Error>Vous n'avez pas assez d’argent dans votre portefeuille, s'il vous plait fait un depot!</Error>
-							}
-							<Btn disabled={user.wallet < prix_total || isClicked ? true : false} type="submit" color="#fff" background="rgba(231,62,17, 1)">Acheter les bricks pour { prix_total } €</Btn>
-						</Vente>
-					</Body>
-				</Container>
-				{
-					success !== '' && <Success>{success}</Success>
-				}
-			</BuyContainer>
-		}
+							<Information>
+								<div>
+									Nombre: <span> {nombre_bricks} </span>
+								</div>
+								<div>
+									Prix vente/d'origine: <span> {(prix_total / nombre_bricks).toFixed(2)} € / 10 € </span>
+								</div>
+								<div>
+									Rentabilité: <span> {rentabiliter} % </span>
+								</div>
+								<div>
+									Reversé: <span> {reverser} % </span>
+								</div>
+							</Information>
+							<Vente onSubmit={handleSellBricks}>
+								<input type="hidden" value={prix_total} />
+								{
+									error !== '' && <Error>{error}</Error>
+								}
+								{
+									wallet < prix_total && <Error>Vous n'avez pas assez d’argent dans votre portefeuille, s'il vous plait fait un depot!</Error>
+								}
+								<Btn disabled={wallet < prix_total || isClicked ? true : false} type="submit" color="#fff" background="rgba(231,62,17, 1)">Acheter les bricks pour {prix_total} €</Btn>
+							</Vente>
+						</Body>
+					</Container>
+					{
+						success !== '' && <Success>{success}</Success>
+					}
+				</BuyContainer>
+			}
 		</>
 	)
 }

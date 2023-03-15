@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { loadStripe } from "@stripe/stripe-js";
 import axios from "axios"
 import styled from 'styled-components';
+import Loader from './Loader';
 
 
 const Container = styled.div`
@@ -95,6 +96,9 @@ const Button = styled.button`
 
 const StripePayment = () => {
 
+
+    const [loading, setLoading] = useState(false)
+
     const [product, setProduct] = useState({
         name: "Go FullStack with KnowledgeHut",
         price: 0,
@@ -104,6 +108,7 @@ const StripePayment = () => {
     })
 
     const makePayment = async () => {
+        setLoading(true)
         const stripe = await loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
         const body = { product };
         const response = await axios.post('/api/create-checkout-session', body)
@@ -122,18 +127,22 @@ const StripePayment = () => {
 
     return (
         <Container>
-            <Content>
-                <div>
-                    <Title>Ajouter des fond</Title>
-                    <Input type="number" min="0" required value={product.price} onChange={(e) => setProduct({ ...product, price: e.target.value })} />
-                    {product.price > 0 && <Button onClick={makePayment}>Ajouter {product.price}€ dans votre compte</Button>}
-                </div>
-                {/* <div>
+            {
+                !loading ?
+                    <Content>
+                        <div>
+                            <Title>Ajouter des fond</Title>
+                            <Input type="number" min="0" required value={product.price} onChange={(e) => setProduct({ ...product, price: e.target.value })} />
+                            {product.price > 0 && <Button onClick={makePayment}>Ajouter {product.price}€ dans votre compte</Button>}
+                        </div>
+                        {/* <div>
                     <h2>Retrait de fond</h2>
                     <Input type="number" min="0" required />
                     <Button>Buy now for {product.price}</Button>
                 </div> */}
-            </Content>
+                    </Content>
+                    : <Loader />
+            }
         </Container>
     )
 }

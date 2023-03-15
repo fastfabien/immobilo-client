@@ -67,11 +67,11 @@ const Container = styled.div`
 
 const Loader = () => {
 
-	return(
+	return (
 		<LoaderContainer>
 			<Container>
-				<div></div><div></div><div></div>	
-			</Container>	
+				<div></div><div></div><div></div>
+			</Container>
 		</LoaderContainer>
 	)
 }
