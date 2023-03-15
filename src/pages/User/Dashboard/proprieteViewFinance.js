@@ -97,16 +97,16 @@ const Finance = () => {
 	const [datas, setDatas] = useState()
 	const { id } = useParams()
 
-	const pourcentage_investisement= ((parseFloat(datas?.nb_brique_restant) * 100) / parseFloat(datas?.nb_brique)).toFixed(2)
+	const pourcentage_investisement = ((parseFloat(datas?.nb_brique_restant) * 100) / parseFloat(datas?.nb_brique)).toFixed(2)
 	const formatedRevenuReverserValue = parseFloat(datas?.loyer_collecter_annuel) - parseFloat(datas?.frais_agence) - parseFloat(datas?.remboursement_emprunt) - parseFloat(datas?.renovation)
-	const formatedValorisation = datas?.valorisation.toLocaleString(undefined, {useGrouping: true, groupingSeparator: " "});
+	const formatedValorisation = datas?.valorisation.toLocaleString(undefined, { useGrouping: true, groupingSeparator: " " });
 
 	const getInformation = async () => {
-		return await axios.get(API_URL + `${id}`, { headers: authHeader() }).then( async (data) => {
+		return await axios.get(API_URL + `${id}`, { headers: authHeader() }).then(async (data) => {
 			await setDatas(data.data.property)
 		}).catch((err) => {
 			console.log(err)
-		})	
+		})
 	}
 
 	useEffect(() => {
@@ -115,18 +115,18 @@ const Finance = () => {
 
 	console.log(datas)
 
-	return(
+	return (
 		<Container>
 			<GoBack onClick={() => navigate(-1)}>
 				<FontAwesomeIcon icon={solid('arrow-left-long')} /><span>Retour</span>
 			</GoBack>
-			<ProprieteInfoImage 
-				all_images={datas?.images} 
+			<ProprieteInfoImage
+				all_images={datas?.images}
 				nom={datas?.nom}
 				rue={datas?.rue}
 				region={datas?.region}
 				zip={datas?.zip}
-				 />
+			/>
 			<NavBarContainer>
 				<ProprieteNavibar alignment="start" content={
 					[{ lien: `/proprietes/${id}`, text: "Général" },
@@ -136,47 +136,47 @@ const Finance = () => {
 			</NavBarContainer>
 			<InformationContainer>
 				<Left>
-					<FinanceInformation 
+					<FinanceInformation
 
-						information={[	{header: [<FontAwesomeIcon icon={solid('home')} />, "Acquisition"]},
-							["Prix d'acquisition", datas?.prix_acquisition],
-							["Rémunération", datas?.renumeration_service],
-							["Frais de notaire", datas?.frais_notaire],
-							["Réserve d’argent (notamment pour travaux)", datas?.reserve_argent],
-							["Coût d'acquisition total", formatedValorisation]
+						information={[{ header: [<FontAwesomeIcon icon={solid('home')} />, "Acquisition"] },
+						["Prix d'acquisition", datas?.prix_acquisition],
+						["Rémunération", datas?.renumeration_service],
+						["Frais de notaire", datas?.frais_notaire],
+						["Réserve d’argent (notamment pour travaux)", datas?.reserve_argent],
+						["Coût d'acquisition total", formatedValorisation]
 						]}
-					 />
-					 <FinanceInformation 
-						information={[	{header: [<FontAwesomeIcon icon={solid('home')} />, "Rendement Locatif Cible"]},
-							["Loyers collectés", datas?.loyer_collecter_annuel],
-							["Frais d’agence immobilière", datas?.frais_agence],
-							["Remboursement de l'emprunt", datas?.remboursement_emprunt],
-							["Renovation", datas?.renovation],
-							["Revenu Reverser", `${formatedRevenuReverserValue} € (soit ${datas?.reverser.toFixed(2)}%)`]
+					/>
+					<FinanceInformation
+						information={[{ header: [<FontAwesomeIcon icon={solid('home')} />, "Rendement Locatif Cible"] },
+						["Loyers collectés", datas?.loyer_collecter_annuel],
+						["Frais d’agence immobilière", datas?.frais_agence],
+						["Remboursement de l'emprunt", datas?.remboursement_emprunt],
+						["Renovation", datas?.renovation],
+						["Revenu Reverser", `${formatedRevenuReverserValue} € (soit ${datas?.reverser.toFixed(2)}%)`]
 						]}
-					 />
-					 <FinanceInformation 
-						information={[	{header: [<FontAwesomeIcon icon={solid('home')} />, "valorisation"]},
-							["Nombre de bricks", datas?.nb_brique],
-							["Valorisation du bien", formatedValorisation],
-							["Réserve d'argent actuelle", datas?.reserve_argent],
-							["Prêt à rembourser", datas?.remboursement_emprunt],
-							["Valeur Totale", formatedValorisation]
+					/>
+					<FinanceInformation
+						information={[{ header: [<FontAwesomeIcon icon={solid('home')} />, "valorisation"] },
+						["Nombre de bricks", datas?.nb_brique],
+						["Valorisation du bien", formatedValorisation],
+						["Réserve d'argent actuelle", datas?.reserve_argent],
+						["Prêt à rembourser", datas?.remboursement_emprunt],
+						["Valeur Totale", formatedValorisation]
 						]}
-					 />
+					/>
 				</Left>
 				<Right>
-					<Brickeurs 
+					<Brickeurs
 						nom={datas?.nom}
 						image={datas?.image_couverture}
 						pourcentageInvestissement={pourcentage_investisement}
 						brickRestant={datas?.nb_brique_restant}
 						id={datas?._id}
-					 />
+					/>
 					<Calculete reverser={datas?.reverser.toFixed(2)} />
 				</Right>
 			</InformationContainer>
-		</Container>	
+		</Container>
 	)
 }
 

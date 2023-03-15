@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef, useCallback} from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import styled from 'styled-components'
@@ -223,9 +223,9 @@ const Erreur = styled.div`
 	}
 `
 
-const UserDashboard = () =>  {
+const UserDashboard = () => {
 
-	
+
 	const messageRef = useRef()
 
 	const [user, setUser] = useState()
@@ -257,14 +257,14 @@ const UserDashboard = () =>  {
 	const handleSetVerification = async (e) => {
 		e.preventDefault()
 
-		axios.post(API_URL + `${id}`, data,{ headers: authHeader() }).then((data) => {
+		axios.post(API_URL + `${id}`, data, { headers: authHeader() }).then((data) => {
 			setMessage('Information enregistrer !')
 		}).catch((err) => {
 			setError(err.message)
 		})
 	}
 
-	return(
+	return (
 		<Container>
 			<NavBarContainer>
 				<ProprieteNavibar alignment="center" content={
@@ -276,12 +276,12 @@ const UserDashboard = () =>  {
 			{
 				user && <UserInformationContainer>
 					<Left>
-						<Profil>
+						{/* <Profil>
 							{
 								user.document && 
 							   <img src={`data:image/jpg;base64,${user.document}`} height="50" width="60" alt="Red dot" />
 							}
-						</Profil>
+						</Profil> */}
 					</Left>
 					<Right>
 						<p><span>Username:</span> <span>{user.username}</span></p>
@@ -305,22 +305,22 @@ const UserDashboard = () =>  {
 							)
 						}
 						<Select onChange={(e) => setData({ ...data, verification: e.target.value })}>
-			                <option value={user.verification} disabled="disabled" selected="selected">{user.verification}</option>
-			                <option value="Refuser">Refuser</option>
-			                <option value="Verifier">Accepter</option>
-			             </Select>
-			             <input type="text" id="messageRefused" ref={messageRef} onChange={(e) => setData({ ...data, documentMessage: e.target.value })} placeholder="Message" />
-			             <input type="submit" value="enregistrer" /> 
-			             {
-			             	message && <Message>{message}<span onClick={() => setMessage(!message)}><FontAwesomeIcon icon={solid('xmark')} /></span></Message>
-			             }
-			             {
-			             	error && <Erreur>{error}<span onClick={() => setMessage(!error)}><FontAwesomeIcon icon={solid('xmark')} /></span></Erreur>
-			             }
+							<option value={user.verification} disabled="disabled" selected="selected">{user.verification}</option>
+							<option value="Refuser">Refuser</option>
+							<option value="Verifier">Accepter</option>
+						</Select>
+						<input type="text" id="messageRefused" ref={messageRef} onChange={(e) => setData({ ...data, documentMessage: e.target.value })} placeholder="Message" />
+						<input type="submit" value="enregistrer" />
+						{
+							message && <Message>{message}<span onClick={() => setMessage(!message)}><FontAwesomeIcon icon={solid('xmark')} /></span></Message>
+						}
+						{
+							error && <Erreur>{error}<span onClick={() => setMessage(!error)}><FontAwesomeIcon icon={solid('xmark')} /></span></Erreur>
+						}
 					</form>
-				</UserInformationContainer>	
+				</UserInformationContainer>
 			}
-			
+
 		</Container>
 	)
 }

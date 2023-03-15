@@ -84,9 +84,8 @@ const FinanceInformation = ({ information }) => {
 
 	}, [])
 
-	console.log(formatedInformationArray[1][0])
 
-	return(
+	return (
 		<Container>
 			<Header>
 				<div>
@@ -112,7 +111,7 @@ const FinanceInformation = ({ information }) => {
 					<div>{information[information.length - 1][1]} €</div>
 				</Content>
 			</Footer>
-		</Container>	
+		</Container>
 	)
 }
 

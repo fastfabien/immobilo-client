@@ -1,4 +1,4 @@
-import react, {useState, useEffect, useRef} from 'react'
+import react, { useState, useEffect, useRef } from 'react'
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import axios from 'axios';
@@ -8,6 +8,12 @@ import { solid, regular, brands, icon, thin } from '@fortawesome/fontawesome-svg
 import AdminDashboardLeft from '../../components/Admin/Dashboard.admin.js'
 import ProprieteNavibar from '../../components/ProprieteNavibar'
 import Button from "../../components/Button";
+import Actualite from '../../components/Actualite.js';
+import Rentabilite from '../../components/Rentabilite.js';
+import PourquoiInvestir from '../../components/PourquoiInvestir.js';
+import Presentation from '../../components/Presentation.js';
+import FinanceInformation from '../../components/FinanceInformation.js';
+import Loader from '../../components/Loader.js';
 
 const Container = styled.div`
 
@@ -355,11 +361,13 @@ const Verify = styled.div`
 
 const Verification = styled.div`
 
-
+	position: absolute;
+	top: 15rem;
+	bottom: 0;
 	width: 100%;
 	display: flex;
-	flex-direction: column;
 	justify-content: space-between;
+	gap: 2rem;
 
 
 `
@@ -448,12 +456,65 @@ const TextareaContainer = styled.div`
 
 `
 
+const Left = styled.div`
+
+
+	width: 50%;
+
+
+`
+
+const Right = styled.div`
+
+
+	width: 50%;
+
+
+`
+
+const Buttons = styled.div`
+
+  
+  position: absolute; 
+  left: 1rem;
+  top: -2rem;
+  cursor: pointer;
+
+  appearance: none;
+  outline: none;
+
+  & span, & span::after {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: red;
+  }
+  & span {
+    transform: rotate(45deg);
+  }
+  & span::after {
+    content: "";
+    transform: rotate(90deg);
+  }
+
+  `
+
+
+const Notice = styled.span`
+
+  color: green;
+  font-size: ${props => props.theme.fontmd};
+  font-weight: 800;
+
+`
+
+
+
+
 const NewProprieteAdmin = () => {
 
 	const { isLoggedIn, user, token } = useSelector(state => state.auth);
 	const [data, setData] = useState({
-		loyer_mensuel: 0,
-		loyer_collecter_annuel: 0
 	})
 	const textareaConteinerRef = useRef()
 	const aproposRef = useRef()
@@ -465,10 +526,11 @@ const NewProprieteAdmin = () => {
 	const [showFileName, setShowFileName] = useState("");
 	const navigate = useNavigate()
 	const [inputNumber, setInputNumber] = useState(0)
+	const [loading, setLoading] = useState(false)
 
 	const handleChangeLoyerMensuel = (e) => {
 		e.preventDefault()
-		setData({ ...data, loyer_mensuel: e.target.value})
+		setData({ ...data, loyer_mensuel: e.target.value })
 	}
 
 	const handleChangeDataAnnuel = () => {
@@ -480,75 +542,86 @@ const NewProprieteAdmin = () => {
 	}, [data.loyer_mensuel])
 
 	if (!isLoggedIn || user.roles[0]['name'] !== 'admin') {
-    return <Navigate to="/dashboard" />
-  }
+		return <Navigate to="/dashboard" />
+	}
+	const handleVerified = (e) => {
+		e.preventDefault()
 
-  const handleVerified = (e) => {
-    	e.preventDefault()
+		setIsVerified(true)
+		setToVerify(false)
+	}
 
-    	setIsVerified(true)
-    	setToVerify(false)
-    }
 
-  const createDescription = (e) => {
-  	e.preventDefault()
-  	setInputNumber(inputNumber + 1)
-  	const name = `description${inputNumber}`
-  	const form = textareaConteinerRef.current
-  	const textarea = document.createElement('textarea')
-  	textarea.name = name
-  	textarea.placeholder = "Description"
-  	textarea.onChange = () => setData({ ...data, name: e.target.value })
-  	form.appendChild(textarea)
-  }
+	const rentabiliter = (parseFloat(data.revente) + ((parseFloat(data.loyer_collecter_annuel) - parseFloat(data.frais_agence) - parseFloat(data.remboursement_emprunt) + parseFloat(data.taxes)) / (parseFloat(data.prix_acquisition) + parseFloat(data.renumeration_service) + parseFloat(data.frais_notaire) + parseFloat(data.reserve_argent)) * 100)).toFixed(2)
+	const reverser = ((parseFloat(data.loyer_collecter_annuel) - parseFloat(data.frais_agence) - parseFloat(data.remboursement_emprunt) + parseFloat(data.taxes)) / (parseFloat(data.prix_acquisition) + parseFloat(data.renumeration_service) + parseFloat(data.frais_notaire) + parseFloat(data.reserve_argent)) * 100).toFixed(2)
+	const valorisation = (parseFloat(data.prix_acquisition) + parseFloat(data.renumeration_service) + parseFloat(data.frais_notaire) + parseFloat(data.reserve_argent) + parseFloat(data.renovation))
 
-  const createAbout = (e) => {
-  	e.preventDefault()
-  	setInputNumber(inputNumber + 1)
-  	const name = `about${inputNumber}`
-  	const form = aproposRef.current
-  	const textarea = document.createElement('textarea')
-  	textarea.name = name
-  	textarea.placeholder = "À propos"
-  	textarea.onChange = () => setData({ ...data, name: e.target.value })
-  	form.appendChild(textarea)
-  }
+	const formatedValorisation = valorisation.toLocaleString(undefined, { useGrouping: true, groupingSeparator: " " });
+
+
+	const createDescription = (e) => {
+		e.preventDefault()
+		setInputNumber(inputNumber + 1)
+		const name = `description${inputNumber}`
+		const form = textareaConteinerRef.current
+		const textarea = document.createElement('textarea')
+		textarea.name = name
+		textarea.placeholder = "Description"
+		textarea.onChange = () => setData({ ...data, name: e.target.value })
+		form.appendChild(textarea)
+	}
+
+	const createAbout = (e) => {
+		e.preventDefault()
+		setInputNumber(inputNumber + 1)
+		const name = `about${inputNumber}`
+		const form = aproposRef.current
+		const textarea = document.createElement('textarea')
+		textarea.name = name
+		textarea.placeholder = "À propos"
+		textarea.onChange = () => setData({ ...data, name: e.target.value })
+		form.appendChild(textarea)
+	}
 
 	const handleCreateProperty = async (e) => {
 		e.preventDefault()
 
-		const val = e.target[e.target.length - 2].files;
+		const val = e.target[e.target.length - 3].files;
 		setIsClicked(true)
 
-		var formData = new FormData()
-		for(var i = 0; i < e.target.length - 1; i++) {
-			formData.append(`${e.target[i].name}`, e.target[i].value)    
-    }
-    for(var i = 0; i < val.length; i++) {
-			formData.append('file', e.target[e.target.length - 2].files[i])    
-    }
+		setLoading(true)
 
-    await axios.post('/api/properties', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'x-access-token': `${token}` 
-        }
-      }).then((response) => {
-	        setMessage('Proprietes enregistrer !')
-	        navigate("/admin/proprietes");
-	    }).catch((error) => {
-	        setError(error.message)
-	    })
+		var formData = new FormData()
+		for (var i = 0; i < e.target.length - 1; i++) {
+			formData.append(`${e.target[i].name}`, e.target[i].value)
+		}
+		for (var i = 0; i < val.length; i++) {
+			formData.append('file', e.target[e.target.length - 3].files[i])
+		}
+
+		await axios.post('/api/properties', formData, {
+			headers: {
+				'Content-Type': 'multipart/form-data',
+				'x-access-token': `${token}`
+			}
+		}).then((response) => {
+			setMessage('Proprietes enregistrer !')
+			navigate("/admin/proprietes");
+			setLoading(false)
+		}).catch((error) => {
+			setError(error.message)
+		})
 
 
 	}
 
 	if (!isLoggedIn && user.roles[0]['name'] !== 'user') {
-	    return <Navigate to="/login" />
-	 }
+		return <Navigate to="/login" />
+	}
 
-	return(
+	return (
 		<Container>
+			{loading && <Loader />}
 			<NavBarContainer>
 				<ProprieteNavibar alignment="center" content={
 					[{ lien: "/admin", text: "Tous les utilisateurs" },
@@ -556,112 +629,119 @@ const NewProprieteAdmin = () => {
 				} />
 			</NavBarContainer>
 			{!toVerify && <FormContainer onSubmit={handleCreateProperty}>
-			          <InputContainer>
-			            <Content>
-			              <Label>Information generale</Label>
-			              <Inputs type="text" required value={data.nom} name="nom" placeholder='Nom' onChange={(e) => setData({ ...data, nom: e.target.value })} />
-			              <Inputs type="text" required value={data.rue} name="rue" placeholder='Rue' onChange={(e) => setData({ ...data, rue: e.target.value })} />
-			              <Inputs type="text" required value={data.region} name="region" placeholder='Region' onChange={(e) => setData({ ...data, region: e.target.value })} />
-			              <Inputs type="number" min="0" required value={data.zip} name="zip" placeholder='Zip' onChange={(e) => setData({ ...data, zip: e.target.value })} />
-			              <Label>Information Secondaire</Label>
-			              <Textarea type="text" required value={data.localisation} name="localisation" placeholder='Localisation' onChange={(e) => setData({ ...data, localisation: e.target.value })} />
-			              <Textarea type="text" required value={data.etat_immeuble} name="etat_immeuble" placeholder="Etat de l'immeuble" onChange={(e) => setData({ ...data, etat_immeuble: e.target.value })} />
-			              <Textarea type="text" required value={data.nature_lots} name="nature_lots" placeholder='Nature du lots' onChange={(e) => setData({ ...data, nature_lots: e.target.value })} />
-			              <Textarea type="text" required value={data.totalite_lots} name="totalite_lots" placeholder='Totalite du lots' onChange={(e) => setData({ ...data, totalite_lots: e.target.value })} />
-			              <Inputs type="number" min="0" required value={data.nombre_lots} name="nombre_lots" placeholder='Nombre de lots' onChange={(e) => setData({ ...data, nombre_lots: e.target.value })} />
-			              <Inputs type="number" min="0" required value={data.aire} name="aire" placeholder='Surface' onChange={(e) => setData({ ...data, aire: e.target.value })} />
-			              <TextareaContainer ref={textareaConteinerRef}>
-			              	<Textarea required value={data.description} name="description" placeholder='Description' onChange={(e) => setData({ ...data, description: e.target.value })} />
-			              </TextareaContainer>
-			              <Btn onClick={createDescription}>+</Btn>
-			              <TextareaContainer ref={aproposRef}>
-			              	<Textarea required value={data.about} name="about" placeholder='À propos' onChange={(e) => setData({ ...data, about: e.target.value })} />
-			              </TextareaContainer>
-			              <Btn onClick={createAbout}>+</Btn>
-			            </Content>
-			            <Content>
-			              
-			              <Label>Acquisition</Label>
-			              <Inputs type="number" min="0" required value={data.prix_acquisition} name="prix_acquisition" placeholder="Prix d' acquisition" onChange={(e) => setData({ ...data, prix_acquisition: e.target.value })} />
-			              <Inputs type="number" min="0" required value={data.renumeration_service} name="renumeration_service" placeholder="Renumeration de service" onChange={(e) => setData({ ...data, renumeration_service: e.target.value })} />
-			              <Inputs type="number" min="0" required value={data.frais_notaire} name="frais_notaire" placeholder="Frais notaire" onChange={(e) => setData({ ...data, frais_notaire: e.target.value })} />
-			              <Inputs type="number" min="0" required value={data.reserve_argent} name="reserve_argent" placeholder="Reserve d'argent" onChange={(e) => setData({ ...data, reserve_argent: e.target.value })} />
-			              <Inputs type="number" min="0" required value={data.renovation} name="renovation" placeholder="Renovation" onChange={(e) => setData({ ...data, renovation: e.target.value })} />
-			
-			              <Label>Loyer Mensuel/Annuel</Label>
-			              <Inputs type="number" min="0" required value={data.loyer_mensuel} name="loyer_mensuel" placeholder='Loyer Mensuel' onChange={(e) => setData({...data,loyer_mensuel: e.target.value })} />
-			              <Inputs type="number" min="0" required value={data.loyer_collecter_annuel} name="loyer_collecter_annuel" placeholder='Loyer Collecter Annuel' readOnly />
-			              <Label>Rendement locatif cible</Label>
-			              <Inputs type="number" min="0" required value={data.frais_agence} name="frais_agence" placeholder="Frais agence immobilier" onChange={(e) => setData({ ...data, frais_agence: e.target.value })} />
-			              <Inputs type="number" min="0" required value={data.remboursement_emprunt} name="remboursement_emprunt" placeholder="Remboursement emprunt" onChange={(e) => setData({ ...data, remboursement_emprunt: e.target.value })} />
-			              <Inputs type="number" min="0" step="0.01" required value={data.taxes} name="taxes" placeholder="Taxes" onChange={(e) => setData({ ...data, taxes: e.target.value })} />
-			              <Label>Finance</Label>
-			              <Inputs type="number" min="0" step="0.01" required value={data.revente} name="revente" placeholder="Potentiel de revente" onChange={(e) => setData({ ...data, revente: e.target.value })} />
-			              <Inputs type="number" min="0" step="0.01" required value={data.hausse} name="hause" placeholder="Potentiel de hausse" onChange={(e) => setData({ ...data, hausse: e.target.value })} />
-			            </Content>
-			          </InputContainer>
-			          <Content>
-			            	<Label>Gallery</Label>
-			            	<UploadContainer htmlFor="uploadDoc">
-			                  {
-			                    showFileName == "" ? "Choisissez un fichier" : showFileName
-			                  }
-			              </UploadContainer>
-			              <input type="file" name="file" id="uploadDoc" multiple accept="image/png,image/jpeg" required />
-			            </Content>
-			            <SubmitContainer>
-			            	<Inputs type="submit" value="Valider" />
-			            </SubmitContainer>
-			        </FormContainer>}
-	        { toVerify && <Verification>
-	        						<InputContainer>
-	        	        	<Content>
-	        	              <Label>Information generale</Label>
-	        	              <Inputs type="text" required value={data.nom} name="nom" placeholder='Nom' onChange={(e) => setData({ ...data, nom: e.target.value })} />
-	        	              <Inputs type="text" required value={data.rue} name="rue" placeholder='Rue' onChange={(e) => setData({ ...data, rue: e.target.value })} />
-	        	              <Inputs type="text" required value={data.region} name="region" placeholder='Region' onChange={(e) => setData({ ...data, region: e.target.value })} />
-	        	              <Inputs type="number" min="0" required value={data.zip} name="zip" placeholder='Zip' onChange={(e) => setData({ ...data, zip: e.target.value })} />
-	        	              <Label>Information Secondaire</Label>
-	        	              <Textarea type="text" required value={data.localisation} name="localisation" placeholder='Localisation' onChange={(e) => setData({ ...data, localisation: e.target.value })} />
-	        	              <Textarea type="text" required value={data.etat_immeuble} name="etat_immeuble" placeholder="Etat de l'immeuble" onChange={(e) => setData({ ...data, etat_immeuble: e.target.value })} />
-	        	              <Textarea type="text" required value={data.nature_lots} name="nature_lots" placeholder='Nature du lots' onChange={(e) => setData({ ...data, nature_lots: e.target.value })} />
-	        	              <Textarea type="text" required value={data.totalite_lots} name="totalite_lots" placeholder='Totalite du lots' onChange={(e) => setData({ ...data, totalite_lots: e.target.value })} />
-	        	              <Inputs type="number" min="0" required value={data.nombre_lots} name="nombre_lots" placeholder='Nombre de lots' onChange={(e) => setData({ ...data, nombre_lots: e.target.value })} />
-	        	              <Inputs type="number" min="0" required value={data.aire} name="aire" placeholder='Surface' onChange={(e) => setData({ ...data, aire: e.target.value })} />
-	        	              <Textarea required value={data.description} name="description" placeholder='Description' onChange={(e) => setData({ ...data, description: e.target.value })} />
-	        
-	        	            </Content>
-	        	            <Content>
-	        	              
-	        	              <Label>Acquisition</Label>
-	        	              <Inputs type="number" min="0" required value={data.prix_acquisition} name="prix_acquisition" placeholder="Prix d' acquisition" onChange={(e) => setData({ ...data, prix_acquisition: e.target.value })} readOnly />
-	        	              <Inputs type="number" min="0" required value={data.renumeration_service} name="renumeration_service" placeholder="Renumeration de service" onChange={(e) => setData({ ...data, renumeration_service: e.target.value })} readOnly />
-	        	              <Inputs type="number" min="0" required value={data.frais_notaire} name="frais_notaire" placeholder="Frais notaire" onChange={(e) => setData({ ...data, frais_notaire: e.target.value })} readOnly />
-	        	              <Inputs type="number" min="0" required value={data.reserve_argent} name="reserve_argent" placeholder="Reserve d'argent" onChange={(e) => setData({ ...data, reserve_argent: e.target.value })} readOnly />
-	        	              <Inputs type="number" min="0" required value={data.renovation} name="renovation" placeholder="Renovation" onChange={(e) => setData({ ...data, renovation: e.target.value })} readOnly />
-	        
-	        	              <Label>Loyer Mensuel/Annuel</Label>
-	        	              <Inputs type="number" min="0" required value={data.loyer_mensuel} name="loyer_mensuel" placeholder='Loyer Mensuel' onChange={(e) => setData({...data,loyer_mensuel: e.target.value })} />
-	        	              <Inputs type="number" min="0" required value={data.loyer_collecter_annuel} name="loyer_collecter_annuel" placeholder='Loyer Collecter Annuel' readOnly />
-	        	              <Label>Rendement locatif cible</Label>
-	        	              <Inputs type="number" min="0" required value={data.frais_agence} name="frais_agence" placeholder="Frais agence immobilier" onChange={(e) => setData({ ...data, frais_agence: e.target.value })}  />
-	        	              <Inputs type="number" min="0" required value={data.remboursement_emprunt} name="remboursement_emprunt" placeholder="Remboursement emprunt" onChange={(e) => setData({ ...data, remboursement_emprunt: e.target.value })}  />
-	        	              <Inputs type="number" min="0" step="0.01" required value={data.taxes} name="taxes" placeholder="Taxes" onChange={(e) => setData({ ...data, taxes: e.target.value })}  />
-	        	              <Label>Finance</Label>
-	        	              <Inputs type="number" min="0" step="0.01" required value={data.revente} name="revente" placeholder="Potentiel de revente" onChange={(e) => setData({ ...data, revente: e.target.value })}  />
-	        	              <Inputs type="number" min="0" step="0.01" required value={data.hausse} name="hause" placeholder="Potentiel de hausse" onChange={(e) => setData({ ...data, hausse: e.target.value })}  />
-	        	            </Content>
-	        	            </InputContainer>
-	        	            <SubmitContainer>
-		        	            <Btn onClick={handleVerified} >Confirmer</Btn>
-	        	            </SubmitContainer>
-	        	        </Verification>}
-        {
-         	message && <Message>{message}<span onClick={() => setMessage(!message)}><FontAwesomeIcon icon={solid('xmark')} /></span></Message>
-        }
-        {
-         	error && <Erreur>{error}<span onClick={() => setMessage(!error)}><FontAwesomeIcon icon={solid('xmark')} /></span></Erreur>
-        }
+				<InputContainer>
+					<Content>
+						<Label>Information generale</Label>
+						<Inputs type="text" required value={data.nom} name="nom" placeholder='Nom' onChange={(e) => setData({ ...data, nom: e.target.value })} />
+						<Inputs type="text" required value={data.rue} name="rue" placeholder='Rue' onChange={(e) => setData({ ...data, rue: e.target.value })} />
+						<Inputs type="text" required value={data.region} name="region" placeholder='Region' onChange={(e) => setData({ ...data, region: e.target.value })} />
+						<Inputs type="number" min="0" required value={data.zip} name="zip" placeholder='Zip' onChange={(e) => setData({ ...data, zip: e.target.value })} />
+						<Label>Information Secondaire</Label>
+						<Textarea type="text" required value={data.localisation} name="localisation" placeholder='Localisation' onChange={(e) => setData({ ...data, localisation: e.target.value })} />
+						<Textarea type="text" required value={data.etat_immeuble} name="etat_immeuble" placeholder="Etat de l'immeuble" onChange={(e) => setData({ ...data, etat_immeuble: e.target.value })} />
+						<Textarea type="text" required value={data.nature_lots} name="nature_lots" placeholder='Nature du lots' onChange={(e) => setData({ ...data, nature_lots: e.target.value })} />
+						<Textarea type="text" required value={data.totalite_lots} name="totalite_lots" placeholder='Totalite du lots' onChange={(e) => setData({ ...data, totalite_lots: e.target.value })} />
+						<Inputs type="number" min="0" required value={data.nombre_lots} name="nombre_lots" placeholder='Nombre de lots' onChange={(e) => setData({ ...data, nombre_lots: e.target.value })} />
+						<Inputs type="number" min="0" required value={data.aire} name="aire" placeholder='Surface' onChange={(e) => setData({ ...data, aire: e.target.value })} />
+						<TextareaContainer ref={textareaConteinerRef}>
+							<Textarea required value={data.description} name="description" placeholder='Description' onChange={(e) => setData({ ...data, description: e.target.value })} />
+						</TextareaContainer>
+						<Btn onClick={createDescription}>+</Btn>
+						<TextareaContainer ref={aproposRef}>
+							<Textarea required value={data.about} name="about" placeholder='À propos' onChange={(e) => setData({ ...data, about: e.target.value })} />
+						</TextareaContainer>
+						<Btn onClick={createAbout}>+</Btn>
+					</Content>
+					<Content>
+						<Notice>Veuillez utiliser point (.) pour les virgules*</Notice>
+						<Label>Acquisition</Label>
+						<Inputs type="number" min="0" required value={data.prix_acquisition} name="prix_acquisition" placeholder="Prix d' acquisition" onChange={(e) => setData({ ...data, prix_acquisition: e.target.value })} />
+						<Inputs type="number" min="0" required value={data.renumeration_service} name="renumeration_service" placeholder="Renumeration de service" onChange={(e) => setData({ ...data, renumeration_service: e.target.value })} />
+						<Inputs type="number" min="0" required value={data.frais_notaire} name="frais_notaire" placeholder="Frais notaire" onChange={(e) => setData({ ...data, frais_notaire: e.target.value })} />
+						<Inputs type="number" min="0" required value={data.reserve_argent} name="reserve_argent" placeholder="Reserve d'argent" onChange={(e) => setData({ ...data, reserve_argent: e.target.value })} />
+						<Inputs type="number" min="0" required value={data.renovation} name="renovation" placeholder="Renovation" onChange={(e) => setData({ ...data, renovation: e.target.value })} />
+
+						<Label>Loyer Mensuel/Annuel</Label>
+						<Inputs type="number" min="0" required value={data.loyer_mensuel} name="loyer_mensuel" placeholder='Loyer Mensuel' onChange={(e) => setData({ ...data, loyer_mensuel: e.target.value })} />
+						<Inputs type="number" min="0" required value={data.loyer_collecter_annuel} name="loyer_collecter_annuel" placeholder='Loyer Collecter Annuel' readOnly />
+						<Label>Rendement locatif cible</Label>
+						<Inputs type="number" min="0" required value={data.frais_agence} name="frais_agence" placeholder="Frais agence immobilier" onChange={(e) => setData({ ...data, frais_agence: e.target.value })} />
+						<Inputs type="number" min="0" required value={data.remboursement_emprunt} name="remboursement_emprunt" placeholder="Remboursement emprunt" onChange={(e) => setData({ ...data, remboursement_emprunt: e.target.value })} />
+						<Inputs type="number" min="0" step="0.01" required value={data.taxes} name="taxes" placeholder="Taxes" onChange={(e) => setData({ ...data, taxes: e.target.value })} />
+						<Label>Finance</Label>
+						<Inputs type="number" min="0" step="0.01" required value={data.revente} name="revente" placeholder="Potentiel de revente en %" onChange={(e) => setData({ ...data, revente: e.target.value })} />
+						<Inputs type="number" min="0" step="0.01" required value={data.hausse} name="hause" placeholder="Potentiel de hausse en %" onChange={(e) => setData({ ...data, hausse: e.target.value })} />
+					</Content>
+				</InputContainer>
+				<Content>
+					<Label>Gallery</Label>
+					<UploadContainer htmlFor="uploadDoc">
+						{
+							showFileName == "" ? "Choisissez un fichier" : showFileName
+						}
+					</UploadContainer>
+					<input type="file" name="file" id="uploadDoc" multiple accept="image/png,image/jpeg" required onChange={(e) => setData({ ...data, files: e.target.files })} />
+				</Content>
+				<SubmitContainer>
+					<Inputs type="submit" value="Valider" />
+					<Btn onClick={() => setToVerify(true)}><FontAwesomeIcon icon={solid('eye')} /></Btn>
+				</SubmitContainer>
+			</FormContainer>}
+			{toVerify && <Verification>
+				<Buttons onClick={() => setToVerify(false)}><span></span></Buttons>
+				<Left>
+					<Rentabilite
+						rentabiliter={rentabiliter}
+						reverser={reverser}
+						valorisation={valorisation} />
+					<PourquoiInvestir
+						localisation={data?.localisation}
+						etat_immeuble={data?.etat_immeuble}
+						nature_lots={data?.nature_lots}
+						totalite_lots={data?.totalite_lots}
+					/>
+					<Presentation
+						nombre_lots={data?.nombre_lots}
+						loyer_mensuel={data?.loyer_mensuel}
+						aire={data?.aire}
+						description={[data?.description]}
+					/>
+				</Left>
+				<Right>
+					<FinanceInformation
+
+						information={[{ header: [<FontAwesomeIcon icon={solid('home')} />, "Acquisition"] },
+						["Prix d'acquisition", data?.prix_acquisition],
+						["Rémunération", data?.renumeration_service],
+						["Frais de notaire", data?.frais_notaire],
+						["Réserve d’argent (notamment pour travaux)", data?.reserve_argent],
+						["Coût d'acquisition total", formatedValorisation]
+						]}
+					/>
+					<FinanceInformation
+						information={[{ header: [<FontAwesomeIcon icon={solid('home')} />, "Rendement Locatif Cible"] },
+						["Loyers collectés", data?.loyer_collecter_annuel],
+						["Frais d’agence immobilière", data?.frais_agence],
+						["Remboursement de l'emprunt", data?.remboursement_emprunt],
+						["Renovation", data?.renovation]
+						]}
+					/>
+					<FinanceInformation
+						information={[{ header: [<FontAwesomeIcon icon={solid('home')} />, "valorisation"] },
+						["Valorisation du bien", formatedValorisation],
+						["Réserve d'argent actuelle", data?.reserve_argent],
+						["Prêt à rembourser", data?.remboursement_emprunt],
+						["Valeur Totale", formatedValorisation]
+						]}
+					/>
+				</Right>
+			</Verification>}
+			{
+				message && <Message>{message}<span onClick={() => setMessage(!message)}><FontAwesomeIcon icon={solid('xmark')} /></span></Message>
+			}
+			{
+				error && <Erreur>{error}<span onClick={() => setMessage(!error)}><FontAwesomeIcon icon={solid('xmark')} /></span></Erreur>
+			}
 		</Container>
 	)
 }

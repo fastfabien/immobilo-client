@@ -1,4 +1,4 @@
-import react, {useState, useEffect, useCallback} from 'react'
+import react, { useState, useEffect, useCallback } from 'react'
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import styled from 'styled-components'
@@ -89,10 +89,10 @@ const ProprieteAdmin = () => {
 	}, [])
 
 	if (!isLoggedIn || user.roles[0]['name'] !== 'admin') {
-      return <Navigate to="/dashboard" />
-    }
+		return <Navigate to="/dashboard" />
+	}
 
-	return(
+	return (
 		<Container>
 			<NavBarContainer>
 				<ProprieteNavibar alignment="center" content={
@@ -101,29 +101,27 @@ const ProprieteAdmin = () => {
 				} />
 			</NavBarContainer>
 			<table>
-			  <tr>
-			    <th>Nom</th>
-			    <th>Rentabilité</th>
-			    <th>Valoristation</th>
-			    <th>Prix d'acquisition</th>
-			    <th>Details</th>
-			  </tr>
-			  {
-			  	datas && datas.map((data) => (
-					<tr key={data.id}>
-						<td>{data.nom}</td>
-					    <td>{parseFloat(data.rentabiliter)}%</td>
-					    <td>{data.valorisation}€</td>
-					    <td>{data.prix_acquisition}€</td>
-					    <td><Link to={`/admin/user/${user._id}`}><FontAwesomeIcon icon={solid('pencil')} /></Link></td>
-					 </tr>
-				))
-			  }
+				<tr>
+					<th>Nom</th>
+					<th>Rentabilité</th>
+					<th>Valoristation</th>
+					<th>Prix d'acquisition</th>
+				</tr>
+				{
+					datas && datas.map((data) => (
+						<tr key={data.id}>
+							<td>{data.nom}</td>
+							<td>{parseFloat(data.rentabiliter)}%</td>
+							<td>{data.valorisation}€</td>
+							<td>{data.prix_acquisition}€</td>
+						</tr>
+					))
+				}
 			</table>
 			<Action>
 				<Button href="new" color="#fff" background="rgba(231,62,17, 1)">
-		          Ajouter
-		        </Button>
+					Ajouter
+				</Button>
 			</Action>
 		</Container>
 	)
