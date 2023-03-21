@@ -551,10 +551,10 @@ const NewProprieteAdmin = () => {
 		setToVerify(false)
 	}
 
-
-	const rentabiliter = (parseFloat(data.revente) + ((parseFloat(data.loyer_collecter_annuel) - parseFloat(data.frais_agence) - parseFloat(data.remboursement_emprunt) + parseFloat(data.taxes)) / (parseFloat(data.prix_acquisition) + parseFloat(data.renumeration_service) + parseFloat(data.frais_notaire) + parseFloat(data.reserve_argent)) * 100)).toFixed(2)
+	const valorisation = (parseFloat(data.prix_acquisition) + parseFloat(data.renumeration_service) + parseFloat(data.frais_notaire) + parseFloat(data.reserve_argent))
+	const revenu_reverser = parseFloat(data.loyer_collecter_annuel) - parseFloat(data.charge_co_proprietes) - parseFloat(data.taxe_foncières) - parseFloat(data.frais_agence) - parseFloat(data.remboursement_emprunt) - parseFloat(data.taxes) - parseFloat(data.assurance)
+	const rentabiliter = ((parseFloat(revenu_reverser) / parseFloat(valorisation)) * 100).toFixed(2)
 	const reverser = ((parseFloat(data.loyer_collecter_annuel) - parseFloat(data.frais_agence) - parseFloat(data.remboursement_emprunt) + parseFloat(data.taxes)) / (parseFloat(data.prix_acquisition) + parseFloat(data.renumeration_service) + parseFloat(data.frais_notaire) + parseFloat(data.reserve_argent)) * 100).toFixed(2)
-	const valorisation = (parseFloat(data.prix_acquisition) + parseFloat(data.renumeration_service) + parseFloat(data.frais_notaire) + parseFloat(data.reserve_argent) + parseFloat(data.renovation))
 
 	const formatedValorisation = valorisation.toLocaleString(undefined, { useGrouping: true, groupingSeparator: " " });
 
@@ -653,24 +653,24 @@ const NewProprieteAdmin = () => {
 						<Btn onClick={createAbout}>+</Btn>
 					</Content>
 					<Content>
-						<Notice>Veuillez utiliser point (.) pour les virgules*</Notice>
 						<Label>Acquisition</Label>
 						<Inputs type="number" min="0" required value={data.prix_acquisition} name="prix_acquisition" placeholder="Prix d' acquisition" onChange={(e) => setData({ ...data, prix_acquisition: e.target.value })} />
 						<Inputs type="number" min="0" required value={data.renumeration_service} name="renumeration_service" placeholder="Renumeration de service" onChange={(e) => setData({ ...data, renumeration_service: e.target.value })} />
 						<Inputs type="number" min="0" required value={data.frais_notaire} name="frais_notaire" placeholder="Frais notaire" onChange={(e) => setData({ ...data, frais_notaire: e.target.value })} />
 						<Inputs type="number" min="0" required value={data.reserve_argent} name="reserve_argent" placeholder="Reserve d'argent" onChange={(e) => setData({ ...data, reserve_argent: e.target.value })} />
-						<Inputs type="number" min="0" required value={data.renovation} name="renovation" placeholder="Renovation" onChange={(e) => setData({ ...data, renovation: e.target.value })} />
 
 						<Label>Loyer Mensuel/Annuel</Label>
 						<Inputs type="number" min="0" required value={data.loyer_mensuel} name="loyer_mensuel" placeholder='Loyer Mensuel' onChange={(e) => setData({ ...data, loyer_mensuel: e.target.value })} />
 						<Inputs type="number" min="0" required value={data.loyer_collecter_annuel} name="loyer_collecter_annuel" placeholder='Loyer Collecter Annuel' readOnly />
 						<Label>Rendement locatif cible</Label>
+						<Inputs type="number" min="0" required value={data.charge_co_proprietes} name="charge_co_proprietes" placeholder="Charges de coproprietés" onChange={(e) => setData({ ...data, charge_co_proprietes: e.target.value })} />
+						<Inputs type="number" min="0" required value={data.taxe_foncières} name="taxe_foncières" placeholder="Taxes foncières" onChange={(e) => setData({ ...data, taxe_foncières: e.target.value })} />
+						<Inputs type="number" min="0" required value={data.assurance} name="assurance" placeholder="Assurance" onChange={(e) => setData({ ...data, assurance: e.target.value })} />
 						<Inputs type="number" min="0" required value={data.frais_agence} name="frais_agence" placeholder="Frais agence immobilier" onChange={(e) => setData({ ...data, frais_agence: e.target.value })} />
 						<Inputs type="number" min="0" required value={data.remboursement_emprunt} name="remboursement_emprunt" placeholder="Remboursement emprunt" onChange={(e) => setData({ ...data, remboursement_emprunt: e.target.value })} />
 						<Inputs type="number" min="0" step="0.01" required value={data.taxes} name="taxes" placeholder="Taxes" onChange={(e) => setData({ ...data, taxes: e.target.value })} />
 						<Label>Finance</Label>
-						<Inputs type="number" min="0" step="0.01" required value={data.revente} name="revente" placeholder="Potentiel de revente en %" onChange={(e) => setData({ ...data, revente: e.target.value })} />
-						<Inputs type="number" min="0" step="0.01" required value={data.hausse} name="hause" placeholder="Potentiel de hausse en %" onChange={(e) => setData({ ...data, hausse: e.target.value })} />
+						<Inputs type="number" min="0" step="0.01" required value={data.potentiel_plus_value} name="potentiel_plus_value" placeholder="Potentiel de plus value en %" onChange={(e) => setData({ ...data, potentiel_plus_value: e.target.value })} />
 					</Content>
 				</InputContainer>
 				<Content>
@@ -721,9 +721,13 @@ const NewProprieteAdmin = () => {
 					<FinanceInformation
 						information={[{ header: [<FontAwesomeIcon icon={solid('home')} />, "Rendement Locatif Cible"] },
 						["Loyers collectés", data?.loyer_collecter_annuel],
+						["Charges de coproprietès", data?.charge_co_proprietes],
 						["Frais d’agence immobilière", data?.frais_agence],
+						["Taxes foncières", data?.taxe_foncières],
 						["Remboursement de l'emprunt", data?.remboursement_emprunt],
-						["Renovation", data?.renovation]
+						["Assurance", data?.assurance],
+						["Taxes", data?.taxes],
+						["Revenu Reverser", `${revenu_reverser} € (soit ${reverser}%)`]
 						]}
 					/>
 					<FinanceInformation

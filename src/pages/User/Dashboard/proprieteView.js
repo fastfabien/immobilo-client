@@ -160,7 +160,7 @@ const Propriete = () => {
 						brickRestant={datas?.nb_brique_restant}
 						id={datas?._id}
 					/>
-					<Calculete reverser={datas?.reverser.toFixed(2)} />
+					<Calculete reverser={datas?.reverser.toFixed(2)} potentiel_plus_value={datas?.potentiel_plus_value.toFixed(2)} />
 				</Right>
 			</InformationContainer>
 		</Container>

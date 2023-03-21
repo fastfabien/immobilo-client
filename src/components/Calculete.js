@@ -117,7 +117,7 @@ const Investissement = styled.div`
 `
 
 
-const Brickeurs = ({ reverser }) => {
+const Brickeurs = ({ reverser, potentiel_plus_value }) => {
 
 	const [showAction, setShowAction] = useState(false);
 	const [montantInvesti, setMontantInvesti] = useState(0)
@@ -127,16 +127,16 @@ const Brickeurs = ({ reverser }) => {
 
 	const handleChangeMontantInvesti = (e) => {
 		setMontantInvesti(e.target.value)
-		setRevenuMensuel(e.target.value * parseFloat(reverser) / 100)
-		setPlusValue(e.target.value * 0.5 / 100)
-		setValoriation(e.target.value * 0.2 / 100)
+		setRevenuMensuel(parseFloat(reverser) * e.target.value)
+		setPlusValue(parseFloat(potentiel_plus_value) * e.target.value)
+		setValoriation((parseFloat(reverser * e.target.value) * 12) / parseFloat(potentiel_plus_value) * e.target.value)
 	}
 
 	useEffect(() => {
 
 	}, [])
 
-	return(
+	return (
 		<>
 			<Container>
 				<Header>
@@ -145,7 +145,7 @@ const Brickeurs = ({ reverser }) => {
 				</Header>
 				<Body>
 					<Range>
-						<p>Montant investi: <span>{ montantInvesti } €</span></p>
+						<p>Montant investi: <span>{montantInvesti} €</span></p>
 						<input type="range" step="10" value={montantInvesti} onChange={handleChangeMontantInvesti} min="0" max="5000" />
 					</Range>
 					<Investissement>

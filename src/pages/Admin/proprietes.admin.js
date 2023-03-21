@@ -111,7 +111,7 @@ const ProprieteAdmin = () => {
 					datas && datas.map((data) => (
 						<tr key={data.id}>
 							<td>{data.nom}</td>
-							<td>{parseFloat(data.rentabiliter)}%</td>
+							<td>{parseFloat(data.rentabiliter).toFixed(2)}%</td>
 							<td>{data.valorisation}€</td>
 							<td>{data.prix_acquisition}€</td>
 						</tr>

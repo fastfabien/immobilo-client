@@ -113,34 +113,34 @@ const Lieu = () => {
 	const [datas, setDatas] = useState()
 	const { id } = useParams()
 
-	const pourcentage_investisement= ((parseFloat(datas?.nb_brique_restant) * 100) / parseFloat(datas?.nb_brique)).toFixed(2)
+	const pourcentage_investisement = ((parseFloat(datas?.nb_brique_restant) * 100) / parseFloat(datas?.nb_brique)).toFixed(2)
 
 	const getInformation = async () => {
-		return await axios.get(API_URL + `${id}`, { headers: authHeader() }).then( async (data) => {
+		return await axios.get(API_URL + `${id}`, { headers: authHeader() }).then(async (data) => {
 			await setDatas(data.data.property)
 		}).catch((err) => {
 			console.log(err)
-		})	
+		})
 	}
 
 	useEffect(() => {
 		getInformation()
 	}, [])
 
-	
 
-	return(
+
+	return (
 		<Container>
 			<GoBack onClick={() => navigate(-1)}>
 				<FontAwesomeIcon icon={solid('arrow-left-long')} /><span>Retour</span>
 			</GoBack>
-			<ProprieteInfoImage 
-				all_images={datas?.images} 
+			<ProprieteInfoImage
+				all_images={datas?.images}
 				nom={datas?.nom}
 				rue={datas?.rue}
 				region={datas?.region}
 				zip={datas?.zip}
-				 />
+			/>
 			<NavBarContainer>
 				<ProprieteNavibar alignment="start" content={
 					[{ lien: `/proprietes/${id}`, text: "Général" },
@@ -164,17 +164,17 @@ const Lieu = () => {
 					</Content>
 				</Left>
 				<Right>
-					<Brickeurs 
+					<Brickeurs
 						nom={datas?.nom}
 						image={datas?.image_couverture}
 						pourcentageInvestissement={pourcentage_investisement}
 						brickRestant={datas?.nb_brique_restant}
 						id={datas?._id}
-					 />
-					<Calculete reverser={datas?.reverser.toFixed(2)} />
+					/>
+					<Calculete reverser={datas?.reverser.toFixed(2)} potentiel_plus_value={datas?.potentiel_plus_value.toFixed(2)} />
 				</Right>
 			</InformationContainer>
-		</Container>	
+		</Container>
 	)
 }
 

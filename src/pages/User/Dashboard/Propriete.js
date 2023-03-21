@@ -67,6 +67,7 @@ const Proprietes = () => {
 
 
 
+
 	return (
 		<Container>
 			<ProprieteNavibar alignment="center" content={
@@ -87,8 +88,8 @@ const Proprietes = () => {
 									image={data.image_couverture}
 									nom={data.nom}
 									adresse={`${data.zip} ${data.rue}`}
-									prix={`${data.valorisation}€`}
-									rentabilité={`${data.rentabiliter}%`}
+									prix={`${data.valorisation.toLocaleString(undefined, { useGrouping: true, groupingSeparator: " " })}€`}
+									rentabilité={`${data.rentabiliter.toFixed(2)}%`}
 									reversé={`${data.reverser.toFixed(2)}%`}
 									pourcentageInvestissement={(((parseFloat(data?.nb_brique) - parseFloat(data?.nb_brique_restant)) * 100) / parseFloat(data?.nb_brique)).toFixed(2)} //((parseFloat(data?.nb_brique_restant) * 100) / parseFloat(data?.nb_brique))
 									acheter={true}

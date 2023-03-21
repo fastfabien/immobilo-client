@@ -98,7 +98,7 @@ const Finance = () => {
 	const { id } = useParams()
 
 	const pourcentage_investisement = ((parseFloat(datas?.nb_brique_restant) * 100) / parseFloat(datas?.nb_brique)).toFixed(2)
-	const formatedRevenuReverserValue = parseFloat(datas?.loyer_collecter_annuel) - parseFloat(datas?.frais_agence) - parseFloat(datas?.remboursement_emprunt) - parseFloat(datas?.renovation)
+	const formatedRevenuReverserValue = parseFloat(datas?.revenu_reverser).toLocaleString(undefined, { useGrouping: true, groupingSeparator: " " });
 	const formatedValorisation = datas?.valorisation.toLocaleString(undefined, { useGrouping: true, groupingSeparator: " " });
 
 	const getInformation = async () => {
@@ -149,9 +149,12 @@ const Finance = () => {
 					<FinanceInformation
 						information={[{ header: [<FontAwesomeIcon icon={solid('home')} />, "Rendement Locatif Cible"] },
 						["Loyers collectés", datas?.loyer_collecter_annuel],
-						["Frais d’agence immobilière", datas?.frais_agence],
-						["Remboursement de l'emprunt", datas?.remboursement_emprunt],
-						["Renovation", datas?.renovation],
+						["Charges de coproprietés", `-${datas?.charge_co_proprietes}`],
+						["Taxes foncières", `-${datas?.taxe_foncières}`],
+						["Frais d’agence immobilière", `-${datas?.frais_agence}`],
+						["Remboursement de l'emprunt", `-${datas?.remboursement_emprunt}`],
+						["Assurances", `-${datas?.assurance}`],
+						["Taxes", `-${datas?.taxes}`],
 						["Revenu Reverser", `${formatedRevenuReverserValue} € (soit ${datas?.reverser.toFixed(2)}%)`]
 						]}
 					/>
@@ -173,7 +176,7 @@ const Finance = () => {
 						brickRestant={datas?.nb_brique_restant}
 						id={datas?._id}
 					/>
-					<Calculete reverser={datas?.reverser.toFixed(2)} />
+					<Calculete reverser={datas?.reverser.toFixed(2)} potentiel_plus_value={datas?.potentiel_plus_value} />
 				</Right>
 			</InformationContainer>
 		</Container>
