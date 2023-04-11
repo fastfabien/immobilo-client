@@ -268,6 +268,7 @@ const AchatBricks = ({ nom, image, pourcentageInvestissement, brickRestant, setS
       setLoading(false)
       setShowAction(false)
       dispatch(refreshUserInformation())
+      window.location.reload()
     }).catch(() => {
       setLoading(false)
     })
