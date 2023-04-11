@@ -182,10 +182,10 @@ const Dashboard = () => {
   const [datas, setDatas] = useState()
   const [bricksValue, setBrickValue] = useState()
   const formatedBrickPriceTotal = datas?.bricks.reduce((acc, curr) => acc + parseFloat(curr.prix_total), 0)
+  const userRole = user?.roles[0].name
 
   const refreshUserInfo = useCallback(() => {
     return axios.get('/api/user/dashboard', { headers: authHeader() }).then(async (data) => {
-      console.log(data.data.user)
       setDatas(data.data.user)
       setBrickValue(data.data.user.bricks)
     }).catch((err) => {
@@ -212,15 +212,15 @@ const Dashboard = () => {
       })
     }
     refreshUserInfo()
-  }, [refreshUserInfo, user])
+  }, [refreshUserInfo])
 
-  if (user) {
-    if (user?.roles[0].name === "admin") {
-      return <Navigate to="/admin" />
-    } else if (!isLoggedIn) {
-      return <Navigate to="/login" />
-    }
+  if (userRole === "admin") {
+    return <Navigate to="/admin" />
+  } else if (!isLoggedIn) {
+    return <Navigate to="/login" />
   }
+
+  console.log(bricksValue)
 
   return (
     <Container>
