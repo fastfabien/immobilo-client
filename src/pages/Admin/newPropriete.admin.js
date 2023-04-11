@@ -14,6 +14,9 @@ import PourquoiInvestir from '../../components/PourquoiInvestir.js';
 import Presentation from '../../components/Presentation.js';
 import FinanceInformation from '../../components/FinanceInformation.js';
 import Loader from '../../components/Loader.js';
+// import ReactQuill from 'react-quill'
+// import 'react-quill/dist/quill.snow.css'
+
 
 const Container = styled.div`
 
@@ -527,6 +530,8 @@ const NewProprieteAdmin = () => {
 	const navigate = useNavigate()
 	const [inputNumber, setInputNumber] = useState(0)
 	const [loading, setLoading] = useState(false)
+	const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+
 
 	const handleChangeLoyerMensuel = (e) => {
 		e.preventDefault()
@@ -539,7 +544,22 @@ const NewProprieteAdmin = () => {
 
 	useEffect(() => {
 		handleChangeDataAnnuel()
-	}, [data.loyer_mensuel])
+		window.addEventListener("beforeunload", handleBeforeUnload);
+		return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+	}, [data.loyer_mensuel, handleChangeDataAnnuel, hasUnsavedChanges])
+
+	const handleInputChange = (event) => {
+		setData({ ...data, [event.target.name]: event.target.value });
+		setHasUnsavedChanges(true);
+	};
+
+	const handleBeforeUnload = (event) => {
+		if (hasUnsavedChanges) {
+			event.preventDefault();
+			event.returnValue = "";
+		}
+	};
+
 
 	if (!isLoggedIn || user.roles[0]['name'] !== 'admin') {
 		return <Navigate to="/dashboard" />
@@ -606,6 +626,7 @@ const NewProprieteAdmin = () => {
 			}
 		}).then((response) => {
 			setMessage('Proprietes enregistrer !')
+			setHasUnsavedChanges(false);
 			navigate("/admin/proprietes");
 			setLoading(false)
 		}).catch((error) => {
@@ -622,55 +643,51 @@ const NewProprieteAdmin = () => {
 	return (
 		<Container>
 			{loading && <Loader />}
-			<NavBarContainer>
-				<ProprieteNavibar alignment="center" content={
-					[{ lien: "/admin", text: "Tous les utilisateurs" },
-					{ lien: "/admin/proprietes", text: "Tous les biens" }]
-				} />
-			</NavBarContainer>
+
 			{!toVerify && <FormContainer onSubmit={handleCreateProperty}>
 				<InputContainer>
 					<Content>
 						<Label>Information generale</Label>
-						<Inputs type="text" required value={data.nom} name="nom" placeholder='Nom' onChange={(e) => setData({ ...data, nom: e.target.value })} />
-						<Inputs type="text" required value={data.rue} name="rue" placeholder='Rue' onChange={(e) => setData({ ...data, rue: e.target.value })} />
-						<Inputs type="text" required value={data.region} name="region" placeholder='Region' onChange={(e) => setData({ ...data, region: e.target.value })} />
-						<Inputs type="number" min="0" required value={data.zip} name="zip" placeholder='Zip' onChange={(e) => setData({ ...data, zip: e.target.value })} />
+						<Inputs type="text" required value={data.nom} name="nom" placeholder='Nom' onChange={(e) => handleInputChange(e)} />
+						<Inputs type="text" required value={data.rue} name="rue" placeholder='Rue' onChange={(e) => handleInputChange(e)} />
+						<Inputs type="text" required value={data.region} name="region" placeholder='Region' onChange={(e) => handleInputChange(e)} />
+						<Inputs type="number" min="0" required value={data.zip} name="zip" placeholder='Zip' onChange={(e) => handleInputChange(e)} />
 						<Label>Information Secondaire</Label>
-						<Textarea type="text" required value={data.localisation} name="localisation" placeholder='Localisation' onChange={(e) => setData({ ...data, localisation: e.target.value })} />
-						<Textarea type="text" required value={data.etat_immeuble} name="etat_immeuble" placeholder="Etat de l'immeuble" onChange={(e) => setData({ ...data, etat_immeuble: e.target.value })} />
-						<Textarea type="text" required value={data.nature_lots} name="nature_lots" placeholder='Nature du lots' onChange={(e) => setData({ ...data, nature_lots: e.target.value })} />
-						<Textarea type="text" required value={data.totalite_lots} name="totalite_lots" placeholder='Totalite du lots' onChange={(e) => setData({ ...data, totalite_lots: e.target.value })} />
-						<Inputs type="number" min="0" required value={data.nombre_lots} name="nombre_lots" placeholder='Nombre de lots' onChange={(e) => setData({ ...data, nombre_lots: e.target.value })} />
-						<Inputs type="number" min="0" required value={data.aire} name="aire" placeholder='Surface' onChange={(e) => setData({ ...data, aire: e.target.value })} />
+						<Textarea type="text" required value={data.localisation} name="localisation" placeholder='Localisation' onChange={(e) => handleInputChange(e)} />
+						<Textarea type="text" required value={data.etat_immeuble} name="etat_immeuble" placeholder="Etat de l'immeuble" onChange={(e) => handleInputChange(e)} />
+						<Textarea type="text" required value={data.nature_lots} name="nature_lots" placeholder='Nature du lots' onChange={(e) => handleInputChange(e)} />
+						<Textarea type="text" required value={data.totalite_lots} name="totalite_lots" placeholder='Totalite du lots' onChange={(e) => handleInputChange(e)} />
+						<Inputs type="number" min="0" required value={data.nombre_lots} name="nombre_lots" placeholder='Nombre de lots' onChange={(e) => handleInputChange(e)} />
+						<Inputs type="number" min="0" required value={data.aire} name="aire" placeholder='Surface' onChange={(e) => handleInputChange(e)} />
 						<TextareaContainer ref={textareaConteinerRef}>
-							<Textarea required value={data.description} name="description" placeholder='Description' onChange={(e) => setData({ ...data, description: e.target.value })} />
+							<Textarea required value={data.description} name="description" placeholder='Description' onChange={(e) => handleInputChange(e)} />
 						</TextareaContainer>
 						<Btn onClick={createDescription}>+</Btn>
+						{/* <ReactQuill /> */}
 						<TextareaContainer ref={aproposRef}>
-							<Textarea required value={data.about} name="about" placeholder='À propos' onChange={(e) => setData({ ...data, about: e.target.value })} />
+							<Textarea required value={data.about} name="about" placeholder='À propos' onChange={(e) => handleInputChange(e)} />
 						</TextareaContainer>
 						<Btn onClick={createAbout}>+</Btn>
 					</Content>
 					<Content>
 						<Label>Acquisition</Label>
-						<Inputs type="number" min="0" required value={data.prix_acquisition} name="prix_acquisition" placeholder="Prix d' acquisition" onChange={(e) => setData({ ...data, prix_acquisition: e.target.value })} />
-						<Inputs type="number" min="0" required value={data.renumeration_service} name="renumeration_service" placeholder="Renumeration de service" onChange={(e) => setData({ ...data, renumeration_service: e.target.value })} />
-						<Inputs type="number" min="0" required value={data.frais_notaire} name="frais_notaire" placeholder="Frais notaire" onChange={(e) => setData({ ...data, frais_notaire: e.target.value })} />
-						<Inputs type="number" min="0" required value={data.reserve_argent} name="reserve_argent" placeholder="Reserve d'argent" onChange={(e) => setData({ ...data, reserve_argent: e.target.value })} />
+						<Inputs type="number" min="0" required value={data.prix_acquisition} name="prix_acquisition" placeholder="Prix d' acquisition" onChange={(e) => handleInputChange(e)} />
+						<Inputs type="number" min="0" required value={data.renumeration_service} name="renumeration_service" placeholder="Renumeration de service" onChange={(e) => handleInputChange(e)} />
+						<Inputs type="number" min="0" required value={data.frais_notaire} name="frais_notaire" placeholder="Frais notaire" onChange={(e) => handleInputChange(e)} />
+						<Inputs type="number" min="0" required value={data.reserve_argent} name="reserve_argent" placeholder="Reserve d'argent" onChange={(e) => handleInputChange(e)} />
 
 						<Label>Loyer Mensuel/Annuel</Label>
-						<Inputs type="number" min="0" required value={data.loyer_mensuel} name="loyer_mensuel" placeholder='Loyer Mensuel' onChange={(e) => setData({ ...data, loyer_mensuel: e.target.value })} />
+						<Inputs type="number" min="0" required value={data.loyer_mensuel} name="loyer_mensuel" placeholder='Loyer Mensuel' onChange={(e) => handleInputChange(e)} />
 						<Inputs type="number" min="0" required value={data.loyer_collecter_annuel} name="loyer_collecter_annuel" placeholder='Loyer Collecter Annuel' readOnly />
 						<Label>Rendement locatif cible</Label>
-						<Inputs type="number" min="0" required value={data.charge_co_proprietes} name="charge_co_proprietes" placeholder="Charges de coproprietés" onChange={(e) => setData({ ...data, charge_co_proprietes: e.target.value })} />
-						<Inputs type="number" min="0" required value={data.taxe_foncières} name="taxe_foncières" placeholder="Taxes foncières" onChange={(e) => setData({ ...data, taxe_foncières: e.target.value })} />
-						<Inputs type="number" min="0" required value={data.assurance} name="assurance" placeholder="Assurance" onChange={(e) => setData({ ...data, assurance: e.target.value })} />
-						<Inputs type="number" min="0" required value={data.frais_agence} name="frais_agence" placeholder="Frais agence immobilier" onChange={(e) => setData({ ...data, frais_agence: e.target.value })} />
-						<Inputs type="number" min="0" required value={data.remboursement_emprunt} name="remboursement_emprunt" placeholder="Remboursement emprunt" onChange={(e) => setData({ ...data, remboursement_emprunt: e.target.value })} />
+						<Inputs type="number" min="0" required value={data.charge_co_proprietes} name="charge_co_proprietes" placeholder="Charges de coproprietés" onChange={(e) => handleInputChange(e)} />
+						<Inputs type="number" min="0" required value={data.taxe_foncières} name="taxe_foncières" placeholder="Taxes foncières" onChange={(e) => handleInputChange(e)} />
+						<Inputs type="number" min="0" required value={data.assurance} name="assurance" placeholder="Assurance" onChange={(e) => handleInputChange(e)} />
+						<Inputs type="number" min="0" required value={data.frais_agence} name="frais_agence" placeholder="Frais agence immobilier" onChange={(e) => handleInputChange(e)} />
+						<Inputs type="number" min="0" required value={data.remboursement_emprunt} name="remboursement_emprunt" placeholder="Remboursement emprunt" onChange={(e) => handleInputChange(e)} />
 						<Inputs type="number" min="0" step="0.01" required value={data.taxes} name="taxes" placeholder="Taxes" onChange={(e) => setData({ ...data, taxes: e.target.value })} />
 						<Label>Finance</Label>
-						<Inputs type="number" min="0" step="0.01" required value={data.potentiel_plus_value} name="potentiel_plus_value" placeholder="Potentiel de plus value en %" onChange={(e) => setData({ ...data, potentiel_plus_value: e.target.value })} />
+						<Inputs type="number" min="0" step="0.01" required value={data.potentiel_plus_value} name="potentiel_plus_value" placeholder="Potentiel de plus value en %" onChange={(e) => handleInputChange(e)} />
 					</Content>
 				</InputContainer>
 				<Content>

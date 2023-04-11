@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Button from '../../../components/Button';
 import authHeader from "../../../services/auth-header";
 import Loader from '../../../components/Loader';
+// import BlogCard from '../../../components/BlogCard';
 
 
 
@@ -257,7 +258,7 @@ const Dashboard = () => {
         </Recap>
         <Propriete>
           <Right>
-            <table>
+            {bricksValue?.length > 0 ? < table >
               <tr>
                 <th>Propriété</th>
                 <th>Répartition</th>
@@ -281,12 +282,15 @@ const Dashboard = () => {
                   <td>{formatedBrickPriceTotal} €</td>
                 </tr>
               </tfoot>
-            </table>
+            </table> :
+              "Vous avez pas encore de propriete"
+            }
           </Right>
         </Propriete>
+        {/* <BlogCard /> */}
       </Content>
 
-    </Container>
+    </Container >
   )
 }
 

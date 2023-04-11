@@ -221,22 +221,38 @@ const Vente = styled.form`
 	justify-content: flex-start;
 	flex-direction: column;
 	gap: 1rem;
+	width: 80%;
 
-	& div {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		width: 100%;
-		margin-top: 2rem;
+`
 
-		& input {
-			padding: .5rem 1rem;
-			border: none;
-			background-color: rgba(${props => props.theme.bodyRgba}, .1);
-			appearance: none;
-			outline: none;
-		}
+const VenteContent = styled.div`
+
+
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+	margin: 0 auto;
+	margin-top: 2rem;
+	gap: 1rem;
+
+	& input {
+		padding: .5rem 1rem;
+		border: none;
+		background-color: rgba(${props => props.theme.bodyRgba}, .1);
+		appearance: none;
+		outline: none;
 	}
+
+`
+
+const Info = styled.div`
+
+
+	display: flex;
+	flex-direction: column;
+	width: 30%;
+
 
 `
 
@@ -274,10 +290,20 @@ const SellBricks = ({ id, image, nom, zip, prix_total, nombre_bricks, rentabilit
 	const [loading, setLoading] = useState(false)
 	const [isClicked, setIsClicked] = useState(false)
 	const [data, setData] = useState({
-		new_price: 0,
-		bricks_id: id
+		bricks_id: id,
+		quantity: 0,
+		unit_price: 10,
+		variation: 0,
+		prix_total_sell: 0
 	})
 
+	const handleChangeQuantity = (e) => {
+		setData({ ...data, quantity: e.target.value, prix_total_sell: parseFloat(e.target.value) * parseFloat(data.unit_price) })
+	}
+
+	const handleChangeUnitPrice = (e) => {
+		setData({ ...data, unit_price: e.target.value, prix_total_sell: parseFloat(e.target.value) * parseFloat(data.quantity) })
+	}
 
 	const handleSellBricks = async (e) => {
 		e.preventDefault()
@@ -296,13 +322,20 @@ const SellBricks = ({ id, image, nom, zip, prix_total, nombre_bricks, rentabilit
 
 	}
 
+	const handleRemoveSell = async (e) => {
+		setLoading(true)
+		await axios.post('/api/market/remove', data, { headers: authHeader() }).then((data) => {
+			setLoading(false)
+			window.location.reload()
+		}).catch((err) => {
+			setLoading(false)
+		})
+	}
+
 
 	useEffect(() => {
 
 	}, [])
-
-
-
 
 	return (
 		<>
@@ -320,20 +353,24 @@ const SellBricks = ({ id, image, nom, zip, prix_total, nombre_bricks, rentabilit
 				<div>
 					<p> Prix du lot </p>
 					<span>{prix_total} €</span>
-					<span> ~{prix_total / nombre_bricks} € / brick</span>
+					<span> ~{(prix_total / nombre_bricks).toFixed(2)} € / brick</span>
 				</div>
 				<div>
 					<div>
 						<p> Benefices </p>
-						<p>{rentabiliter}% rentabilité</p>
-						<p>{reverser}% reversé</p>
+						<p>{parseFloat(rentabiliter).toFixed(2)}% rentabilité</p>
+						<p>{parseFloat(reverser).toFixed(2)}% reversé</p>
 					</div>
 					<div>
 						{
-							status === "Sell" &&
-							<Btn onClick={() => setShow(!show)} color="#fff" background="rgba(231,62,17, 1)">
-								Vendre
-							</Btn>
+							status === "Sell" ?
+								<Btn onClick={() => setShow(!show)} color="#fff" background="rgba(231,62,17, 1)">
+									Vendre
+								</Btn>
+								:
+								<Btn onClick={handleRemoveSell} color="#fff" background="rgba(53,52,52, 1)">
+									Supprimer
+								</Btn>
 						}
 					</div>
 				</div>
@@ -363,11 +400,21 @@ const SellBricks = ({ id, image, nom, zip, prix_total, nombre_bricks, rentabilit
 								</div>
 							</Information>
 							<Vente onSubmit={handleSellBricks}>
-								<div>
-									<p>Prix des bricks: </p>
-									<input type="number" value={data.new_price} min="0" onChange={(e) => setData({ ...data, new_price: e.target.value })} />
-								</div>
-								<Btn disabled={data.new_price === "0" || data.new_price === "" || data.new_price === 0 ? true : false || isClicked} type="submit" color="#fff" background="rgba(231,62,17, 1)">Vendre les {nombre_bricks} bricks à {data.new_price} € dont {(data.new_price / nombre_bricks).toFixed(2)} € par bricks</Btn>
+								<VenteContent>
+									<Info>
+										<p>Quantité</p>
+										<input type="number" value={data.quantity} min="0" max={nombre_bricks} onChange={(e) => handleChangeQuantity(e)} />
+									</Info>
+									<Info>
+										<p>Prix par brick</p>
+										<input type="number" value={data.unit_price} min="10" onChange={(e) => handleChangeUnitPrice(e)} />
+									</Info>
+									<Info>
+										<p>Prix Total</p>
+										<input type="number" value={data.prix_total_sell} min="0" readOnly />
+									</Info>
+								</VenteContent>
+								<Btn disabled={parseFloat(data.quantity) > parseFloat(nombre_bricks) || data.quantity === "0" || data.quantity === "" || data.quantity === 0 ? true : false || isClicked || data.prix_total_sell === "0" || data.prix_total_sell === "" || data.prix_total_sell === 0} type="submit" color="#fff" background="rgba(231,62,17, 1)">Vendre {data.quantity} bricks</Btn>
 							</Vente>
 						</Body>
 					</Container>

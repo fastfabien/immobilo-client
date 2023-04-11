@@ -126,10 +126,13 @@ const Brickeurs = ({ reverser, potentiel_plus_value }) => {
 	const [valoriation, setValoriation] = useState(0.0)
 
 	const handleChangeMontantInvesti = (e) => {
+		const revMensuel = parseFloat(reverser) * e.target.value
+		const pluValue = parseFloat(potentiel_plus_value) * e.target.value
+		const valoAn = parseFloat(revMensuel) * 12 + pluValue
 		setMontantInvesti(e.target.value)
-		setRevenuMensuel(parseFloat(reverser) * e.target.value)
-		setPlusValue(parseFloat(potentiel_plus_value) * e.target.value)
-		setValoriation((parseFloat(reverser * e.target.value) * 12) / parseFloat(potentiel_plus_value) * e.target.value)
+		setRevenuMensuel(revMensuel)
+		setPlusValue(pluValue)
+		setValoriation(valoAn)
 	}
 
 	useEffect(() => {

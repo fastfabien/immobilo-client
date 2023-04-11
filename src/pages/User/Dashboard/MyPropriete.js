@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback} from 'react'
+import React, { useState, useRef, useEffect, useCallback } from 'react'
 import styled, { keyframes } from 'styled-components'
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
@@ -77,18 +77,19 @@ const MyPropriete = () => {
       ) : (
         <ProprieteContainer>
           {datas?.map((data) => (
+            data.nombre_bricks > 0 &&
             <SellBricks
               key={data._id}
               id={data._id}
               image={`data:image/jpg;base64,${data.propertie_id.image_couverture}`}
               nom={data.propertie_id.nom}
               zip={data.propertie_id.zip}
-              prix_total={data.prix_total}
-              nombre_bricks={data.nombre_bricks}
-              rentabiliter={data.propertie_id.rentabiliter}
+              prix_total={data.prix_total.toFixed(2)}
+              nombre_bricks={data.nombre_bricks.toFixed(2)}
+              rentabiliter={data.propertie_id.rentabiliter.toFixed(2)}
               reverser={data.propertie_id.reverser.toFixed(2)}
               region={data.propertie_id.region}
-              status={data.status === "Sell" && data.status}
+              status={data.status}
             />
           ))}
         </ProprieteContainer>

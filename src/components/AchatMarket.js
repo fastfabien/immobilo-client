@@ -8,6 +8,7 @@ import CardProject from "./CardProject";
 import ProprieteNavibar from "./ProprieteNavibar";
 import img from "./../assets/house2.jpg";
 import authHeader from "./../services/auth-header";
+import Loader from './Loader';
 
 const Content = styled.div`
 
@@ -262,13 +263,15 @@ const Error = styled.div`
 
 `
 
-const AchatMarket = ({ id, image, nom, zip, prix_total, nombre_bricks, rentabiliter, reverser, region, status, setDatas }) => {
+const AchatMarket = ({ id, bricks_id, currentUser, image, nom, zip, prix_total, nombre_bricks, rentabiliter, reverser, region, status, setDatas }) => {
 
 	const { isLoggedIn, user, token, wallet } = useSelector(state => state.auth);
 	const [show, setShow] = useState(false)
 	const [success, setSuccess] = useState('')
 	const [error, setError] = useState('')
+	const [loading, setLoading] = useState(false)
 	const [data, setData] = useState({
+		bricks_id: bricks_id,
 		new_price: 0
 	})
 	const [isClicked, setIsClicked] = useState(false)
@@ -276,6 +279,8 @@ const AchatMarket = ({ id, image, nom, zip, prix_total, nombre_bricks, rentabili
 
 	const handleSellBricks = async (e) => {
 		e.preventDefault()
+
+		setLoading(true)
 
 		setIsClicked(true);
 
@@ -285,11 +290,23 @@ const AchatMarket = ({ id, image, nom, zip, prix_total, nombre_bricks, rentabili
 		}
 
 		await axios.post('/api/markets/sell', value, { headers: authHeader() }).then((data) => {
+			setLoading(false)
 			window.location.reload()
 		}).catch((err) => {
 			console.log(err)
 		})
 
+	}
+
+
+	const handleRemoveSell = async (e) => {
+		setLoading(true)
+		await axios.post('/api/market/remove', data, { headers: authHeader() }).then((data) => {
+			setLoading(false)
+			window.location.reload()
+		}).catch((err) => {
+			setLoading(false)
+		})
 	}
 
 
@@ -299,9 +316,11 @@ const AchatMarket = ({ id, image, nom, zip, prix_total, nombre_bricks, rentabili
 
 
 
-
 	return (
 		<>
+			{
+				loading && <Loader />
+			}
 			<Content key={id}>
 				<div>
 					<img src={image} alt={nom} />
@@ -323,10 +342,14 @@ const AchatMarket = ({ id, image, nom, zip, prix_total, nombre_bricks, rentabili
 					</div>
 					<div>
 						{
-							status === "Sell" &&
-							<Btn onClick={() => setShow(!show)} color="#fff" background="rgba(231,62,17, 1)">
-								Acheter
-							</Btn>
+							currentUser === user._id ?
+								<Btn onClick={handleRemoveSell} color="#fff" background="rgba(53,52,52, 1)">
+									Supprimer
+								</Btn>
+								:
+								<Btn onClick={() => setShow(!show)} color="#fff" background="rgba(231,62,17, 1)">
+									Acheter
+								</Btn>
 						}
 					</div>
 				</div>

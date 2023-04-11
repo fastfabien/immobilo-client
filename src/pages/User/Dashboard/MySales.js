@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback} from 'react'
+import React, { useState, useRef, useEffect, useCallback } from 'react'
 import styled, { keyframes } from 'styled-components'
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import axios from "axios";
@@ -147,15 +147,15 @@ const MySales = () => {
 	const [datas, setDatas] = useState()
 	const [loading, setLoading] = useState(false)
 
-	const getMySales =  useCallback(() => {
+	const getMySales = useCallback(() => {
 		setLoading(true)
 		return axios.get('/api/market', { headers: authHeader() }).then((data) => {
 			setDatas(data.data.markets)
 			setLoading(false)
 		}).catch((err) => {
 			setLoading(false)
-			console.log(err) 
-		})	
+			console.log(err)
+		})
 	}, [])
 
 	useEffect(() => {
@@ -164,7 +164,7 @@ const MySales = () => {
 	}, [])
 
 
-	return(
+	return (
 		<Container>
 			<ProprieteNavibar alignment="center" content={
 				[{ lien: "/proprietes", text: "Tous les biens" },
@@ -173,25 +173,25 @@ const MySales = () => {
 			} />
 			{
 				loading ? <Loader /> :
-				<ProprieteContainer>
-							{
-								datas && datas.map((data) => (
-			
-									<SellBricks 
-										id={data._id} 
-										image={`data:image/jpg;base64,${data.bricks.propertie_id.image_couverture}`} 
-										nom={ data.bricks.propertie_id.nom }
-										zip={ data.bricks.propertie_id.zip }
-										prix_total={ data.prix }
-										nombre_bricks={ data.bricks.nombre_bricks }
-										rentabiliter={ data.bricks.propertie_id.rentabiliter } 
-										reverser={ data.bricks.propertie_id.reverser.toFixed(2) }
-										region={ data.bricks.propertie_id.region }
-									 />
-									))
-							}
-						</ProprieteContainer>}
-		</Container>	
+					<ProprieteContainer>
+						{
+							datas && datas.map((data) => (
+
+								<SellBricks
+									id={data._id}
+									image={`data:image/jpg;base64,${data.bricks.propertie_id.image_couverture}`}
+									nom={data.bricks.propertie_id.nom}
+									zip={data.bricks.propertie_id.zip}
+									prix_total={data.prix}
+									nombre_bricks={data.bricks.nombre_bricks}
+									rentabiliter={data.bricks.propertie_id.rentabiliter}
+									reverser={data.bricks.propertie_id.reverser.toFixed(2)}
+									region={data.bricks.propertie_id.region}
+								/>
+							))
+						}
+					</ProprieteContainer>}
+		</Container>
 	)
 }
 
