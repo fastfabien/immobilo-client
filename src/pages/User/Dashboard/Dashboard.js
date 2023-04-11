@@ -212,15 +212,15 @@ const Dashboard = () => {
       })
     }
     refreshUserInfo()
-  }, [refreshUserInfo])
+  }, [refreshUserInfo, user])
 
-  if (user?.roles[0].name === "admin") {
-    return <Navigate to="/admin" />
-  } else if (!isLoggedIn) {
-    return <Navigate to="/login" />
+  if (user) {
+    if (user?.roles[0].name === "admin") {
+      return <Navigate to="/admin" />
+    } else if (!isLoggedIn) {
+      return <Navigate to="/login" />
+    }
   }
-
-  console.log(bricksValue)
 
   return (
     <Container>
