@@ -50,6 +50,7 @@ const Proprietes = () => {
 
 	const [datas, setDatas] = useState()
 	const [loading, setLoading] = useState(false)
+	const { isLoggedIn } = useSelector(state => state.auth);
 
 	const getAllPropriete = () => {
 		setLoading(true)
@@ -61,10 +62,10 @@ const Proprietes = () => {
 		})
 	}
 
+
 	useEffect(() => {
 		getAllPropriete()
 	}, [])
-
 
 
 
@@ -92,7 +93,7 @@ const Proprietes = () => {
 									rentabilité={`${data.rentabiliter.toFixed(2)}%`}
 									reversé={`${data.reverser.toFixed(2)}%`}
 									pourcentageInvestissement={(((parseFloat(data?.nb_brique) - parseFloat(data?.nb_brique_restant)) * 100) / parseFloat(data?.nb_brique)).toFixed(2)} //((parseFloat(data?.nb_brique_restant) * 100) / parseFloat(data?.nb_brique))
-									acheter={true}
+									acheter={isLoggedIn}
 									brickRestant={data.nb_brique_restant}
 								/>
 

@@ -70,43 +70,53 @@ const Btn = styled.button`
     text-align: center;
     opacity: .9;
 
+    &:disabled {
+      opacity: .4;
+      cursor: not-allowed;
+      &:hover {
+        opacity: .4;
+      }
+    }
+
     &:hover {
         opacity: .8;
     }
 
 `
 
-const Brickeurs = ({nom, image, pourcentageInvestissement, brickRestant, id}) => {
+const Brickeurs = ({ nom, image, pourcentageInvestissement, brickRestant, id }) => {
 
-	const [showAction, setShowAction] = useState(false);
-	const formatedbrickRestant = brickRestant?.toLocaleString(undefined, {useGrouping: true, groupingSeparator: " "});
+  const [showAction, setShowAction] = useState(false);
+  const formatedbrickRestant = brickRestant?.toLocaleString(undefined, { useGrouping: true, groupingSeparator: " " });
+  const { isLoggedIn } = useSelector(state => state.auth);
 
-	const handleShowAction = (e) => {
-	    e.stopPropagation()
-	    setShowAction(!showAction)
-	  }
+  const handleShowAction = (e) => {
+    e.stopPropagation()
+    setShowAction(!showAction)
+  }
 
-	useEffect(() => {
+  useEffect(() => {
 
-	}, [])
+  }, [])
 
-	return(
-		<>
-			<Container>
-				<PourcentageInvestissementContainer>
-	               {formatedbrickRestant} de bricks restant
-	              <PourcentageInvestissement pourcentage={pourcentageInvestissement} />
-	            </PourcentageInvestissementContainer>
-	            <Btn onClick={handleShowAction} color="#fff" background="rgba(231,62,17, 1)">
-	              Acheter
-	            </Btn>
-			</Container>	
-			{
-		        showAction && 
-		        <AchatBricks setShowAction={setShowAction} nom={nom} image={image} pourcentageInvestissement={pourcentageInvestissement} brickRestant={formatedbrickRestant} id={id} />
-		    }
-		</>
-	)
+
+  return (
+    <>
+      <Container>
+        <PourcentageInvestissementContainer>
+          {formatedbrickRestant} de bricks restant
+          <PourcentageInvestissement pourcentage={pourcentageInvestissement} />
+        </PourcentageInvestissementContainer>
+        <Btn disabled={!isLoggedIn} onClick={handleShowAction} color="#fff" background="rgba(231,62,17, 1)">
+          Acheter
+        </Btn>
+      </Container>
+      {
+        showAction &&
+        <AchatBricks setShowAction={setShowAction} nom={nom} image={image} pourcentageInvestissement={pourcentageInvestissement} brickRestant={formatedbrickRestant} id={id} />
+      }
+    </>
+  )
 }
 
 export default Brickeurs;

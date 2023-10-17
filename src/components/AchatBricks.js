@@ -122,7 +122,7 @@ const AcheterBricksContent = styled.div`
 
       & img {
         width: 10rem;
-        height: 100%;
+        height: 10rem;
         object-fit: cover;
         border-radius: 10px;
       }
@@ -295,7 +295,7 @@ const AchatBricks = ({ nom, image, pourcentageInvestissement, brickRestant, setS
                 <InputContainer>
                   <div>
                     <label>Nombre de bricks</label>
-                    <Input type="number" value={data.nombreBricks} min="0" onChange={handleAddBrick} />
+                    <Input type="number" min="0" max={brickRestant} onChange={handleAddBrick} />
                   </div>
                   <div>
                     <label>Prix par bricks</label>
@@ -306,7 +306,7 @@ const AchatBricks = ({ nom, image, pourcentageInvestissement, brickRestant, setS
                     <Input type="number" placeholder={`${data.prixTotalBricks}€`} readOnly />
                   </div>
                 </InputContainer>
-                <input type="submit" disabled={(data.nombreBricks === 0 || data.nombreBricks === "0" || wallet < data.prixTotalBricks) ? true : false} value={`Acheter ${data.nombreBricks} bricks`} />
+                <input type="submit" disabled={(data.nombreBricks === 0 || data.nombreBricks === "0" || wallet < data.prixTotalBricks || data.nombreBricks > brickRestant) ? true : false} value={`Acheter ${data.nombreBricks} bricks`} />
               </form>
             </div>
             <div className="footer">

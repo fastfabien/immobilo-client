@@ -131,7 +131,7 @@ const Concept = () => {
           sit unde.
         </Etape>
       </Etapes>
-      <Button href="/" color="#fff" background="rgba(231,62,17, 1)">
+      <Button href="/signup" color="#fff" background="rgba(231,62,17, 1)">
         Je m'inscris
       </Button>
     </Conceptss>

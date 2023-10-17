@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios"
+import axios from "axios";
 import styled from "styled-components";
 import { Swiper, SwiperSlide } from "swiper/react";
 import img from "../../assets/house2.jpg";
@@ -26,14 +26,13 @@ const Container = styled.div`
   .swiper-slide {
     & > div {
       width: 100%;
-    & img {
-      height: 100%;
-      border-bottom-left-radius: 0;
-      border-bottom-right-radius: 0;
+      & img {
+        height: 100%;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+      }
     }
   }
-  }
-
 `;
 
 const Title = styled.h2`
@@ -73,25 +72,25 @@ const CardContainer = styled.div`
 `;
 
 const Opportinuté = () => {
-
-
-  const [datas, setDatas] = useState()
-  const [loading, setLoading] = useState(false)
+  const [datas, setDatas] = useState();
+  const [loading, setLoading] = useState(false);
 
   const getAllPropriete = () => {
-    setLoading(true)
-    return axios.get('/api/properties').then( async (data) => {
-      await setDatas(data.data)
-      setLoading(false)
-    }).catch((err) => {
-      setLoading(false)
-    })
-  }
+    setLoading(true);
+    return axios
+      .get("/api/properties")
+      .then(async (data) => {
+        await setDatas(data.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setLoading(false);
+      });
+  };
 
   useEffect(() => {
-    getAllPropriete()
-  }, [])
-
+    getAllPropriete();
+  }, []);
 
   return (
     <Container>
@@ -123,29 +122,32 @@ const Opportinuté = () => {
             },
           }}
         >
-      {
-              datas && datas?.map((data) => (
-                <SwiperSlide>
-                  <CardProject
-                    key={data._id}
-                    id={data._id}
-                          image={data.image_couverture}
-                          nom={data.nom}
-                          adresse={`${data.zip} ${data.rue}`}
-                          prix={`${data.valorisation}€`}
-                          rentabilité={`${data.rentabiliter}%`}
-                          reversé={`${data.reverser.toFixed(2)}%`}
-                          pourcentageInvestissement="57.32%"
-                          acheter={false}
-                          brickRestant={data.nb_brique_restant}
-                         />
-                  </SwiperSlide>
-
-              ))
-            }
+          {datas &&
+            datas?.map((data) => (
+              <SwiperSlide>
+                <CardProject
+                  key={data._id}
+                  id={data._id}
+                  image={data.image_couverture}
+                  nom={data.nom}
+                  adresse={`${data.zip} ${data.rue}`}
+                  prix={`${data.valorisation}€`}
+                  rentabilité={`${data.rentabiliter.toFixed(2)}%`}
+                  reversé={`${data.reverser.toFixed(2)}%`}
+                  pourcentageInvestissement={(
+                    ((parseFloat(data?.nb_brique) -
+                      parseFloat(data?.nb_brique_restant)) *
+                      100) /
+                    parseFloat(data?.nb_brique)
+                  ).toFixed(2)}
+                  acheter={false}
+                  brickRestant={data.nb_brique_restant}
+                />
+              </SwiperSlide>
+            ))}
         </Swiper>
       </CardContainer>
-      <Button href="/" color="#fff" background="rgba(231,62,17, 1)">
+      <Button href="/proprietes" color="#fff" background="rgba(231,62,17, 1)">
         Voir tous les projets
       </Button>
     </Container>

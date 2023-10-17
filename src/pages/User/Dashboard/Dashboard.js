@@ -220,7 +220,6 @@ const Dashboard = () => {
     return <Navigate to="/login" />
   }
 
-  console.log(bricksValue)
 
   return (
     <Container>

@@ -27,7 +27,6 @@ const UseFetch = (url) => {
                     window.location.reload();
                 }
                 console.log(data)
-                /*throw new Error(data?.message || data);*/
             })
             .catch((error) => {
                 setErr(error?.message);
