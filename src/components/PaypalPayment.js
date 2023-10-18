@@ -14,6 +14,17 @@ const Container = styled.div`
     gap: 1rem;
     padding-top: 8rem;
 
+    @media screen and (max-width: 80em) {
+      width: 90%;
+    }
+
+    @media screen and (max-width: 40em) {
+      padding-bottom: 8rem;
+      min-height: 60vh;
+      width: 95%;
+      justify-content: flex-start;
+    }
+
 `
 
 
@@ -28,6 +39,14 @@ const InputContainer = styled.div`
   gap: .5rem;
   margin: 0 auto;
   margin-bottom: 2rem;
+
+  @media screen and (max-width: 80em) {
+    width: 80%;
+  }
+
+  @media screen and (max-width: 40em) {
+    width: 100%;
+  }
 
 `
 

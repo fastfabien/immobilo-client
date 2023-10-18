@@ -107,10 +107,14 @@ const Logo = styled(Link)`
     color: rgba(${props => props.theme.textRgba}, 1);
     width: 30%;
 
-    @media screen and (max-width: 70em) {
+    @media screen and (max-width: 80em) {
         font-size: ${props => props.theme.fontmd};
         width: 40%;
 
+    }
+
+    @media screen and (max-width: 50em) {
+        width: auto;
     }
 
 
@@ -240,8 +244,6 @@ const UserNavigation = styled.div`
 
 const UserInfo = styled.div`
 
-
-    width: 30%;
     display: flex;
     justify-content: space-between;
     gap: 2rem;

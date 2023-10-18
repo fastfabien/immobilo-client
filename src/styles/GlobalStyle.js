@@ -27,7 +27,7 @@ const GlobalStyle = createGlobalStyle`
         color: inherit;
     }
 
-    @media screen and (max-width: 40em) {
+    @media screen and (max-width: 50em) {
         nav.nav {
             position: relative;
             flex-direction: column;

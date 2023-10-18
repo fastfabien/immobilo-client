@@ -50,8 +50,7 @@ const Body = styled.div`
 
 	@media screen and (max-width: 40em) {
 		& img {
-			width: 100%;
-			height: 15rem;
+			height: 10rem;
 		}
 	}
 

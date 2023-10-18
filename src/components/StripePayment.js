@@ -9,13 +9,24 @@ const Container = styled.div`
 
 
     width: 80%;
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     margin: 0 auto;
     gap: 1rem;
+
+    @media screen and (max-width: 80em) {
+      width: 90%;
+    }
+
+    @media screen and (max-width: 40em) {
+      padding-bottom: 8rem;
+      min-height: 60vh;
+      width: 95%;
+      justify-content: flex-start;
+    }
 
 `
 
@@ -34,6 +45,14 @@ const Content = styled.div`
         width: 50%;
         margin: 0 auto;
         gap: 1rem;
+
+         @media screen and (max-width: 80em) {
+            width: 80%;
+        }
+
+        @media screen and (max-width: 40em) {
+            width: 100%;
+        }
 
         h2 {
             text-align: center;

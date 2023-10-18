@@ -70,6 +70,10 @@ const AcheterBricksContent = styled.div`
   height: auto;
   background-color: ${props => props.theme.white};
 
+  @media screen and (max-width: 40em) {
+		width: 95%;
+	}
+
   & .header {
     position: relative;
     text-align: center;
