@@ -63,8 +63,18 @@ const AcheterBricksContent = styled.div`
 
 
   width: 50%;
-  height: 80vh;
+  min-height: 80vh;
   background-color: ${props => props.theme.white};
+
+  @media screen and (max-width: 80em) {
+    width: 95%;
+    min-height: 65vh;
+  }
+
+  @media screen and (max-width: 40em) {
+    width: 95%;
+    min-height: 65vh;
+  }
 
   & .header {
     position: relative;
@@ -125,6 +135,10 @@ const AcheterBricksContent = styled.div`
         height: 10rem;
         object-fit: cover;
         border-radius: 10px;
+        @media screen and (max-width: 80em) {
+          width: 100%;
+          height: 12rem;
+        }
       }
 
       & p {
@@ -176,6 +190,16 @@ const InputContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   gap: .5rem;
+
+  @media screen and (max-width: 40em) {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+
+    & div:first-child {
+      width: 100%!important;
+    }
+  }
 
 `
 

@@ -21,6 +21,11 @@ const Container = styled.div`
   	padding: ${(props) => props.theme.fontlg} ${(props) => props.theme.fontxxl};
   	padding-top: 10rem;
 
+	@media screen and (max-width: 70em) {
+		padding: ${(props) => props.theme.fontlg} ${(props) => props.theme.fontmd};
+		padding-top: 10rem;
+	}
+
 
 `
 
@@ -34,6 +39,11 @@ const ProprieteContainer = styled.div`
 	width: 80%;
 	margin: 0 auto;
 	margin-top: 2rem;
+
+	@media screen and (max-width: 80em) {
+		width: 100%;
+		gap: 2rem;
+	}
 
 
 `
