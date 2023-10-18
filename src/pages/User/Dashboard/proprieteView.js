@@ -31,6 +31,11 @@ const Container = styled.div`
   	padding-top: 10rem;
   	position: relative;
 
+	@media screen and (max-width: 80em) {
+		padding: ${(props) => props.theme.fontlg} ${(props) => props.theme.fontmd};
+		padding-top: 10rem;
+	}
+
 	@media screen and (max-width: 40em) {
 		padding-top: 2rem;
 	}
@@ -64,6 +69,10 @@ const NavBarContainer = styled.div`
 	box-shadow: 0px 0px 5px rgba(${(props) => props.theme.bodyRgba}, 0.18);
 	z-index: 5;
 
+	@media screen and (max-width: 40em) {
+		position: static;
+	}
+
 `
 
 const InformationContainer = styled.div`
@@ -74,6 +83,14 @@ const InformationContainer = styled.div`
 	gap: 2rem;
 	position: relative;
 
+	@media screen and (max-width: 80em) {
+		flex-direction: row;
+	}
+
+	@media screen and (max-width: 40em) {
+		flex-direction: column;
+	}
+
 `
 
 const Left = styled.div`
@@ -83,6 +100,10 @@ const Left = styled.div`
 	flex-direction: column;
 	gap: 2rem;
 
+	@media screen and (max-width: 40em) {
+		width: 100%;
+	}
+
 
 `
 const Right = styled.div`
@@ -91,6 +112,11 @@ const Right = styled.div`
 	gap: 2rem;
 	display: flex;
 	flex-direction: column;
+	margin-top: 1rem;
+
+	@media screen and (max-width: 40em) {
+		width: 100%;
+	}
 
 `
 

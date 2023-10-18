@@ -48,6 +48,13 @@ const Body = styled.div`
 		object-fit: cover;
 	}
 
+	@media screen and (max-width: 40em) {
+		& img {
+			width: 100%;
+			height: 15rem;
+		}
+	}
+
 	& p {
 		position: absolute;
 		bottom: 1.5rem;
@@ -124,29 +131,29 @@ const GoBack = styled.div`
 const ProprieteInfoImage = ({ all_images, nom, rue, region, zip }) => {
 
 	const [showGallery, setShowGallery] = useState(false)
-	
+
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		
+
 	}, [])
 
-	return(
+	return (
 		<Container>
 			<Header>
 				<h1>{nom}</h1>
 				<p>{rue}, {zip} {region}</p>
 			</Header>
 			<Body onClick={() => setShowGallery(!showGallery)}>
-			{
-				all_images && all_images?.slice(0, 2).map((image, i) => (
-					<img key={i} src={`data:image/jpg;base64,${image}`} />
-				))
-			}
-			<p><FontAwesomeIcon icon={solid('image')} />Voir les {all_images?.length} photos</p>
+				{
+					all_images && all_images?.slice(0, 2).map((image, i) => (
+						<img key={i} src={`data:image/jpg;base64,${image}`} />
+					))
+				}
+				<p><FontAwesomeIcon icon={solid('image')} />Voir les {all_images?.length} photos</p>
 			</Body>
 			{
-				showGallery && 
+				showGallery &&
 				<GalleryContainer>
 					<GoBack onClick={() => setShowGallery(!showGallery)}>
 						<FontAwesomeIcon icon={solid('arrow-left-long')} /><span>Retour</span>
@@ -160,7 +167,7 @@ const ProprieteInfoImage = ({ all_images, nom, rue, region, zip }) => {
 					</Gallery>
 				</GalleryContainer>
 			}
-		</Container>	
+		</Container>
 	)
 }
 

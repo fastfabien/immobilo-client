@@ -19,6 +19,10 @@ const Container = styled.div`
   	padding: ${(props) => props.theme.fontxl} ${(props) => props.theme.fontxxl};
   	margin-top: 1rem;
 
+	@media screen and (max-width: 40em) {
+		padding: ${(props) => props.theme.fontlg} ${(props) => props.theme.fontlg};
+	}
+
 
 `
 

@@ -18,6 +18,10 @@ const Container = styled.div`
   	box-shadow: 0px 0px 5px rgba(${(props) => props.theme.bodyRgba}, 0.18);
   	padding: ${(props) => props.theme.fontxl} ${(props) => props.theme.fontxxl};
 
+	@media screen and (max-width: 40em) {
+		padding: ${(props) => props.theme.fontlg} ${(props) => props.theme.fontlg};
+	}
+
 
 `
 
@@ -53,6 +57,12 @@ const Info = styled.div`
 		}
 	}
 
+	@media screen and (max-width: 40em) {
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	}
+
 
 `
 
@@ -70,7 +80,7 @@ const Description = styled.div`
 
 const Presentation = ({ nombre_lots, loyer_mensuel, aire, description }) => {
 
-	const formatedLoyerMensuel = loyer_mensuel?.toLocaleString(undefined, {useGrouping: true, groupingSeparator: " "});
+	const formatedLoyerMensuel = loyer_mensuel?.toLocaleString(undefined, { useGrouping: true, groupingSeparator: " " });
 	const descritionRef = useRef()
 
 
@@ -80,7 +90,7 @@ const Presentation = ({ nombre_lots, loyer_mensuel, aire, description }) => {
 
 	console.dir(descritionRef?.current)
 
-	return(
+	return (
 		<Container>
 			<h2>Presentation</h2>
 			<iframe height="312" src="https://www.youtube.com/embed/g5VOi9V4Rjo" title="Le mot de l&#39;expert - Izon Immeuble Générale de Gaulle - Bricks.co" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
@@ -106,7 +116,7 @@ const Presentation = ({ nombre_lots, loyer_mensuel, aire, description }) => {
 
 				))}
 			</Description>
-		</Container>	
+		</Container>
 	)
 }
 

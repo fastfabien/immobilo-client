@@ -19,6 +19,9 @@ const Container = styled.div`
   	box-shadow: 0px 0px 5px rgba(${(props) => props.theme.bodyRgba}, 0.18);
   	border-radius: 5px;
 
+	@media screen and (max-width: 40em) {
+		padding: ${(props) => props.theme.fontmd} ${(props) => props.theme.fontlg};
+	}
 
 `
 
@@ -63,22 +66,22 @@ const Actualite = () => {
 
 
 	const actualite = [
-			{
-				title: "Actualité",
-				mois: "Fevrier 2023",
-				description: "L'acte authentique a été signé le 7 février. Nous allons pouvoir commencer à collecter les loyers. Les premiers revenus reversés sont donc prévus en mars. La collecte reste ouverte jusqu'à atteindre 100%."
-			},
-			{
-				title: "Actualité",
-				mois: "Janvier 2023",
-				description: "La signature a été repoussée à début février car nous sommes dans l'attente du retour de la non préamption par la mairie (étape incontournable lors d'une acquisition). Les premiers revenus reversés sont donc prévus en mars. La collecte reste ouverte jusqu'à atteindre 100%."
-			},
-			{
-				title: "Actualité",
-				mois: "Decembre 2022",
-				description: "L'immeuble sera signé chez le notaire le 20 décembre. Les premiers loyers seront donc collectés fin décembre."
-			}
-		];
+		{
+			title: "Actualité",
+			mois: "Fevrier 2023",
+			description: "L'acte authentique a été signé le 7 février. Nous allons pouvoir commencer à collecter les loyers. Les premiers revenus reversés sont donc prévus en mars. La collecte reste ouverte jusqu'à atteindre 100%."
+		},
+		{
+			title: "Actualité",
+			mois: "Janvier 2023",
+			description: "La signature a été repoussée à début février car nous sommes dans l'attente du retour de la non préamption par la mairie (étape incontournable lors d'une acquisition). Les premiers revenus reversés sont donc prévus en mars. La collecte reste ouverte jusqu'à atteindre 100%."
+		},
+		{
+			title: "Actualité",
+			mois: "Decembre 2022",
+			description: "L'immeuble sera signé chez le notaire le 20 décembre. Les premiers loyers seront donc collectés fin décembre."
+		}
+	];
 
 	const navigate = useNavigate();
 	const [numAct, setNumAct] = useState(0)
@@ -98,7 +101,7 @@ const Actualite = () => {
 		var element = document.getElementById('prev')
 		var next = document.getElementById('next')
 
-		if (numAct > 0 ) {
+		if (numAct > 0) {
 			setNumAct(numAct - 1)
 			next.classList.remove('active')
 		} else {
@@ -109,14 +112,14 @@ const Actualite = () => {
 			element.classList.add('active')
 			next.classList.remove('active')
 		}
-	}	
+	}
 
 
 	useEffect(() => {
 
 	}, [numAct])
 
-	return(
+	return (
 		<Container>
 			<Header>
 				<div>
@@ -135,7 +138,7 @@ const Actualite = () => {
 			<Body>
 				{actualite[numAct].description}
 			</Body>
-		</Container>	
+		</Container>
 	)
 }
 

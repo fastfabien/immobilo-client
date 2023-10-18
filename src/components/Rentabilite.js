@@ -15,6 +15,10 @@ const Container = styled.div`
 	justify-content: space-between;
   	border-radius: 5px;
 
+	@media screen and (max-width: 40em) {
+		flex-direction: column;
+	}
+
 
 `
 
@@ -52,13 +56,13 @@ const Content = styled.div`
 
 const Rentabilite = ({ rentabiliter, reverser, valorisation }) => {
 
-	const formatedValorisation = valorisation?.toLocaleString(undefined, {useGrouping: true, groupingSeparator: " "});
+	const formatedValorisation = valorisation?.toLocaleString(undefined, { useGrouping: true, groupingSeparator: " " });
 
 	useEffect(() => {
 
 	}, [])
 
-	return(
+	return (
 		<Container>
 			<Content>
 				<div>
@@ -84,7 +88,7 @@ const Rentabilite = ({ rentabiliter, reverser, valorisation }) => {
 					<p>{formatedValorisation} €</p>
 				</div>
 			</Content>
-		</Container>	
+		</Container>
 	)
 }
 

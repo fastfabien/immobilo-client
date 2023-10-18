@@ -19,6 +19,10 @@ const Container = styled.div`
   	box-shadow: 0px 0px 5px rgba(${(props) => props.theme.bodyRgba}, 0.18);
   	padding: ${(props) => props.theme.fontxl} ${(props) => props.theme.fontxxl};
 
+	@media screen and (max-width: 40em) {
+		padding: ${(props) => props.theme.fontlg} ${(props) => props.theme.fontlg};
+	}
+
 
 `
 
@@ -46,6 +50,14 @@ const Header = styled.div`
 		gap: .5rem;
 	}
 
+	@media screen and (max-width: 40em) {
+		flex-direction: column;
+
+		& div {
+			text-align: center;
+		}
+	}
+
 
 `
 
@@ -66,6 +78,14 @@ const Avis = styled.div`
 	justify-content: start;
 	align-items: start;
 	gap: 1rem;
+
+	@media screen and (max-width: 40em) {
+		flex-direction: column;
+
+		& p:first-child {
+			display: none;
+		}
+	}
 
 	& p {
 		line-height: 1.5;
@@ -92,7 +112,7 @@ const PourquoiInvestir = ({ localisation, etat_immeuble, nature_lots, totalite_l
 
 	}, [])
 
-	return(
+	return (
 		<Container>
 			<Header>
 				<img src={expert} alt="L'expert" />
@@ -127,7 +147,7 @@ const PourquoiInvestir = ({ localisation, etat_immeuble, nature_lots, totalite_l
 					</p>
 				</Avis>
 			</Body>
-		</Container>	
+		</Container>
 	)
 }
 
