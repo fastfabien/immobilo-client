@@ -11,42 +11,6 @@ import { solid, regular, brands, icon } from '@fortawesome/fontawesome-svg-core/
 import { logout, refreshUserInformation } from "../actions/auth";
 import { clearMessage } from "../actions/message";
 
-const NavBar = styled.nav`
-
-
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: auto;
-    padding: ${props => props.theme.fontlg} ${props => props.theme.fontxxl};
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 2rem;
-    z-index: 5;
-
-    @media screen and (max-width: 70em) {
-        padding: ${props => props.theme.fontsm} ${props => props.theme.fontlg};
-    }
-
-`
-
-const Logo = styled(Link)`
-
-    text-transform: uppercase;
-    font-weight: 800;
-    font-size: ${props => props.theme.fontlg};
-    color: rgba(${props => props.theme.textRgba}, 1);
-    width: 30%;
-
-    @media screen and (max-width: 70em) {
-        font-size: ${props => props.theme.fontmd};
-        width: 40%;
-
-    }
-
-
-`
 const Right = styled.div`
 
     width: 30%;
@@ -100,6 +64,55 @@ const Right = styled.div`
             display: block;
         }
     }
+
+`
+
+const NavBar = styled.nav`
+
+
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: auto;
+    padding: ${props => props.theme.fontlg} ${props => props.theme.fontxxl};
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+    z-index: 5;
+
+    @media screen and (max-width: 70em) {
+        padding: ${props => props.theme.fontsm} ${props => props.theme.fontlg};
+    }
+
+    @media screen and (max-width: 40em) {
+        &.nav {
+            & a {
+                width: auto;
+            }
+            ${Right} {
+                width: 100%;
+                justify-content: space-around;
+            }
+        }
+    }
+
+`
+
+const Logo = styled(Link)`
+
+    text-transform: uppercase;
+    font-weight: 800;
+    font-size: ${props => props.theme.fontlg};
+    color: rgba(${props => props.theme.textRgba}, 1);
+    width: 30%;
+
+    @media screen and (max-width: 70em) {
+        font-size: ${props => props.theme.fontmd};
+        width: 40%;
+
+    }
+
 
 `
 
@@ -198,6 +211,12 @@ const UserNavigation = styled.div`
     justify-content: space-around;
     align-items: center;
     gap: 2em;
+    text-align: center;
+
+    @media screen and (max-width: 40em) {
+        gap: 1em;
+        text-align: center;
+     }
 
     & a {
         display: flex;
@@ -226,6 +245,26 @@ const UserInfo = styled.div`
     display: flex;
     justify-content: space-between;
     gap: 2rem;
+
+    @media screen and (max-width: 40em) {
+        width: 100%;
+        justify-content: center;
+        gap: 5em;
+        & div:first-child {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1em;
+
+            & span {
+                order: 2;
+            }
+
+            & svg {
+                order: 1;
+            }
+        }
+    }
 
     & div {
         display: flex;
@@ -307,7 +346,7 @@ function Header() {
     }, [dispatch]);
 
     return (
-        <NavBar>
+        <NavBar className={currentUser ? "nav" : ""}>
             <Logo to="/">
                 <img src={MyLogo} alt="logo" />
             </Logo>

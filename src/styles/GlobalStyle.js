@@ -27,6 +27,16 @@ const GlobalStyle = createGlobalStyle`
         color: inherit;
     }
 
+    @media screen and (max-width: 40em) {
+        nav.nav {
+            position: relative;
+            flex-direction: column;
+            gap: 1rem;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+
 `
 
 export default GlobalStyle;

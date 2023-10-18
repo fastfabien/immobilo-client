@@ -26,6 +26,10 @@ const Container = styled.div`
 		padding-top: 10rem;
 	}
 
+	@media screen and (max-width: 40em) {
+		padding-top: 2rem;
+	}
+
 
 `
 

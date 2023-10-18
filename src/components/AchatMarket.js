@@ -18,15 +18,34 @@ const Content = styled.div`
 	align-items: center;
 	margin-top: 0;
 
+	@media screen and (max-width: 40em) {
+		flex-direction: column;
+		width: 100%;
+		gap: 1rem;
+	}
+
 	& div {
 		box-shadow: 0px 0px 5px rgba(${(props) => props.theme.bodyRgba}, 0.18);
 		min-width: 32%;
 		padding: 1rem;
+		@media screen and (max-width: 80em) {
+			height: 12rem;
+		}
+		@media screen and (max-width: 40em) {
+			width: 100%;
+		}
 		&:first-child {
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
 			gap: .5rem;
+			@media screen and (max-width: 80em) {
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				padding: 1rem .5rem;
+				text-align: center;
+			}
 			& img {
 				width: 4rem;
 				height: 4rem;
@@ -60,6 +79,12 @@ const Content = styled.div`
 		&:last-child {
 			display: flex;
 			padding: 0;
+			@media screen and (max-width: 80em) {
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				padding: 1rem 0;
+			}
 			& div:first-child {
 				width: 60%;
 				box-shadow: none;

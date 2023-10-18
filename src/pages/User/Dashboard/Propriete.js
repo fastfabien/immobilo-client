@@ -25,9 +25,9 @@ const Container = styled.div`
 	  padding-top: 10rem;
     }
 
-	@media screen and (max-width: 70em) {
+	@media screen and (max-width: 40em) {
 		padding: ${(props) => props.theme.fontmd} ${(props) => props.theme.fontmd};
-		padding-top: 10rem;
+		padding-top: 2rem;
   	}
 
 

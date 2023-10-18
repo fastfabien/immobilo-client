@@ -24,6 +24,15 @@ const Container = styled.div`
   	padding: ${(props) => props.theme.fontlg} ${(props) => props.theme.fontxxl};
   	padding-top: 10rem;
 
+	@media screen and (max-width: 70em) {
+		padding: ${(props) => props.theme.fontlg} ${(props) => props.theme.fontmd};
+		padding-top: 10rem;
+	}
+
+	@media screen and (max-width: 40em) {
+		padding-top: 2rem;
+	}
+
 
 `
 
@@ -37,6 +46,11 @@ const ProprieteContainer = styled.div`
 	width: 80%;
 	margin: 0 auto;
 	margin-top: 2rem;
+
+	@media screen and (max-width: 80em) {
+		width: 100%;
+		gap: 2rem;
+	}
 
 
 `
@@ -148,12 +162,29 @@ const Filter = styled.div`
 	margin: 0 auto;
 	box-shadow: 0px 0px 5px rgba(${(props) => props.theme.bodyRgba}, 0.18);
 
+	@media screen and (max-width: 80em) {
+		width: 100%;
+		padding-top: 2rem;
+		padding-bottom: 3rem;
+	}
+
 	& form {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
 		width: 100%;
 		padding: 0 2rem;
+		@media screen and (max-width: 80em) {
+			flex-direction: column;
+			justify-content: center;
+			align-items: flex-start;
+
+			gap: 1rem;
+			
+			& div {
+				width: 100%;
+			}
+		}
 		& div {
 			display: flex;
 			justify-content: space-between;
@@ -171,6 +202,11 @@ const Filter = styled.div`
 				background-color: transparent;
 				width: 100%;
 				cursor: pointer;
+
+				@media screen and (max-width: 40em) {
+					padding: 1rem 2rem;
+					border-bottom: 2px solid ${p => p.theme.principal};
+				}
 
 				& option {
 					padding: 1rem;
@@ -190,6 +226,11 @@ const Input = styled.input`
 	padding: 1rem .5rem;
 	border: none;
 	outline: none;
+
+	@media screen and (max-width: 40em) {
+		width: 100%;
+		border-bottom: 2px solid ${p => p.theme.principal};
+	}
 
 `
 
