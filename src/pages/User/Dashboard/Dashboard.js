@@ -19,6 +19,11 @@ const Container = styled.div`
   padding-top: 10rem;
   position: relative;
 
+  @media screen and (max-width: 70em) {
+    padding: ${(props) => props.theme.fontsm} ${(props) => props.theme.fontlg};
+    padding-top: 10rem;
+  }
+
 `
 
 
@@ -65,6 +70,10 @@ const Content = styled.div`
   margin: 0 auto;
   gap: 2rem;
 
+  @media screen and (max-width: 70em) {
+    width: 100%;
+  }
+
 `
 const Recap = styled.div`
 
@@ -72,8 +81,16 @@ const Recap = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 1rem;
+  gap: .5rem;
   width: 100%;
+
+  @media screen and (max-width: 80em) {
+    flex-wrap: wrap;
+  }
+
+  @media screen and (max-width: 40em) {
+    flex-direction: column;
+  }
 
 
 `
@@ -88,6 +105,16 @@ const RecapContent = styled.div`
   justify-content: space-between;
   align-items: center;
   flex-direction: column;
+
+  @media screen and (max-width: 70em) {
+    flex-direction: column;
+    width: 45%;
+    gap: 2rem;
+  }
+
+  @media screen and (max-width: 40em) {
+    width: 100%;
+  }
 
   & h2 {
     text-transform: uppercase;

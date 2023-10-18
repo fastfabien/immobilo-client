@@ -18,15 +18,34 @@ const Content = styled.div`
 	align-items: center;
 	margin-top: 0;
 
+	@media screen and (max-width: 40em) {
+		flex-direction: column;
+		width: 100%;
+		gap: 1rem;
+	}
+
 	& div {
 		box-shadow: 0px 0px 5px rgba(${(props) => props.theme.bodyRgba}, 0.18);
 		min-width: 32%;
 		padding: 1rem;
+		@media screen and (max-width: 80em) {
+			height: 12rem;
+		}
+		@media screen and (max-width: 40em) {
+			width: 100%;
+		}
 		&:first-child {
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
 			gap: .5rem;
+			@media screen and (max-width: 80em) {
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				padding: 1rem .5rem;
+				text-align: center;
+			}
 			& img {
 				width: 4rem;
 				height: 4rem;
@@ -45,7 +64,7 @@ const Content = styled.div`
 		}
 		&:not(:first-child):not(:last-child) {
 			display: flex;
-			justify-content: space-between;
+			justify-content: center;
 			align-items: center;
 			flex-direction: column;
 			gap: .5rem;
@@ -60,6 +79,12 @@ const Content = styled.div`
 		&:last-child {
 			display: flex;
 			padding: 0;
+			@media screen and (max-width: 80em) {
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				padding: 1rem 0;
+			}
 			& div:first-child {
 				width: 60%;
 				box-shadow: none;
@@ -121,12 +146,16 @@ const BuyContainer = styled.div`
 	top: 0;
 	left: 0;
 	width: 100%;
-	height: 100vh;
+	min-height: 100vh;
 	background-color: rgba(${props => props.theme.bodyRgba}, .2);
 	z-index: 8;
 	display: flex;
 	justify-content: center;
 	align-items: center;
+
+	@media screen and (max-width: 40em) {
+		min-height: 100vh;
+	}
 
 
 `
@@ -137,6 +166,15 @@ const Container = styled.div`
 	background-color: ${props => props.theme.white};
 	height: 80%;
 	box-shadow: 0px 0px 5px rgba(${(props) => props.theme.bodyRgba}, 0.18);
+
+	@media screen and (max-width: 80em) {
+		width: 95%;
+		height: 60vh;
+	}
+
+	@media screen and (max-width: 40em) {
+		min-height: 100vh;
+	}
 
 `
 
@@ -195,6 +233,27 @@ const Body = styled.div`
 		margin-bottom: 1rem;
 	}
 
+	@media screen and (max-width: 40em) {
+		flex-direction: column;
+		align-items: flex-start;
+
+		& img {
+			width: 100%;
+			height: 12rem;
+		}
+
+		& h2 {
+			text-align: center;
+			margin-bottom: .5em;
+
+			& + span {
+				text-align: center;
+				width: 100%;
+				display: inline-block;
+			}
+		}
+	}
+
 `
 
 const Information = styled.div`
@@ -211,6 +270,11 @@ const Information = styled.div`
 		}
 	}	
 
+	@media screen and (max-width: 80em) {
+		flex-direction: column;
+		justify-content: flex-start;
+		align-items: flex-start;
+	}
 
 `
 
@@ -222,6 +286,10 @@ const Vente = styled.form`
 	flex-direction: column;
 	gap: 1rem;
 	width: 80%;
+
+	@media screen and (max-width: 80em) {
+		width: 100%;
+	}
 
 `
 
@@ -235,6 +303,10 @@ const VenteContent = styled.div`
 	margin: 0 auto;
 	margin-top: 2rem;
 	gap: 1rem;
+
+	@media screen and (max-width: 40em) {
+		flex-direction: column;
+	}
 
 	& input {
 		padding: .5rem 1rem;
@@ -252,6 +324,11 @@ const Info = styled.div`
 	display: flex;
 	flex-direction: column;
 	width: 30%;
+	gap: 0.8em;
+
+	@media screen and (max-width: 40em) {
+		width: 100%;
+	}
 
 
 `

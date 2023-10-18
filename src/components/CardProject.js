@@ -28,6 +28,14 @@ const Container = styled.div`
     transform: translateY(-10px) scale(1.01);
     transition: transform 0.5s ease;
   }
+
+  @media screen and (max-width: 70em) {
+    width: 45%;
+  }
+
+  @media screen and (max-width: 40em) {
+    width: 100%;
+  }
 `;
 
 const Header = styled.img`

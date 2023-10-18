@@ -20,6 +20,13 @@ const Container = styled.div`
         }
     }
 
+    @media screen and (max-width: 40em) {
+        flex-direction: column;
+        & a {
+            width: 100%;
+        }
+    }
+
 `
 
 const ProprieteNavibar = ({ content, alignment }) => {
@@ -29,7 +36,7 @@ const ProprieteNavibar = ({ content, alignment }) => {
 
     useEffect(() => {
         const nav = navRef.current.children;
-        for(let i = 0; i < nav.length; i++) {
+        for (let i = 0; i < nav.length; i++) {
             if (nav[i].pathname === Location.pathname) {
                 nav[i].classList.add('active')
             } else {

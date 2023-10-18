@@ -20,6 +20,16 @@ const Container = styled.div`
   	padding: ${(props) => props.theme.fontlg} ${(props) => props.theme.fontxxl};
   	padding-top: 10rem;
 
+	@media screen and (max-width: 70em) {
+      padding: ${(props) => props.theme.fontmd} ${(props) => props.theme.fontxl};
+	  padding-top: 10rem;
+    }
+
+	@media screen and (max-width: 70em) {
+		padding: ${(props) => props.theme.fontmd} ${(props) => props.theme.fontmd};
+		padding-top: 10rem;
+  	}
+
 
 
 `
@@ -31,8 +41,14 @@ const ProprieteContainer = styled.div`
 	flex-wrap: wrap;
 	gap: 3rem;
 	width: 80%;
-	margin: 0 auto;
+	margin: 2rem auto;
 	position: relative;
+
+	@media screen and (max-width: 70em) {
+		justify-content: space-around;
+      	width: 90%;
+	  	gap: 1rem;
+    }
 
 	& > div {
 		& img {
