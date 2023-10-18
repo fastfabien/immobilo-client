@@ -178,6 +178,7 @@ const Right = styled.div`
 
 const Dashboard = () => {
   const [message, setMessage] = useState({})
+  const [isLoading, setIsLoading] = useState(true)
   const { isLoggedIn, user, token } = useSelector(state => state.auth);
   const [datas, setDatas] = useState()
   const [bricksValue, setBrickValue] = useState()
@@ -188,6 +189,7 @@ const Dashboard = () => {
     return axios.get('/api/user/dashboard', { headers: authHeader() }).then(async (data) => {
       setDatas(data.data.user)
       setBrickValue(data.data.user.bricks)
+      setIsLoading(false)
     }).catch((err) => {
       console.log(err)
     })
@@ -237,55 +239,59 @@ const Dashboard = () => {
       }
 
       <Content>
-        <Recap>
-          <RecapContent>
-            <h2>valeur de mes bricks</h2>
-            <div>{datas?.bricks.reduce((acc, curr) => acc + parseFloat(curr.prix_total), 0).toFixed(2)} €</div>
-          </RecapContent>
-          <RecapContent>
-            <h2>proprieté en portefeuille</h2>
-            <div>{datas?.bricks.length}</div>
-          </RecapContent>
-          <RecapContent>
-            <h2>révenus réçu</h2>
-            <div>{datas?.user_benefits.toFixed(2)} €</div>
-          </RecapContent>
-          <RecapContent>
-            <h2>montant total investi</h2>
-            <div>{datas?.invested_money.toFixed(2)} €</div>
-          </RecapContent>
-        </Recap>
-        <Propriete>
-          <Right>
-            {bricksValue?.length > 0 ? < table >
-              <tr>
-                <th>Propriété</th>
-                <th>Répartition</th>
-                <th>Valoriation</th>
-              </tr>
-              {
-                bricksValue?.map((brick) => (
-
+        {isLoading ? <Loader /> :
+          <>
+            <Recap>
+              <RecapContent>
+                <h2>valeur de mes bricks</h2>
+                <div>{datas?.bricks.reduce((acc, curr) => acc + parseFloat(curr.prix_total), 0).toFixed(2)} €</div>
+              </RecapContent>
+              <RecapContent>
+                <h2>proprieté en portefeuille</h2>
+                <div>{datas?.bricks.length}</div>
+              </RecapContent>
+              <RecapContent>
+                <h2>révenus réçu</h2>
+                <div>{datas?.user_benefits.toFixed(2)} €</div>
+              </RecapContent>
+              <RecapContent>
+                <h2>montant total investi</h2>
+                <div>{datas?.invested_money.toFixed(2)} €</div>
+              </RecapContent>
+            </Recap>
+            <Propriete>
+              <Right>
+                {bricksValue?.length > 0 ? < table >
                   <tr>
-                    <td>{brick.propertie_id.nom}</td>
-                    <td>{((parseFloat(brick.prix_total) * 100) / formatedBrickPriceTotal).toFixed(2)}%</td>
-                    <td>{brick.prix_total} €</td>
+                    <th>Propriété</th>
+                    <th>Répartition</th>
+                    <th>Valoriation</th>
                   </tr>
+                  {
+                    bricksValue?.map((brick) => (
 
-                ))
-              }
-              <tfoot>
-                <tr>
-                  <td>Total</td>
-                  <td>100%</td>
-                  <td>{formatedBrickPriceTotal} €</td>
-                </tr>
-              </tfoot>
-            </table> :
-              "Vous avez pas encore de propriete"
-            }
-          </Right>
-        </Propriete>
+                      <tr>
+                        <td>{brick.propertie_id.nom}</td>
+                        <td>{((parseFloat(brick.prix_total) * 100) / formatedBrickPriceTotal).toFixed(2)}%</td>
+                        <td>{brick.prix_total} €</td>
+                      </tr>
+
+                    ))
+                  }
+                  <tfoot>
+                    <tr>
+                      <td>Total</td>
+                      <td>100%</td>
+                      <td>{formatedBrickPriceTotal} €</td>
+                    </tr>
+                  </tfoot>
+                </table> :
+                  "Vous avez pas encore de propriete"
+                }
+              </Right>
+            </Propriete>
+          </>
+        }
         {/* <BlogCard /> */}
       </Content>
 

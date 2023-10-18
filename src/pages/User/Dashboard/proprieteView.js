@@ -16,6 +16,7 @@ import Calculete from "../../../components/Calculete";
 import img from "../../../assets/house2.jpg";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { solid, regular, brands, icon, thin } from '@fortawesome/fontawesome-svg-core/import.macro'
+import Loader from '../../../components/Loader';
 
 const API_URL = "/api/properties/";
 
@@ -95,6 +96,7 @@ const Propriete = () => {
 
 	const navigate = useNavigate();
 	const [datas, setDatas] = useState()
+	const [isLoading, setIsLoading] = useState(true)
 	const { id } = useParams()
 
 	const pourcentage_investisement = (((parseFloat(datas?.nb_brique) - parseFloat(datas?.nb_brique_restant)) * 100) / parseFloat(datas?.nb_brique)).toFixed(2)
@@ -102,6 +104,7 @@ const Propriete = () => {
 	const getInformation = async () => {
 		return await axios.get(API_URL + `${id}`, { headers: authHeader() }).then(async (data) => {
 			await setDatas(data.data.property)
+			setIsLoading(false)
 		}).catch((err) => {
 			console.log(err)
 		})
@@ -114,55 +117,60 @@ const Propriete = () => {
 
 
 	return (
+
 		<Container>
-			<GoBack onClick={() => navigate(-1)}>
-				<FontAwesomeIcon icon={solid('arrow-left-long')} /><span>Retour</span>
-			</GoBack>
-			<ProprieteInfoImage
-				all_images={datas?.images}
-				nom={datas?.nom}
-				rue={datas?.rue}
-				region={datas?.region}
-				zip={datas?.zip}
-			/>
-			<NavBarContainer>
-				<ProprieteNavibar alignment="start" content={
-					[{ lien: `/proprietes/${id}`, text: "Général" },
-					{ lien: `/proprietes/${id}/finance`, text: "Finance" },
-					{ lien: `/proprietes/${id}/location`, text: "Lieu" }]
-				} />
-			</NavBarContainer>
-			<InformationContainer>
-				<Left>
-					<Actualite />
-					<Rentabilite
-						rentabiliter={datas?.rentabiliter.toFixed(2)}
-						reverser={datas?.reverser.toFixed(2)}
-						valorisation={datas?.valorisation} />
-					<PourquoiInvestir
-						localisation={datas?.localisation}
-						etat_immeuble={datas?.etat_immeuble}
-						nature_lots={datas?.nature_lots}
-						totalite_lots={datas?.totalite_lots}
-					/>
-					<Presentation
-						nombre_lots={datas?.nombre_lots}
-						loyer_mensuel={datas?.loyer_mensuel}
-						aire={datas?.aire}
-						description={datas?.description}
-					/>
-				</Left>
-				<Right>
-					<Brickeurs
-						nom={datas?.nom}
-						image={datas?.image_couverture}
-						pourcentageInvestissement={pourcentage_investisement}
-						brickRestant={datas?.nb_brique_restant}
-						id={datas?._id}
-					/>
-					<Calculete reverser={datas?.reverser.toFixed(2)} potentiel_plus_value={datas?.potentiel_plus_value.toFixed(2)} />
-				</Right>
-			</InformationContainer>
+			<>
+				{
+					isLoading ? <Loader /> : <><GoBack onClick={() => navigate(-1)}>
+						<FontAwesomeIcon icon={solid('arrow-left-long')} /><span>Retour</span>
+					</GoBack>
+						<ProprieteInfoImage
+							all_images={datas?.images}
+							nom={datas?.nom}
+							rue={datas?.rue}
+							region={datas?.region}
+							zip={datas?.zip}
+						/>
+						<NavBarContainer>
+							<ProprieteNavibar alignment="start" content={
+								[{ lien: `/proprietes/${id}`, text: "Général" },
+								{ lien: `/proprietes/${id}/finance`, text: "Finance" },
+								{ lien: `/proprietes/${id}/location`, text: "Lieu" }]
+							} />
+						</NavBarContainer>
+						<InformationContainer>
+							<Left>
+								<Actualite />
+								<Rentabilite
+									rentabiliter={datas?.rentabiliter.toFixed(2)}
+									reverser={datas?.reverser.toFixed(2)}
+									valorisation={datas?.valorisation} />
+								<PourquoiInvestir
+									localisation={datas?.localisation}
+									etat_immeuble={datas?.etat_immeuble}
+									nature_lots={datas?.nature_lots}
+									totalite_lots={datas?.totalite_lots}
+								/>
+								<Presentation
+									nombre_lots={datas?.nombre_lots}
+									loyer_mensuel={datas?.loyer_mensuel}
+									aire={datas?.aire}
+									description={datas?.description}
+								/>
+							</Left>
+							<Right>
+								<Brickeurs
+									nom={datas?.nom}
+									image={datas?.image_couverture}
+									pourcentageInvestissement={pourcentage_investisement}
+									brickRestant={datas?.nb_brique_restant}
+									id={datas?._id}
+								/>
+								<Calculete reverser={datas?.reverser.toFixed(2)} potentiel_plus_value={datas?.potentiel_plus_value.toFixed(2)} />
+							</Right>
+						</InformationContainer></>
+				}
+			</>
 		</Container>
 	)
 }
