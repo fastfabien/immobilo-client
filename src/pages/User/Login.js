@@ -3,7 +3,7 @@ import styled, { keyframes } from 'styled-components'
 import axios from 'axios'
 import { useDispatch, useSelector } from "react-redux";
 import { Link, Navigate, useNavigate } from 'react-router-dom';
-import {useGoogleLogin} from '@react-oauth/google';
+import { useGoogleLogin } from '@react-oauth/google';
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input"
 import CheckButton from "react-validation/build/button";
@@ -181,6 +181,10 @@ const ActionContainer = styled.div`
     font-weight: 800;
     font-size: ${props => props.theme.fontsm};
 
+    @media screen and (max-width: 40em) {
+      width: 100%;
+    }
+
     & .svg-inline--fa {
       height: 1.5rem;
     }
@@ -230,7 +234,7 @@ const Login = () => {
   function handleGoogleLoginSuccess(tokenResponse) {
     const accessToken = tokenResponse.access_token;
     setLoading(true)
-    dispatch(googleLogin(accessToken,navigate)).then(() => {
+    dispatch(googleLogin(accessToken, navigate)).then(() => {
       setLoading(false)
       window.location.reload();
     }).catch(() => {
@@ -238,7 +242,7 @@ const Login = () => {
     })
   }
 
-  const Glogin = useGoogleLogin({onSuccess: handleGoogleLoginSuccess});
+  const Glogin = useGoogleLogin({ onSuccess: handleGoogleLoginSuccess });
 
   if (isLoggedIn) {
     return <Navigate to="/dashboard" />
@@ -263,7 +267,7 @@ const Login = () => {
           </button>
         </ActionContainer>
       </SignupContainer>
-      { loading && <Loader />}
+      {loading && <Loader />}
     </Container>
   )
 }
